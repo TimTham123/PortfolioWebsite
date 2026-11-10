@@ -195,8 +195,8 @@ folder.
 
 - **Netlify / Cloudflare Pages / Vercel:** build command `npm run build`,
   output directory `_site`.
-- **GitHub Pages:** if the site lives at `username.github.io/PortfolioWebsite/`
-  rather than at its own domain, build with
-  `npx @11ty/eleventy --pathprefix=/PortfolioWebsite/` so the links include
-  that folder.
+- **GitHub Pages (set up):** `.github/workflows/deploy.yml` builds and publishes
+  the site on every push, to <https://timtham123.github.io/PortfolioWebsite/>.
+  One-time step: in the repo's **Settings → Pages**, set **Source** to
+  **GitHub Actions**. Progress shows under the repo's **Actions** tab.
 - **Old-school:** upload the contents of `_site/` to any web server over FTP.
