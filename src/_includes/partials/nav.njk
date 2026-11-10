@@ -1,0 +1,39 @@
+{#-
+  Main navigation. The items come from src/_data/navigation.json;
+  edit that file (not this one) to rename, reorder or add pages.
+-#}
+<nav class="site-nav" aria-label="Main">
+  <ul class="nav-list">
+    {%- for item in navigation %}
+    {%- if item.children %}
+    {%- set open = page.url | inSection(item.url) %}
+    <li class="nav-group" data-open="{{ 'true' if open else 'false' }}">
+      <div class="nav-group__head">
+        <a href="{{ item.url }}"{% if page.url == item.url %} aria-current="page"{% endif %}>{{ item.title }}</a>
+        <button class="nav-toggle" type="button" aria-expanded="{{ 'true' if open else 'false' }}" aria-controls="nav-sub-{{ loop.index }}">
+          <span class="visually-hidden">{{ item.title }} pages</span>
+          <svg class="nav-toggle__icon" viewBox="0 0 13 13" width="13" height="13" aria-hidden="true" focusable="false" shape-rendering="crispEdges"><rect x=".5" y=".5" width="12" height="12" fill="#fff" stroke="#808080"/><path d="M3 6h7v1H3z"/><path class="nav-toggle__plus" d="M6 3h1v7H6z"/></svg>
+        </button>
+      </div>
+      <ul class="nav-sub" id="nav-sub-{{ loop.index }}">
+        {%- for child in item.children %}
+        <li><a href="{{ child.url }}"{% if page.url == child.url %} aria-current="page"{% endif %}>{{ child.title }}</a></li>
+        {%- endfor %}
+      </ul>
+    </li>
+    {%- else %}
+    <li><a href="{{ item.url }}"{% if page.url == item.url %} aria-current="page"{% endif %}>{{ item.title }}</a></li>
+    {%- endif %}
+    {%- endfor %}
+  </ul>
+</nav>
+<script>
+  /* Small screens start with the dropdown closed so the page itself stays near the top.
+     Runs here, before the rest of the page is drawn, so nothing jumps. */
+  if (window.matchMedia("(max-width: 759.98px)").matches) {
+    document.querySelectorAll(".nav-group[data-open='true']").forEach(function (group) {
+      group.setAttribute("data-open", "false");
+      group.querySelector(".nav-toggle").setAttribute("aria-expanded", "false");
+    });
+  }
+</script>

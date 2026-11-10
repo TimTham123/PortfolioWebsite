@@ -1,0 +1,9 @@
+{
+  "name": "Your Name",
+  "footerText": "Your Name",
+  "description": "Portfolio of Your Name: video game sound design, the Sounds Of live-music series, social media marketing and original music.",
+  "language": "en-AU",
+  "logo": "/assets/img/logo-placeholder.svg",
+  "email": "hello@example.com",
+  "showPlaceholderMarkers": true
+}

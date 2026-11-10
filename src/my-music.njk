@@ -1,0 +1,64 @@
+---
+layout: layouts/base.njk
+title: My Music
+description: Original music, releases and live performance.
+updated: 2026-11-10
+placeholder: true
+figures:
+  - alt: "Live photo: playing on stage"
+    caption: "(live at [venue])"
+    ratio: "3/4"
+  - alt: "Cover art for the latest release"
+    caption: "([Release title] cover art)"
+    ratio: "1/1"
+---
+<h1>My Music</h1>
+<p class="standfirst">Original music, collaborations and live performance.</p>
+
+<!-- PLACEHOLDER -->
+<div class="ph">
+  <p>Outside of sound design I write, record and produce my own music as [project name], somewhere between [genre] and [genre]. I also play [instrument] in [band name] and help other artists with production and mixing.</p>
+</div>
+
+<h2>Listen</h2>
+{% embed { src: "", title: "Latest release: Bandcamp, Spotify or SoundCloud player", height: 152 } %}
+
+<h2>Releases</h2>
+<!-- PLACEHOLDER: newest first -->
+<div class="ph">
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr><th scope="col">Year</th><th scope="col">Title</th><th scope="col">Format</th><th scope="col">Listen</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>[2026]</td><td>[Single title]</td><td>Single</td><td><a href="https://bandcamp.com/">Bandcamp</a></td></tr>
+        <tr><td>[2025]</td><td>[EP title]</td><td>EP</td><td><a href="https://open.spotify.com/">Spotify</a></td></tr>
+        <tr><td>[2024]</td><td>[Single title]</td><td>Single</td><td><a href="https://soundcloud.com/">SoundCloud</a></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<h2>Projects &amp; collaborations</h2>
+<!-- PLACEHOLDER -->
+<div class="ph">
+  <dl>
+    <dt><b>[Project name]</b>, solo</dt>
+    <dd>Writing, recording, production and mixing.</dd>
+    <dt><b>[Band name]</b>, [instrument]</dt>
+    <dd>A [genre] [four-piece] from [City], playing regular shows around [City].</dd>
+    <dt><b>[Artist name]</b>, production</dt>
+    <dd>Co-production and mixing on [release title].</dd>
+  </dl>
+</div>
+
+<h2>Demos &amp; sketches</h2>
+{% audio { src: "", title: "[Track title] (demo)", caption: "unreleased, [2026]" } %}
+{% audio { src: "", title: "[Track title] (sketch)", caption: "from voice memo to finished idea" } %}
+
+<h2>Live</h2>
+<!-- PLACEHOLDER -->
+<div class="ph">
+  <p>No shows announced right now. Follow along on <a href="https://www.instagram.com/">Instagram</a> for dates, or <a href="/contact/">get in touch</a> about bookings.</p>
+</div>

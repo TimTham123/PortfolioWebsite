@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="{{ site.language }}"{% if site.showPlaceholderMarkers %} class="show-ph"{% endif %}>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% if page.url != "/" %}{{ title }} &ndash; {% endif %}{{ site.name }}</title>
+  <meta name="description" content="{{ description or site.description }}">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <script>document.documentElement.classList.add("js");</script>
+  <script src="/assets/js/site.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <div class="page">
+    {% include "partials/header.njk" %}
+
+    <main id="main" class="main" tabindex="-1">
+      <div class="content">
+{{ content | safe }}
+      </div>
+      {%- if figures and figures.length %}
+
+      <div class="figures">
+        {%- for figure in figures %}
+        {% image figure %}
+        {%- endfor %}
+      </div>
+      {%- endif %}
+
+      {%- if not hideStamp %}
+
+      {% include "partials/stamp.njk" %}
+      {%- endif %}
+    </main>
+  </div>
+
+  {% include "partials/footer.njk" %}
+</body>
+</html>

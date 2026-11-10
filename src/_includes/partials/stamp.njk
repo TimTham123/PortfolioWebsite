@@ -1,0 +1,7 @@
+{#- "Last updated" line at the foot of every page, set with `updated:` in each
+    page's front matter. `placeholder: true` adds a reminder that the page
+    still has placeholder content; set it to false once the page is real. #}
+<div class="stamp">
+  <hr>
+  <p><i>Last updated: <time datetime="{{ (updated or page.date) | isoDate }}">{{ (updated or page.date) | readableDate }}</time>{% if placeholder %} <span class="ph">&middot; placeholder content</span>{% endif %}</i></p>
+</div>

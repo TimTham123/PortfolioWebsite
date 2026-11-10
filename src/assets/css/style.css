@@ -1,0 +1,854 @@
+/* ==========================================================================
+   style.css
+   --------------------------------------------------------------------------
+   Old-school HTML look (Times, default link colours, engraved rules and a
+   few bevelled grey "system" bits) laid out like the reference screenshot:
+   right-aligned nav | text column | figure column, footer at the bottom.
+
+    1. Tokens            6. Navigation           11. Placeholders
+    2. Base              7. Content              12. Footer
+    3. Links & focus     8. Figures & media      13. Tablet  (< 1120px)
+    4. Accessibility     9. Tables & lists       14. Mobile  (< 760px)
+    5. Page layout      10. Stamp & pager
+   ========================================================================== */
+
+
+/* 1. Tokens
+   ========================================================================== */
+
+:root {
+  /* Colours */
+  --bg: #f9f9f9;            /* off-white, sampled from the layout reference */
+  --text: #000;
+  --text-muted: #555;       /* captions */
+  --link: #0000ee;          /* the classic default link blue */
+  --link-visited: #551a8b;  /* ...and visited purple */
+  --link-hover: #c00;       /* the classic active red (darkened for contrast) */
+  --current: #666;          /* "you are here" grey, as in the Retro Millennial nav */
+  --rule-dark: #9a9a9a;     /* engraved <hr>, sampled from the Retro Millennial */
+  --rule-light: #fff;
+
+  /* Windows 9x "system" greys, used sparingly for bevelled bits */
+  --chrome: #c0c0c0;
+  --chrome-hi: #fff;
+  --chrome-lo: #808080;
+  --chrome-dark: #000;
+  --navy: #000080;
+
+  --note: #ffffcc;          /* placeholder highlight: old sticky-note yellow */
+  --note-edge: #b8a64a;     /* ...and its outline */
+
+  /* Type: system Times, no web fonts to download (or to disappear) */
+  --font-serif: "Times New Roman", Times, "Liberation Serif", "Nimbus Roman", "Noto Serif", serif;
+  --font-mono: "Courier New", Courier, "Liberation Mono", monospace;
+  --text-size: 1.0625rem;   /* 17px */
+  --line: 1.47;             /* 25px: same rhythm as the reference */
+  --para: 24px;             /* a full blank line between paragraphs */
+  --nav-size: 1.125rem;     /* 18px */
+  --nav-line: 1.755;        /* 31.6px between items, as measured */
+  --small: 0.875rem;        /* 14px */
+
+  /* Layout, measured from the reference at ~1984px wide */
+  --top: 36px;              /* space above nav / text / first image */
+  --pad: 32px;              /* outer page padding */
+  --gutter: 28px;           /* nav | text | figures */
+  --content-w: 684px;       /* text column (about 95 characters a line) */
+  --figures-w: 226px;       /* figure column */
+}
+
+
+/* 2. Base
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  color-scheme: light;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-serif);
+  font-size: var(--text-size);
+  line-height: var(--line);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-weight: bold;
+  line-height: 1.2;
+}
+
+h1 { font-size: 2rem; margin: 0 0 14px; }
+h2 { font-size: 1.5rem; margin: 44px 0 12px; }
+h3 { font-size: 1.1875rem; margin: 28px 0 6px; }
+h4 { font-size: 1rem; margin: 24px 0 4px; }
+
+p,
+ul,
+ol,
+dl,
+figure,
+blockquote,
+address {
+  margin: 0 0 var(--para);
+}
+
+ul,
+ol {
+  padding-left: 40px;
+}
+
+address {
+  font-style: normal;
+}
+
+img,
+svg,
+video,
+iframe {
+  max-width: 100%;
+}
+
+img,
+video {
+  height: auto;
+}
+
+/* Engraved rule: a dark line over a light one */
+hr {
+  height: 0;
+  margin: var(--para) 0;
+  border: 0;
+  border-top: 1px solid var(--rule-dark);
+  border-bottom: 1px solid var(--rule-light);
+}
+
+small {
+  font-size: var(--small);
+}
+
+
+/* 3. Links & focus
+   ========================================================================== */
+
+a {
+  color: var(--link);
+  text-decoration: underline;
+}
+
+a:visited {
+  color: var(--link-visited);
+}
+
+a:hover,
+a:active {
+  color: var(--link-hover);
+}
+
+:focus-visible {
+  outline: 2px dotted var(--text);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: var(--navy);
+  color: #fff;
+}
+
+
+/* 4. Accessibility helpers
+   ========================================================================== */
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 8px;
+  z-index: 10;
+  padding: 4px 12px;
+  background: var(--chrome);
+  color: var(--text);
+  border: 2px solid;
+  border-color: var(--chrome-hi) var(--chrome-dark) var(--chrome-dark) var(--chrome-hi);
+}
+
+.skip-link:focus {
+  top: 8px;
+}
+
+.skip-link:visited {
+  color: var(--text);
+}
+
+.main:focus {
+  outline: none;
+}
+
+
+/* 5. Page layout
+   --------------------------------------------------------------------------
+   Desktop: [ nav ][ text | figures ][ empty ]
+   The two outer columns share the leftover width 1 : 1.23, which puts the
+   nav's right edge where the reference has it (~22.5% across) on a wide
+   screen. The nav column never gets narrower than its longest item.
+   ========================================================================== */
+
+.page {
+  flex: 1 0 auto;
+  display: grid;
+  grid-template-columns:
+    minmax(max-content, 1fr)
+    minmax(0, calc(var(--content-w) + var(--gutter) + var(--figures-w)))
+    minmax(0, 1.23fr);
+  column-gap: var(--gutter);
+  align-items: start;
+  padding: var(--top) var(--pad) 56px;
+}
+
+.site-header {
+  position: sticky;
+  top: var(--top);
+  justify-self: end;
+  text-align: right;
+}
+
+.site-name {
+  display: none;
+}
+
+.main {
+  display: grid;
+  grid-template-columns: minmax(0, var(--content-w)) var(--figures-w);
+  grid-template-areas:
+    "content figures"
+    "stamp   .";
+  column-gap: var(--gutter);
+  align-items: start;
+  min-width: 0;
+}
+
+.content {
+  grid-area: content;
+  min-width: 0;
+}
+
+.content > :first-child {
+  margin-top: 0;
+}
+
+.figures {
+  grid-area: figures;
+  display: flex;
+  flex-direction: column;
+  gap: 29px;
+}
+
+.stamp {
+  grid-area: stamp;
+}
+
+
+/* 6. Navigation
+   ========================================================================== */
+
+.site-nav ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nav-list {
+  font-size: var(--nav-size);
+  line-height: var(--nav-line);
+}
+
+/* Current page: grey and not underlined */
+.site-nav a[aria-current="page"] {
+  color: var(--current);
+  text-decoration: none;
+  cursor: default;
+}
+
+/* "Video Game Sound Design" + its [+] toggle. The toggle sits on the ragged
+   side of the text, so the right-hand edge of the nav stays clean. */
+.nav-group__head {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+/* Only shown when JavaScript is running; without it the list is just open. */
+.nav-toggle {
+  display: none;
+}
+
+.js .nav-toggle {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 28px;
+  height: 28px;
+  margin: 0 2px 0 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.nav-toggle__icon {
+  display: block;
+  fill: currentColor;
+}
+
+.nav-toggle[aria-expanded="true"] .nav-toggle__plus {
+  display: none;
+}
+
+.nav-toggle:focus-visible {
+  outline-offset: -2px;
+}
+
+/* The dropdown: sub-pages, indented from the right */
+.nav-sub {
+  margin: 0 0 6px;
+  padding: 0 1.25em 0 0;
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+.js .nav-group[data-open="false"] > .nav-sub {
+  display: none;
+}
+
+
+/* 7. Content
+   ========================================================================== */
+
+/* The line under the page title */
+.standfirst {
+  margin-top: -6px;
+  font-style: italic;
+}
+
+/* A page title set as plain text (the home page, like the reference) */
+.title-plain {
+  margin: 0 0 var(--para);
+  font-size: inherit;
+  font-weight: normal;
+  line-height: inherit;
+}
+
+.signature {
+  margin-top: var(--para);
+}
+
+blockquote {
+  margin-left: 40px;
+  margin-right: 40px;
+}
+
+
+/* 8. Figures & media
+   ========================================================================== */
+
+.figure {
+  margin: 0;
+}
+
+.figure img {
+  display: block;
+  width: 100%;
+}
+
+figcaption {
+  margin-top: 8px;
+  color: var(--text-muted);
+  font-size: var(--small);
+  font-style: italic;
+  line-height: 1.35;
+}
+
+/* Videos and embeds keep their shape at any width */
+.media {
+  margin: 0 0 var(--para);
+}
+
+.media__frame {
+  position: relative;
+  width: 100%;
+  background: #000;
+}
+
+.media__frame--embed {
+  background: none;
+}
+
+.media__frame > iframe,
+.media__frame > video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.audio {
+  margin: 0 0 16px;
+}
+
+.audio figcaption {
+  margin: 0 0 4px;
+  color: var(--text);
+  font-size: 1rem;
+  font-style: normal;
+}
+
+.audio audio {
+  display: block;
+  width: 100%;
+}
+
+/* A row of small images (thumbnails), wrapping as needed */
+.thumbs {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(132px, 1fr));
+  gap: 20px 16px;
+  margin: 0 0 var(--para);
+}
+
+
+/* 9. Tables & lists
+   --------------------------------------------------------------------------
+   Tables are drawn like <table border="1">: a raised outer frame with
+   sunken cells.
+   ========================================================================== */
+
+.table-scroll {
+  margin: 0 0 var(--para);
+  overflow-x: auto;
+}
+
+table {
+  border-collapse: separate;
+  border-spacing: 2px;
+  border: 1px solid;
+  border-color: #dfdfdf var(--chrome-lo) var(--chrome-lo) #dfdfdf;
+  font-size: 1rem;
+  line-height: 1.35;
+}
+
+th,
+td {
+  padding: 4px 8px;
+  border: 1px solid;
+  border-color: var(--chrome-lo) #dfdfdf #dfdfdf var(--chrome-lo);
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  background: #e4e4e4;
+}
+
+caption {
+  padding-bottom: 4px;
+  font-style: italic;
+  text-align: left;
+}
+
+/* Definition lists, as on the first web pages */
+dd {
+  margin: 0 0 10px 40px;
+}
+
+dt + dd {
+  margin-top: 0;
+}
+
+
+/* 10. Stamp & pager
+   ========================================================================== */
+
+/* "Last updated" line, as at the foot of the Retro Millennial */
+.stamp {
+  margin-top: 40px;
+}
+
+.stamp hr {
+  margin: 0 0 4px;
+}
+
+.stamp p {
+  margin: 0;
+  font-size: var(--small);
+  text-align: right;
+}
+
+/* « previous | index | next » between project pages */
+.pager {
+  margin: 44px 0 0;
+  text-align: center;
+}
+
+.pager span {
+  margin: 0 6px;
+  color: var(--text-muted);
+}
+
+
+/* 11. Placeholders
+   --------------------------------------------------------------------------
+   Anything with class="ph" is placeholder text. While `showPlaceholderMarkers`
+   is true in src/_data/site.json it gets a sticky-note yellow highlight; set
+   it to false to preview the finished look.
+   Media placeholders come from the {% image %}, {% video %}, {% audio %} and
+   {% embed %} shortcodes and disappear as soon as they are given a file/URL.
+   ========================================================================== */
+
+div.ph {
+  margin-bottom: var(--para);
+}
+
+.ph > :last-child {
+  margin-bottom: 0;
+}
+
+/* Blocks: a dashed "draft" frame with a little tag in the corner */
+.show-ph div.ph {
+  position: relative;
+  outline: 1px dashed var(--note-edge);
+  outline-offset: 8px;
+}
+
+.show-ph div.ph::before {
+  content: "Placeholder";
+  position: absolute;
+  top: -15px;
+  right: -8px;
+  padding: 0 4px;
+  border: 1px solid var(--note-edge);
+  background: var(--note);
+  color: #222;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-style: normal;
+  font-weight: normal;
+  letter-spacing: 0.04em;
+  line-height: 1.4;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+/* Short bits of text (captions, names, dates): highlighted */
+.show-ph span.ph,
+.show-ph figcaption.ph {
+  padding: 0 2px;
+  background: var(--note);
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+.show-ph figcaption.ph {
+  width: fit-content;
+}
+
+/* Media placeholder box, drawn like the frame an old browser showed while
+   an image was still loading: sunken border, icon, and the alt text. */
+.ph-media {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+  width: 100%;
+  padding: 8px;
+  overflow: hidden;
+  border: 1px solid;
+  border-color: var(--chrome-lo) var(--chrome-hi) var(--chrome-hi) var(--chrome-lo);
+  box-shadow: inset 1px 1px 0 #404040, inset -1px -1px 0 #dfdfdf;
+  background: #ececec;
+  color: #222;
+  font-size: 0.8125rem;
+  line-height: 1.3;
+}
+
+.ph-media__alt {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.ph-icon,
+.ph-embed__btn {
+  flex: none;
+}
+
+.ph-media__tag {
+  padding: 1px 4px;
+  border: 1px solid var(--note-edge);
+  background: var(--note);
+  color: #222;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.02em;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+.ph-video {
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  background: #000;
+  color: #fff;
+  text-align: center;
+}
+
+.ph-video .ph-media__label {
+  font-size: 1rem;
+}
+
+.ph-embed {
+  justify-content: space-between;
+}
+
+/* Audio placeholder: a bevelled grey player bar */
+.ph-audio {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+  padding: 4px 6px 4px 5px;
+  border: 1px solid;
+  border-color: var(--chrome-hi) var(--chrome-dark) var(--chrome-dark) var(--chrome-hi);
+  box-shadow: inset -1px -1px 0 var(--chrome-lo);
+  background: var(--chrome);
+}
+
+.ph-audio__btn {
+  flex: none;
+}
+
+.ph-audio__track {
+  flex: 1;
+  min-width: 40px;
+  height: 8px;
+  border: 1px solid;
+  border-color: var(--chrome-lo) var(--chrome-hi) var(--chrome-hi) var(--chrome-lo);
+  background: #fff;
+}
+
+.ph-audio__time {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+
+
+/* 12. Footer
+   --------------------------------------------------------------------------
+   Sits at the bottom of the window on short pages. One centred line, with
+   the logo on the right, level with the text, as in the reference.
+   ========================================================================== */
+
+.site-footer {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 104px;
+  padding: 8px var(--pad);
+  font-size: 1rem;
+  text-align: center;
+}
+
+.site-footer p {
+  margin: 0;
+}
+
+.site-footer__logo {
+  position: absolute;
+  top: 50%;
+  right: clamp(16px, 5vw, 100px);
+  transform: translateY(-50%);
+  line-height: 0;
+}
+
+.site-footer__logo img {
+  display: block;
+  width: 190px;
+  height: auto;
+}
+
+
+/* 13. Tablet: figures move under the text
+   ========================================================================== */
+
+@media (max-width: 1119.98px) {
+  .page {
+    grid-template-columns:
+      minmax(max-content, 1fr)
+      minmax(0, var(--content-w))
+      minmax(0, 1fr);
+  }
+
+  .main {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "content"
+      "figures"
+      "stamp";
+  }
+
+  .figures {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 24px var(--gutter);
+    margin-top: 8px;
+  }
+
+  .figures .figure {
+    width: min(100%, var(--figures-w));
+  }
+
+  .site-footer__logo img {
+    width: 150px;
+  }
+}
+
+
+/* 14. Mobile: one column, name and nav on top
+   ========================================================================== */
+
+@media (max-width: 759.98px) {
+  :root {
+    --pad: 16px;
+    --nav-line: 1.4;
+  }
+
+  .page {
+    display: block;
+    padding: 18px var(--pad) 40px;
+  }
+
+  .site-header {
+    position: static;
+    justify-self: stretch;
+    margin: 0 0 28px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--rule-dark);
+    box-shadow: 0 1px 0 var(--rule-light);
+    text-align: left;
+  }
+
+  .site-name {
+    display: block;
+    margin: 0 0 8px;
+    font-size: 1.375rem;
+    font-weight: bold;
+    line-height: 1.3;
+  }
+
+  .site-name a,
+  .site-name a:visited {
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  /* Bigger tap targets */
+  .nav-list a {
+    display: inline-block;
+    padding: 5px 0;
+  }
+
+  .nav-group__head {
+    flex-direction: row;
+  }
+
+  .js .nav-toggle {
+    width: 40px;
+    height: 40px;
+    margin: 0 0 0 2px;
+  }
+
+  .nav-sub {
+    margin: 0 0 4px;
+    padding: 0 0 0 1.5em;
+    line-height: 1.3;
+  }
+
+  .main {
+    display: block;
+  }
+
+  h1 {
+    font-size: 1.75rem;
+  }
+
+  /* Tighter tables, so most fit without scrolling sideways */
+  table {
+    font-size: 0.9375rem;
+  }
+
+  th,
+  td {
+    padding: 3px 5px;
+  }
+
+  /* Two images to a row */
+  .figures {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px 16px;
+    margin-top: 0;
+  }
+
+  .figures .figure {
+    width: auto;
+  }
+
+  .site-footer {
+    flex-direction: column;
+    gap: 14px;
+    min-height: 0;
+    padding: 24px var(--pad) 20px;
+  }
+
+  .site-footer__logo {
+    position: static;
+    transform: none;
+  }
+
+  .site-footer__logo img {
+    width: 140px;
+  }
+}

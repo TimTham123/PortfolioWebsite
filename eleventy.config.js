@@ -1,0 +1,34 @@
+import { HtmlBasePlugin } from "@11ty/eleventy";
+import * as filters from "./lib/filters.js";
+import * as shortcodes from "./lib/shortcodes.js";
+
+export default function (eleventyConfig) {
+  // Lets the site live in a sub-folder (e.g. GitHub Pages) via --pathprefix.
+  eleventyConfig.addPlugin(HtmlBasePlugin);
+
+  // Static files are copied as-is: CSS, JS, images, audio, video…
+  eleventyConfig.addPassthroughCopy({ "src/assets": "assets" });
+
+  // Filters used by the templates (see lib/filters.js).
+  for (const [name, fn] of Object.entries(filters)) {
+    eleventyConfig.addFilter(name, fn);
+  }
+
+  // Media components: {% image %}, {% video %}, {% audio %}, {% embed %}.
+  // Each one shows a labelled placeholder until it is given a real file/URL.
+  for (const [name, fn] of Object.entries(shortcodes)) {
+    eleventyConfig.addShortcode(name, fn);
+  }
+
+  return {
+    dir: {
+      input: "src",
+      includes: "_includes",
+      data: "_data",
+      output: "_site",
+    },
+    templateFormats: ["njk", "md", "html"],
+    htmlTemplateEngine: "njk",
+    markdownTemplateEngine: "njk",
+  };
+}

@@ -1,0 +1,72 @@
+---
+layout: layouts/project.njk
+title: Cyberpedia
+description: Sound design and FMOD implementation for Cyberpedia.
+updated: 2026-11-10
+placeholder: true
+figures:
+  - alt: "Cyberpedia key art"
+    caption: "(Cyberpedia key art)"
+    ratio: "3/4"
+  - alt: "Screenshot of the Archive hub"
+    caption: "(in game: the Archive hub)"
+    ratio: "1/1"
+---
+<h1>Cyberpedia</h1>
+<p class="standfirst">Sound design &amp; implementation <span class="ph">&middot; [2025] &middot; [team or studio name]</span></p>
+
+<h2>Project overview</h2>
+<!-- PLACEHOLDER -->
+<div class="ph">
+  <p>Cyberpedia is a narrative exploration game set inside a sprawling, half-corrupted online encyclopaedia. Players restore damaged articles to uncover what happened to the people who wrote them, moving between clean, orderly pages and glitching, broken ones.</p>
+  <p>The world needed to sound like the inside of a machine without feeling cold: part dial-up modem, part library, part half-remembered dream.</p>
+</div>
+
+<h2>My role</h2>
+<!-- PLACEHOLDER -->
+<div class="ph">
+  <ul>
+    <li>Lead sound designer: all sound effects, UI and ambience ([120+] assets)</li>
+    <li>Audio implementation in FMOD Studio and Unity</li>
+    <li>Mixing and loudness for the final build</li>
+    <li>Music integration (music by [composer])</li>
+  </ul>
+</div>
+
+<h2>Technical approach</h2>
+<!-- PLACEHOLDER -->
+<div class="ph">
+  <p>Every ambience was built in two versions, clean and corrupted, and crossfaded in FMOD by a single <i>corruption</i> parameter driven by the game. As an article is restored the glitches thin out and the room tone settles, so the player hears their progress before they see it.</p>
+  <p>UI sounds use multi-instruments with randomised pitch and round-robin selection, so repeated typing never sounds mechanical, and mixer snapshots duck the world under dialogue and menus.</p>
+</div>
+
+<h2>Sound design examples</h2>
+{% audio { src: "", title: "Archive hub ambience", caption: "loop, clean to corrupted" } %}
+{% audio { src: "", title: "UI set", caption: "typing, page turns, restore and error sounds" } %}
+{% video { youtube: "", title: "Cyberpedia: gameplay with final audio", caption: "Gameplay capture with the final mix." } %}
+
+<h2>Project details</h2>
+<!-- PLACEHOLDER -->
+<div class="ph">
+  <div class="table-scroll">
+    <table>
+      <tbody>
+        <tr><th scope="row">Engine</th><td>Unity</td></tr>
+        <tr><th scope="row">Audio middleware</th><td>FMOD Studio</td></tr>
+        <tr><th scope="row">DAW</th><td>Reaper</td></tr>
+        <tr><th scope="row">Platform</th><td>PC</td></tr>
+        <tr><th scope="row">Team</th><td>[6 people]</td></tr>
+        <tr><th scope="row">Timeframe</th><td>[12 weeks, 2025]</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<h2>Links</h2>
+<!-- PLACEHOLDER: swap in the real store / trailer links -->
+<div class="ph">
+  <ul>
+    <li><a href="https://itch.io/">Play Cyberpedia on itch.io</a></li>
+    <li><a href="https://www.youtube.com/">Watch the trailer</a></li>
+  </ul>
+</div>

@@ -1,0 +1,71 @@
+---
+layout: layouts/project.njk
+title: Okiro
+description: Sound design and Wwise implementation for Okiro.
+updated: 2026-11-10
+placeholder: true
+figures:
+  - alt: "Okiro key art"
+    caption: "(Okiro key art)"
+    ratio: "3/4"
+  - alt: "Field recording at dawn"
+    caption: "(recording the dawn chorus)"
+    ratio: "1/1"
+---
+<h1>Okiro</h1>
+<p class="standfirst">Sound design &amp; implementation <span class="ph">&middot; [2024] &middot; [team or studio name]</span></p>
+
+<h2>Project overview</h2>
+<!-- PLACEHOLDER -->
+<div class="ph">
+  <p>Okiro is an atmospheric adventure set in the space between dreaming and waking. Players drift through shifting dreamscapes, each one pulling them a little closer to the surface.</p>
+  <p>The audio blurs the edges: sounds from the waking world leak into the dream, growing louder as the player nears the end.</p>
+</div>
+
+<h2>My role</h2>
+<!-- PLACEHOLDER -->
+<div class="ph">
+  <ul>
+    <li>Sound designer: ambiences, transitions and environmental sound</li>
+    <li>Audio implementation in Wwise and Unreal Engine</li>
+    <li>Field recording: [forests, trains, a ticking clock]</li>
+  </ul>
+</div>
+
+<h2>Technical approach</h2>
+<!-- PLACEHOLDER -->
+<div class="ph">
+  <p>Each dreamscape is a Wwise state with its own blend of ambience layers. A <i>wakefulness</i> RTPC drives filters and sends, so real-world sounds (an alarm clock, traffic, a voice calling the player's name) slowly cut through the dream mix.</p>
+  <p>Transitions between areas use spatialised one-shots and a shared reverb bus, so the player never hears a hard cut.</p>
+</div>
+
+<h2>Sound design examples</h2>
+{% audio { src: "", title: "Dreamscape ambience: the forest", caption: "loop" } %}
+{% audio { src: "", title: "Wake-up transition", caption: "dream to waking world" } %}
+{% video { youtube: "", title: "Okiro: gameplay walkthrough", caption: "The first dreamscape, with final audio." } %}
+
+<h2>Project details</h2>
+<!-- PLACEHOLDER -->
+<div class="ph">
+  <div class="table-scroll">
+    <table>
+      <tbody>
+        <tr><th scope="row">Engine</th><td>Unreal Engine 5</td></tr>
+        <tr><th scope="row">Audio middleware</th><td>Wwise</td></tr>
+        <tr><th scope="row">DAW</th><td>Reaper</td></tr>
+        <tr><th scope="row">Platform</th><td>PC</td></tr>
+        <tr><th scope="row">Team</th><td>[4 people]</td></tr>
+        <tr><th scope="row">Timeframe</th><td>[10 weeks, 2024]</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<h2>Links</h2>
+<!-- PLACEHOLDER: swap in the real store / trailer links -->
+<div class="ph">
+  <ul>
+    <li><a href="https://itch.io/">Play Okiro on itch.io</a></li>
+    <li><a href="https://www.youtube.com/">Watch the trailer</a></li>
+  </ul>
+</div>
