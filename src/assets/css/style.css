@@ -322,6 +322,7 @@ a:active {
   background: none;
   color: var(--text);
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent; /* the [+]/[-] swap is the feedback */
 }
 
 .nav-toggle__icon {
