@@ -58,7 +58,7 @@
   --muted: #737373;     /* links and secondary text (4.7:1 on white) */
   --faint: #f2f2f2;     /* placeholder boxes */
   --on-faint: #616161;  /* text on placeholder boxes (5.5:1) */
-  --draft: #a85555;     /* washed-out red: placeholder text, for now (4.6:1+) */
+  --draft: #a85555;     /* washed-out red: "placeholder" notes, for now */
   --track: #cfcfcf;
 
   --font: "Instrument Sans", "Inter", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
@@ -606,17 +606,10 @@ div.ph {
   margin: -0.12em 0 0.2em 1em;
 }
 
-/* Placeholder text in washed-out red until it's replaced */
-.show-ph .ph,
+/* The word "placeholder" is written in washed-out red; the text itself
+   stays as it will look when finished */
 .show-ph .ph-note {
   color: var(--draft);
-}
-
-/* Links inside red placeholder text are underlined so they still stand out */
-.show-ph .ph a {
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 3px;
 }
 
 .ph-box {
