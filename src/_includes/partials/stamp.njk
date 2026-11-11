@@ -1,7 +1,4 @@
 {#- The page's date, set with `updated:` in each page's front matter.
     `placeholder: true` adds a reminder that the page still has placeholder
     content; set it to false once the page is real. #}
-<p class="page-date">
-  updated <time datetime="{{ (updated or page.date) | isoDate }}">{{ (updated or page.date) | readableDate }}</time>
-  {%- if placeholder %} <span class="page-date__note">&middot; placeholder page</span>{% endif %}
-</p>
+<p>Updated <time datetime="{{ (updated or page.date) | isoDate }}">{{ (updated or page.date) | readableDate }}</time>{% if placeholder %} &middot; placeholder content{% endif %}</p>

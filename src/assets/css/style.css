@@ -1,22 +1,44 @@
 /* ==========================================================================
-   style.css: the notebook
+   style.css
    --------------------------------------------------------------------------
-   Each page is the kraft-paper cover of a stitched notebook. The frame of
-   the page (title, navigation, page titles, captions, notes) is written by
-   hand in Reenie Beanie; the body text is set in IBM Plex Sans so it stays
-   professional and easy to read. Three pens: black ink for text, blue for
-   links, red for marks (the circled page, underlines, code tags).
+   Dead simple: a white page, one typeface at one size, black and grey.
+   What you can click is grey; where you are is black. Hierarchy comes from
+   spacing, never from size or decoration. The one handwritten mark is the
+   signature at the top (plus small pencil-style notes on placeholders).
 
-    1. Fonts             6. Navigation          11. Placeholders
-    2. Tokens            7. Content             12. Footer
-    3. Base & paper      8. Figures & media     13. Tablet  (< 1120px)
-    4. Links & focus     9. Tables & lists      14. Mobile  (< 760px)
-    5. Page layout      10. Pager
+    1. Fonts            5. Navigation         9. Placeholders
+    2. Tokens           6. Content           10. Tablet (< 1100px)
+    3. Base & links     7. Media             11. Mobile (< 760px)
+    4. Layout           8. Footer & pager
    ========================================================================== */
 
 
 /* 1. Fonts (self-hosted, SIL Open Font License; see assets/fonts/)
    ========================================================================== */
+
+@font-face {
+  font-family: "Instrument Sans";
+  src: url("../fonts/instrument-sans-latin-400-normal.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Instrument Sans";
+  src: url("../fonts/instrument-sans-latin-400-italic.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Instrument Sans";
+  src: url("../fonts/instrument-sans-latin-500-normal.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
 
 @font-face {
   font-family: "Reenie Beanie";
@@ -26,76 +48,34 @@
   font-display: swap;
 }
 
-@font-face {
-  font-family: "IBM Plex Sans";
-  src: url("../fonts/ibm-plex-sans-latin-400-normal.woff2") format("woff2");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "IBM Plex Sans";
-  src: url("../fonts/ibm-plex-sans-latin-400-italic.woff2") format("woff2");
-  font-weight: 400;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "IBM Plex Sans";
-  src: url("../fonts/ibm-plex-sans-latin-600-normal.woff2") format("woff2");
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-}
-
 
 /* 2. Tokens
    ========================================================================== */
 
 :root {
-  /* Paper and pens, from the notebook reference photos */
-  --paper: #fbfaf6;          /* almost-white notebook paper */
-  --paper-light: #fff;
-  --ink: #2b211a;            /* black fineliner (warm) */
-  --graphite: #57524b;       /* pencil: captions, notes, placeholder text */
-  --blue: #2a3c96;           /* blue ballpoint: links */
-  --red: #a82a22;            /* red pen: circles, underlines, code tags */
-  --margin-line: #e2a19b;    /* the printed red margin rule */
-  --rule: rgba(43, 33, 26, 0.22);
-  --highlight: #f6ea8c;      /* highlighter, for selected text */
+  --bg: #fff;
+  --fg: #0a0a0a;
+  --muted: #737373;     /* links and secondary text (4.7:1 on white) */
+  --faint: #f2f2f2;     /* placeholder boxes */
+  --on-faint: #616161;  /* text on placeholder boxes (5.5:1) */
+  --track: #cfcfcf;
 
-  /* Type */
-  --font-hand: "Reenie Beanie", "Bradley Hand", "Segoe Print", "Comic Sans MS", cursive;
-  --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  --text-size: 1.0625rem;    /* 17px */
-  --line: 1.6;
+  --font: "Instrument Sans", "Inter", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --font-hand: "Reenie Beanie", "Bradley Hand", "Segoe Print", cursive;
+  --size: 1.0625rem;    /* 17px, everywhere */
+  --line: 1.42;         /* lines of links stay 24px apart, easy to tap */
+  --gap: 1.42em;        /* one blank line */
 
-  /* Layout */
-  --binding: 72px;           /* stitched spine down the left edge */
-  --top: 34px;
-  --pad: 32px;
-  --gutter: 40px;            /* nav | margin line | text | figures */
-  --content-w: 660px;
-  --figures-w: 230px;
-
-  /* Pen marks, drawn once and reused */
-  --mark-circle: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 40' preserveAspectRatio='none'%3E%3Cpath d='M10 28C2 16 27 5 52 5c26 0 45 6 44 16-1 11-24 15-48 15C22 36 3 31 6 20 8 12 23 7 38 6' fill='none' stroke='%23a82a22' stroke-width='1.7' stroke-linecap='round' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
-  --mark-underline: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 10' preserveAspectRatio='none'%3E%3Cpath d='M2 6.5C40 4.2 90 3.6 132 4.4c22 .4 44 1.4 66 .6' fill='none' stroke='%23a82a22' stroke-width='1.8' stroke-linecap='round' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
-  --mark-line: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 6' preserveAspectRatio='none'%3E%3Cpath d='M1 3.6C80 2.4 170 3.9 260 2.9c48-.5 96 .3 138 .4' fill='none' stroke='%2357524b' stroke-width='1.2' stroke-linecap='round' stroke-opacity='.7' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
-
-  /* A whisper of paper fibre. (The filter covers the whole tile so the
-     noise wraps without seams.) */
-  --paper-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='f' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9 .65' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35 0 0 0 0 .3 0 0 0 0 .22 .9 0 0 0 -.5'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E");
-
-  /* The spine: a shaded strip, a crease, and pale green cotton thread
-     through stitch holes, wrapped round the edge (Japanese stab binding) */
-  --spine: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='180'%3E%3Crect width='54' height='180' fill='%233b2c1e' fill-opacity='.06'/%3E%3Crect x='53' width='1' height='180' fill='%233b2c1e' fill-opacity='.32'/%3E%3Crect x='54' width='1.5' height='180' fill='%23fff' fill-opacity='.3'/%3E%3Cellipse cx='31' cy='90' rx='3.4' ry='3' fill='%23241a12' fill-opacity='.75'/%3E%3Cpath d='M31.3 0c-.3 30 .4 60 .1 90 .2 30-.3 60 .1 90M0 91c10-.6 20-.3 31.3-.6' stroke='%23879b4f' stroke-width='2.8' fill='none' stroke-linecap='round'/%3E%3Cpath d='M31 0c-.3 30 .4 60 .1 90 .2 30-.3 60 .1 90M0 90.4c10-.6 20-.3 31-.6' stroke='%23c3d585' stroke-width='1.9' fill='none' stroke-linecap='round'/%3E%3Cpath d='M30.6 0c-.3 30 .4 60 .1 90M0 89.9c10-.6 20-.3 30.6-.6' stroke='%23e9f2c4' stroke-width='.6' stroke-opacity='.8' fill='none'/%3E%3C/svg%3E");
+  --top: 30px;
+  --pad: 26px;
+  --nav-w: 16rem;       /* index column */
+  --col-gap: 2rem;
+  --text-w: 35rem;      /* reading column */
+  --fig-w: 15rem;       /* images beside the text */
 }
 
 
-/* 3. Base & paper
+/* 3. Base & links
    ========================================================================== */
 
 *,
@@ -112,45 +92,48 @@ html {
 
 body {
   margin: 0;
-  min-height: 100vh;
-  min-height: 100dvh;
-  display: flex;
-  flex-direction: column;
-  color: var(--ink);
-  background-color: var(--paper);
-  background-image: var(--spine), var(--paper-grain);
-  background-repeat: repeat-y, repeat;
-  background-position: 0 30px, 0 0;
-  background-size: var(--binding) 180px, 240px 240px;
-  font-family: var(--font-body);
-  font-size: var(--text-size);
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font);
+  font-size: var(--size);
+  font-weight: 400;
   line-height: var(--line);
+  letter-spacing: 0.006em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+ul,
+ol,
+dl,
+dd,
+figure,
+blockquote,
+address {
+  margin: 0;
 }
 
 h1,
 h2,
 h3,
 h4 {
-  line-height: 1.25;
-}
-
-p,
-ul,
-ol,
-dl,
-figure,
-blockquote,
-address {
-  margin: 0 0 1em;
-}
-
-address {
-  font-style: normal;
+  font-size: inherit;
+  font-weight: 400;
+  line-height: inherit;
 }
 
 b,
 strong {
-  font-weight: 600;
+  font-weight: 500;
+}
+
+address {
+  font-style: normal;
 }
 
 img,
@@ -165,37 +148,27 @@ video {
   height: auto;
 }
 
-/* A pencil line drawn freehand */
-hr {
-  height: 6px;
-  margin: 1.5em 0;
-  border: 0;
-  background: var(--mark-line) center / 100% 100% no-repeat;
-}
-
-::selection {
-  background: var(--highlight);
-  color: var(--ink);
-}
-
-
-/* 4. Links & focus
-   ========================================================================== */
-
+/* Grey until you point at it */
 a {
-  color: var(--blue);
+  color: var(--muted);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--fg);
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 3px;
 }
 
-a:hover {
-  text-decoration-thickness: 2px;
+:focus-visible {
+  outline: 1px solid var(--fg);
+  outline-offset: 3px;
 }
 
-:focus-visible {
-  outline: 2px dashed var(--blue);
-  outline-offset: 3px;
+::selection {
+  background: var(--fg);
+  color: var(--bg);
 }
 
 .visually-hidden {
@@ -214,16 +187,19 @@ a:hover {
 .skip-link {
   position: absolute;
   top: -100px;
-  left: calc(var(--binding) + 8px);
+  left: var(--pad);
   z-index: 10;
-  padding: 6px 12px;
-  border: 2px dashed var(--ink);
-  background: var(--paper-light);
-  color: var(--ink);
+  padding: 4px 8px;
+  background: var(--fg);
+  color: var(--bg);
 }
 
 .skip-link:focus {
   top: 8px;
+}
+
+.skip-link:hover {
+  color: var(--bg);
 }
 
 .main:focus {
@@ -231,146 +207,80 @@ a:hover {
 }
 
 
-/* 5. Page layout
+/* 4. Layout
    --------------------------------------------------------------------------
-   Wide screens:  [         <title> ][ Callum Tham </title>      date ]
-                  [ nav, right-aligned ][ text | figures ][   empty    ]
-   The opening tag lines up with the nav; the name starts where the text
-   starts. The outer columns share the leftover width 1 : 1.23.
+   [ signature ]
+   [ index     ][ text            ][ images ][ empty ]
+   [ footer                                           ]
    ========================================================================== */
 
 .page {
-  flex: 1 0 auto;
   display: grid;
   grid-template-columns:
-    minmax(max-content, 1fr)
-    minmax(0, calc(var(--content-w) + var(--gutter) + var(--figures-w)))
-    minmax(0, 1.23fr);
+    minmax(var(--nav-w), max-content)
+    minmax(0, var(--text-w))
+    var(--fig-w)
+    1fr;
   grid-template-rows: auto 1fr auto;
   grid-template-areas:
-    "header header ."
-    "nav    main   ."
-    "footer footer footer";
-  column-gap: var(--gutter);
-  row-gap: 30px;
-  align-items: start;
-  padding: var(--top) var(--pad) 0 calc(var(--binding) + 28px);
+    "header .    .    ."
+    "nav    main main ."
+    "footer footer footer footer";
+  column-gap: var(--col-gap);
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: var(--top) var(--pad) var(--pad);
 }
 
-/* Title row */
 .site-header {
   grid-area: header;
-  display: grid;
-  grid-template-columns: auto 1fr;
-  grid-template-columns: subgrid;
-  align-items: baseline;
+  padding-bottom: 14px;
 }
 
-.code-tag {
-  color: var(--red);
+/* The signature: the one handwritten mark */
+.signature {
   font-family: var(--font-hand);
-  font-size: 1.875rem;
+  font-size: 2.25rem;
   line-height: 1;
-  white-space: nowrap;
+  letter-spacing: 0;
 }
 
-.site-header__open {
-  justify-self: end;
+.signature a {
+  color: var(--fg);
 }
 
-.site-header__main {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 4px 24px;
-  min-width: 0;
-}
-
-.site-title {
-  margin: 0;
-  font-family: var(--font-hand);
-  font-size: clamp(3.25rem, 2rem + 2.6vw, 4.5rem);
-  line-height: 1;
-}
-
-.site-title a {
-  color: var(--ink);
+.signature a:hover {
   text-decoration: none;
 }
 
-.site-title a:hover {
-  color: var(--blue);
-}
-
-.site-title .code-tag {
-  margin-left: 0.3em;
-}
-
-.page-date {
-  margin: 0;
-  color: var(--graphite);
-  font-family: var(--font-hand);
-  font-size: 1.5rem;
-  line-height: 1.1;
-}
-
-.page-date__note {
-  color: var(--red);
-}
-
-/* The margin line: a printed red rule down the page, between the index
-   (nav) and the page itself, like the margin of a notebook page. */
-.page::before {
-  content: "";
-  grid-column: 1;
-  grid-row: 1 / -1;
-  justify-self: end;
-  align-self: stretch;
-  width: 1.5px;
-  margin: calc(-1 * var(--top)) calc(var(--gutter) / -2 - 0.75px) 0 0;
-  background: var(--margin-line);
-  pointer-events: none;
-}
-
-/* Nav column and page */
 .site-nav {
   grid-area: nav;
   position: sticky;
-  top: 24px;
-  justify-self: end;
-  text-align: right;
+  top: var(--top);
+  align-self: start;
 }
 
 .main {
   grid-area: main;
   display: grid;
-  grid-template-columns: minmax(0, var(--content-w)) var(--figures-w);
-  grid-template-areas: "content figures";
-  column-gap: var(--gutter);
+  grid-template-columns: minmax(0, var(--text-w)) var(--fig-w);
+  column-gap: var(--col-gap);
   align-items: start;
   min-width: 0;
 }
 
 .content {
-  grid-area: content;
   min-width: 0;
 }
 
-.content > :first-child {
-  margin-top: 0;
-}
-
 .figures {
-  grid-area: figures;
   display: flex;
   flex-direction: column;
-  gap: 34px;
-  padding-top: 6px;
+  gap: 1.75rem;
 }
 
 
-/* 6. Navigation: a handwritten list; the current page is circled in red
+/* 5. Navigation
    ========================================================================== */
 
 .site-nav ul {
@@ -379,104 +289,66 @@ a:hover {
   list-style: none;
 }
 
-.nav-list {
-  font-family: var(--font-hand);
-  font-size: 1.6875rem;
-  line-height: 1.15;
-  -webkit-text-stroke: 0.55px currentColor; /* a slightly heavier pen */
+.nav-group-start {
+  margin-top: var(--gap);
 }
 
-.nav-list > li + li {
-  margin-top: 0.32em;
-}
-
-.site-nav a {
-  color: var(--ink);
-  text-decoration: none;
+/* Where you are is black */
+.site-nav a[aria-current="page"],
+.site-nav a.is-section {
+  color: var(--fg);
 }
 
 .site-nav a:hover {
-  color: var(--blue);
+  text-decoration: none;
 }
 
 .site-nav a[aria-current="page"] {
-  position: relative;
   cursor: default;
 }
 
-.site-nav a[aria-current="page"]::after {
-  content: "";
-  position: absolute;
-  inset: -0.12em -0.5em -0.08em;
-  background: var(--mark-circle) center / 100% 100% no-repeat;
-  pointer-events: none;
-}
-
-/* The section you're in (e.g. on Cyberpedia, "Video Game Sound Design") */
-.site-nav a.is-section {
-  padding-bottom: 3px;
-  background: var(--mark-underline) left bottom / 100% 8px no-repeat;
-}
-
-/* "Video Game Sound Design" + its [+] box. The box sits on the ragged side
-   of the text, so the right-hand edge of the nav stays clean. */
 .nav-group__head {
   display: flex;
-  flex-direction: row-reverse;
-  justify-content: flex-start;
-  align-items: center;
+  align-items: baseline;
 }
 
-/* Only shown when JavaScript is running; without it the list is just open. */
+/* The dropdown's "+" (only shown when JavaScript is running; without it the
+   sub-pages are simply always listed) */
 .nav-toggle {
   display: none;
 }
 
 .js .nav-toggle {
-  display: inline-grid;
-  place-items: center;
-  flex: none;
-  width: 34px;
-  height: 34px;
-  margin: 0 4px 0 0;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 1.75em;
+  height: 1.5em;
+  margin: -0.1em 0 -0.1em 0.1em;
   padding: 0;
   border: 0;
   background: none;
-  color: var(--ink);
+  color: var(--muted);
+  font: inherit;
+  line-height: 1;
   cursor: pointer;
-  -webkit-tap-highlight-color: transparent; /* the [+]/[-] swap is the feedback */
+  -webkit-tap-highlight-color: transparent;
 }
 
 .nav-toggle:hover {
-  color: var(--blue);
+  color: var(--fg);
 }
 
-.nav-toggle__icon {
-  display: block;
+.nav-toggle__icon::before {
+  content: "+";
 }
 
-.nav-toggle__icon path {
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+.nav-toggle[aria-expanded="true"] .nav-toggle__icon::before {
+  content: "\2013";
 }
 
-.nav-toggle[aria-expanded="true"] .nav-toggle__plus {
-  display: none;
-}
-
-/* The dropdown: sub-pages, indented from the right */
 .nav-sub {
-  margin: 0.15em 0 0.1em;
-  padding: 0 1.1em 0 0;
-  font-size: 1.4375rem;
-  line-height: 1.12;
-}
-
-.nav-sub > li + li {
-  margin-top: 0.18em;
+  padding-left: 1em !important;
 }
 
 .js .nav-group[data-open="false"] > .nav-sub {
@@ -484,113 +356,114 @@ a:hover {
 }
 
 
-/* 7. Content
+/* 6. Content
+   --------------------------------------------------------------------------
+   Everything is one size. A heading is a black line with a blank line above
+   it; the text follows straight underneath.
    ========================================================================== */
 
-/* Page titles are handwritten, wrapped in <h1> … </h1> like the code in
-   the notebook. */
 .content h1 {
-  margin: 0 0 10px;
-  font-family: var(--font-hand);
-  font-size: 3.625rem;
-  font-weight: 400;
-  line-height: 1;
+  margin-bottom: var(--gap);
 }
 
-.content h1::before,
-.content h1::after {
-  color: var(--red);
-  font-size: 0.5em;
-  white-space: nowrap;
+.content h1 + .standfirst {
+  margin-top: calc(-1 * var(--gap));
 }
 
-.content h1::before {
-  content: "<h1>";
-  content: "<h1>" / "";
-  margin-right: 0.3em;
-}
-
-.content h1::after {
-  content: "</h1>";
-  content: "</h1>" / "";
-  margin-left: 0.3em;
-}
-
-/* The line under the page title */
 .standfirst {
-  margin: 0 0 1.6em;
-  color: var(--graphite);
-  font-style: italic;
+  margin-bottom: var(--gap);
+  color: var(--muted);
 }
 
-/* Section headings: typed, underlined in red pen */
-h2 {
-  width: fit-content;
-  max-width: 100%;
-  margin: 2.1em 0 0.75em;
-  padding-bottom: 7px;
-  background: var(--mark-underline) left bottom / 100% 9px no-repeat;
-  font-size: 1.25rem;
-  font-weight: 600;
+.content h2,
+.content h3 {
+  margin-top: var(--gap);
 }
 
-h3 {
-  margin: 1.8em 0 0.4em;
-  font-size: 1.0625rem;
-  font-weight: 600;
+.content h1 + h2,
+.content .standfirst + h2 {
+  margin-top: 0;
 }
 
-h4 {
-  margin: 1.5em 0 0.3em;
-  font-size: 1rem;
-  font-weight: 600;
+.content p,
+.content ul,
+.content ol,
+.content dl,
+.content .table-scroll,
+.content blockquote {
+  margin-bottom: var(--gap);
+}
+
+.content ul,
+.content ol {
+  padding: 0;
+  list-style: none;
+}
+
+.content dd {
+  margin-bottom: 0.6em;
+}
+
+.content dd:last-child {
+  margin-bottom: 0;
 }
 
 blockquote {
-  margin-left: 1.5em;
-  margin-right: 1.5em;
+  padding-left: 1em;
+}
+
+.table-scroll {
+  overflow-x: auto;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 0 1.25em 0 0;
+  font-weight: 400;
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  color: var(--muted);
+}
+
+thead th {
+  padding-bottom: 0.15em;
+}
+
+caption {
+  color: var(--muted);
+  text-align: left;
 }
 
 
-/* 8. Figures & media
+/* 7. Media
    ========================================================================== */
 
-.figure {
-  margin: 0;
-}
-
-/* Real photos look printed and stuck in: a white border, a little tilt */
 .figure img {
   display: block;
   width: 100%;
-  padding: 6px;
-  border: 1px solid #e2ded4;
-  background: #fff;
-  transform: rotate(-1deg);
-}
-
-.figures .figure:nth-child(even) img {
-  transform: rotate(1.2deg);
 }
 
 figcaption {
-  margin-top: 8px;
-  text-wrap: balance;
-  color: var(--graphite);
-  font-family: var(--font-hand);
-  font-size: 1.5rem;
-  line-height: 1.1;
+  margin-top: 0.45em;
+  font-size: 0.875rem;
+  line-height: 1.35;
 }
 
-/* Videos and embeds keep their shape at any width */
 .media {
-  margin: 0 0 1.4em;
+  margin-bottom: var(--gap);
 }
 
 .media__frame {
   position: relative;
   width: 100%;
-  background: #000;
+  background: var(--fg);
 }
 
 .media__frame--embed {
@@ -607,15 +480,17 @@ figcaption {
 }
 
 .audio {
-  margin: 0 0 1.2em;
+  margin-bottom: 1em;
 }
 
 .audio figcaption {
-  margin: 0 0 4px;
-  color: var(--ink);
-  font-family: var(--font-body);
-  font-size: 1rem;
-  line-height: 1.4;
+  margin: 0 0 0.4em;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.audio__detail {
+  color: var(--muted);
 }
 
 .audio audio {
@@ -623,450 +498,201 @@ figcaption {
   width: 100%;
 }
 
-/* A row of small images (thumbnails), wrapping as needed */
 .thumbs {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(132px, 1fr));
-  gap: 22px 18px;
-  margin: 0 0 1.4em;
+  grid-template-columns: repeat(auto-fill, minmax(8.5rem, 1fr));
+  gap: 1.25rem 1rem;
+  margin-bottom: var(--gap);
 }
 
 
-/* 9. Tables & lists
+/* 8. Footer & pager
    ========================================================================== */
 
-ul,
-ol {
-  padding-left: 1.5em;
+.site-footer {
+  grid-area: footer;
+  padding-top: 4.5em;
+  color: var(--muted);
+  font-size: 0.875rem;
+  line-height: 1.4;
 }
 
-ul {
-  list-style-type: "–  ";
-}
-
-li::marker {
-  color: var(--graphite);
-}
-
-.table-scroll {
-  margin: 0 0 1.2em;
-  overflow-x: auto;
-}
-
-table {
-  border-collapse: collapse;
-  font-size: 0.9375rem;
-  line-height: 1.45;
-}
-
-th,
-td {
-  padding: 7px 18px 7px 0;
-  border-bottom: 1px solid var(--rule);
-  text-align: left;
-  vertical-align: top;
-}
-
-thead th {
-  border-bottom: 1.5px solid var(--ink);
-}
-
-th {
-  font-weight: 600;
-}
-
-caption {
-  padding-bottom: 2px;
-  color: var(--graphite);
-  font-family: var(--font-hand);
-  font-size: 1.5rem;
-  line-height: 1.1;
-  text-align: left;
-}
-
-dt {
-  margin-top: 0.7em;
-}
-
-dt:first-child {
-  margin-top: 0;
-}
-
-dd {
-  margin: 0.1em 0 0 1.5em;
-}
-
-
-/* 10. Pager: ← previous | index | next → between project pages
-   ========================================================================== */
-
+/* ← previous / next → between project pages */
 .pager {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-  gap: 2px 14px;
-  margin: 3em 0 0;
-  font-family: var(--font-hand);
-  font-size: 1.625rem;
-  line-height: 1.2;
-}
-
-.pager span {
-  color: var(--graphite);
+  justify-content: space-between;
+  gap: 0.25em 2em;
+  margin-top: calc(var(--gap) * 2);
 }
 
 
-/* 11. Placeholders
+/* 9. Placeholders
    --------------------------------------------------------------------------
-   Placeholder text (class="ph") is "written in pencil": grey instead of ink,
-   with a red note in the margin. While `showPlaceholderMarkers` is true in
-   src/_data/site.json the marks show; set it to false to see the finished
-   look. Media placeholders are pencil sketches drawn by the {% image %},
-   {% video %}, {% audio %} and {% embed %} shortcodes until they get a file.
+   Placeholder text (class="ph") gets a small pencil note: "placeholder".
+   Short bits and captions are grey. While `showPlaceholderMarkers` is true in
+   src/_data/site.json the notes show; set it to false to see the finished
+   look. Media placeholders are grey boxes until they're given a file.
    ========================================================================== */
-
-div.ph {
-  margin-bottom: 1em;
-}
 
 .ph > :last-child {
   margin-bottom: 0;
 }
 
-.show-ph .ph {
-  color: var(--graphite);
+/* Tables start below the note rather than squeezing in beside it */
+.ph > .table-scroll {
+  clear: both;
+}
+
+div.ph {
+  margin-bottom: var(--gap);
+}
+
+.show-ph div.ph::before,
+.ph-note {
+  color: inherit;
+  font-family: var(--font-hand);
+  font-size: 1.375rem;
+  font-style: normal;
+  line-height: 1;
+  letter-spacing: 0;
 }
 
 .show-ph div.ph::before {
   content: "placeholder";
+  color: var(--muted);
   float: right;
-  margin: -0.35em 0 0.1em 14px;
-  color: var(--red);
-  font-family: var(--font-hand);
-  font-size: 1.5rem;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 1;
-  transform: rotate(-3deg);
+  margin: -0.12em 0 0.2em 1em;
 }
 
-/* A pencil sketch standing in for a photo, video or player */
-.sketch {
-  position: relative;
+.show-ph span.ph,
+.show-ph figcaption.ph {
+  color: var(--muted);
+}
+
+.ph-box {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 8px;
+  gap: 0.35em;
   width: 100%;
   max-width: 100%;
-  padding: 14px;
+  padding: 12px;
+  background: var(--faint);
+  color: var(--on-faint);
+  font-size: 0.875rem;
+  line-height: 1.3;
   text-align: center;
-}
-
-.sketch__frame {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-}
-
-.sketch svg path,
-.sketch-audio svg path {
-  fill: none;
-  stroke: var(--graphite);
-  stroke-width: 1.5;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  vector-effect: non-scaling-stroke;
-}
-
-.sketch path.sketch__faint {
-  stroke-opacity: 0.4;
-}
-
-.sketch__play {
-  position: relative;
-  flex: none;
-}
-
-.sketch__label {
-  position: relative;
-  max-width: 92%;
   text-wrap: balance;
-  padding: 2px 8px;
-  background: var(--paper);
-  color: var(--ink);
-  font-family: var(--font-hand);
-  font-size: 1.625rem;
-  line-height: 1.05;
 }
 
-.sketch__note {
-  position: relative;
-  padding: 0 6px;
-  background: var(--paper);
-  color: var(--red);
-  font-family: var(--font-hand);
-  font-size: 1.375rem;
-  line-height: 1.1;
+.ph-play {
+  fill: currentColor;
 }
 
-.sketch-audio {
+.ph-box--video .ph-play {
+  margin-bottom: 0.35em;
+  color: var(--fg);
+}
+
+.ph-audio {
   display: flex;
   align-items: center;
-  gap: 10px;
-  min-height: 44px;
+  gap: 12px;
+  min-height: 42px;
+  padding: 0 14px;
+  background: var(--faint);
+  color: var(--on-faint);
 }
 
-.sketch-audio__play {
+.ph-audio .ph-play {
   flex: none;
+  color: var(--fg);
 }
 
-.sketch-audio__wave {
+.ph-audio__track {
   flex: 1;
-  min-width: 48px;
-  height: 26px;
+  min-width: 40px;
+  height: 1px;
+  background: var(--track);
 }
 
-.sketch-audio__time {
-  color: var(--graphite);
-  font-family: var(--font-hand);
-  font-size: 1.5rem;
-  line-height: 1;
-}
-
-.sketch-audio .sketch__note {
-  padding: 0;
-  background: none;
+.ph-audio__time {
+  font-size: 0.875rem;
+  font-variant-numeric: tabular-nums;
 }
 
 
-/* 12. Footer
-   --------------------------------------------------------------------------
-   Sits at the bottom of the window on short pages: your name, signed off by
-   hand, with the logo on the right.
+/* 10. Tablet: images go under the text
    ========================================================================== */
 
-.site-footer {
-  grid-area: footer;
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  align-self: end;
-  min-height: 112px;
-  margin-top: 26px;
-  padding: 10px 0;
-  font-family: var(--font-hand);
-  font-size: 1.75rem;
-  line-height: 1.1;
-  text-align: center;
-}
-
-.site-footer p {
-  margin: 0;
-}
-
-.site-footer__logo {
-  position: absolute;
-  top: 50%;
-  right: clamp(0px, 5vw - 32px, 68px);
-  transform: translateY(-50%);
-  line-height: 0;
-}
-
-.site-footer__logo img {
-  display: block;
-  width: 180px;
-  height: auto;
-}
-
-
-/* 13. Tablet: figures move under the text
-   ========================================================================== */
-
-@media (max-width: 1119.98px) {
+@media (max-width: 1099.98px) {
   .page {
-    grid-template-columns:
-      minmax(max-content, 1fr)
-      minmax(0, var(--content-w))
-      minmax(0, 1fr);
+    grid-template-columns: minmax(var(--nav-w), max-content) minmax(0, var(--text-w)) 1fr;
+    grid-template-areas:
+      "header .    ."
+      "nav    main ."
+      "footer footer footer";
   }
 
   .main {
     grid-template-columns: minmax(0, 1fr);
-    grid-template-areas:
-      "content"
-      "figures";
   }
 
   .figures {
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: flex-start;
-    gap: 28px var(--gutter);
-    margin-top: 12px;
-  }
-
-  .figures .figure {
-    width: min(100%, var(--figures-w));
-  }
-
-  .site-footer__logo img {
-    width: 140px;
-  }
-
-  .nav-list {
-    font-size: 1.5rem;
-  }
-
-  .nav-sub {
-    font-size: 1.3125rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+    gap: 1.25rem 1rem;
+    margin-top: var(--gap);
   }
 }
 
 
-/* 14. Mobile: one column, title and nav on top, a narrower spine
+/* 11. Mobile: one column
    ========================================================================== */
 
 @media (max-width: 759.98px) {
   :root {
-    --binding: 38px;
-    --pad: 16px;
-  }
-
-  body {
-    background-position: 0 20px, 0 0;
-    background-size: var(--binding) 95px, 240px 240px;
+    --pad: 20px;
   }
 
   .page {
     display: block;
-    padding: 18px var(--pad) 40px calc(var(--binding) + 14px);
+    padding: 22px var(--pad) 24px;
   }
 
-  /* The nav sits above the text here; a pencil line divides them instead */
-  .page::before {
-    display: none;
-  }
-
-  /* <title> Callum Tham </title> on one line, the date underneath */
   .site-header {
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr);
-    align-items: baseline;
-    gap: 2px 8px;
-    margin: 0 0 18px;
-  }
-
-  .site-header__main {
-    display: contents;
-  }
-
-  .page-date {
-    grid-column: 1 / -1;
-  }
-
-  .code-tag {
-    font-size: 1.375rem;
-  }
-
-  .site-title {
-    font-size: 2.625rem;
+    padding-bottom: 18px;
   }
 
   .site-nav {
     position: static;
-    justify-self: stretch;
-    margin: 0 0 30px;
-    padding-bottom: 18px;
-    background: var(--mark-line) left bottom / 100% 6px no-repeat;
-    text-align: left;
+    margin-bottom: calc(var(--gap) * 2);
   }
 
-  .nav-list {
-    font-size: 1.625rem;
-  }
-
-  /* Bigger tap targets */
+  /* Bigger tap targets without spreading the list out */
   .nav-list a {
     display: inline-block;
     padding: 3px 0;
   }
 
-  .nav-list > li + li {
-    margin-top: 0.12em;
-  }
-
-  .nav-group__head {
-    flex-direction: row;
-  }
-
   .js .nav-toggle {
     width: 44px;
     height: 44px;
-    margin: 0 0 0 4px;
-  }
-
-  .nav-sub {
-    padding: 0 0 0 1.1em;
-    font-size: 1.375rem;
+    margin: -10px 0 -10px 0;
   }
 
   .main {
     display: block;
   }
 
-  .content h1 {
-    font-size: 3rem;
-  }
-
-  /* Two images to a row */
   .figures {
-    display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 22px 16px;
-    margin-top: 1.5em;
-    padding-top: 0;
-  }
-
-  .figures .figure {
-    width: auto;
-  }
-
-  .sketch__label {
-    font-size: 1.375rem;
-  }
-
-  .sketch__note {
-    font-size: 1.125rem;
-  }
-
-  table {
-    font-size: 0.875rem;
-  }
-
-  th,
-  td {
-    padding-right: 10px;
+    gap: 1.25rem 0.875rem;
   }
 
   .site-footer {
-    flex-direction: column;
-    gap: 12px;
-    min-height: 0;
-    margin-top: 2.5em;
-    padding: 0;
-  }
-
-  .site-footer__logo {
-    position: static;
-    transform: none;
-  }
-
-  .site-footer__logo img {
-    width: 130px;
+    padding-top: 3em;
   }
 }

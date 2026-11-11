@@ -1,6 +1,6 @@
 [
   { "title": "About Me", "url": "/" },
-  { "title": "Sounds Of", "url": "/sounds-of/" },
+  { "title": "Sounds Of", "url": "/sounds-of/", "groupStart": true },
   {
     "title": "Video Game Sound Design",
     "url": "/video-game-sound-design/",
@@ -14,6 +14,6 @@
   },
   { "title": "Social Media Marketing", "url": "/social-media-marketing/" },
   { "title": "My Music", "url": "/my-music/" },
-  { "title": "Qualifications and Other Credits", "url": "/qualifications-and-other-credits/" },
+  { "title": "Qualifications and Other Credits", "url": "/qualifications-and-other-credits/", "groupStart": true },
   { "title": "Contact", "url": "/contact/" }
 ]

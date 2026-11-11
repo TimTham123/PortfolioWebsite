@@ -2,16 +2,13 @@
 layout: layouts/base.njk
 ---
 {#- Layout for the Video Game Sound Design sub-pages: the page itself,
-    then webring-style links to the previous / next project. #}
+    then links to the previous / next project (it wraps round at the ends). #}
 {{ content | safe }}
 {%- set pages = navigation | pager(page.url) %}
 {%- if pages %}
 
 <nav class="pager" aria-label="{{ pages.parent.title }} pages">
   <a href="{{ pages.prev.url }}" rel="prev">&larr; {{ pages.prev.title }}</a>
-  <span aria-hidden="true">|</span>
-  <a href="{{ pages.parent.url }}">{{ pages.parent.title }}</a>
-  <span aria-hidden="true">|</span>
   <a href="{{ pages.next.url }}" rel="next">{{ pages.next.title }} &rarr;</a>
 </nav>
 {%- endif %}

@@ -1,18 +1,20 @@
 {#-
-  Main navigation. The items come from src/_data/navigation.json;
+  Main navigation (the index). The items come from src/_data/navigation.json;
   edit that file (not this one) to rename, reorder or add pages.
+  "groupStart" there leaves a blank line before an item.
 -#}
 <nav class="site-nav" aria-label="Main">
   <ul class="nav-list">
     {%- for item in navigation %}
+    {%- set groupClass = " nav-group-start" if item.groupStart else "" %}
     {%- if item.children %}
     {%- set open = page.url | inSection(item.url) %}
-    <li class="nav-group" data-open="{{ 'true' if open else 'false' }}">
+    <li class="nav-group{{ groupClass }}" data-open="{{ 'true' if open else 'false' }}">
       <div class="nav-group__head">
         <a href="{{ item.url }}"{% if page.url == item.url %} aria-current="page"{% elif open %} class="is-section"{% endif %}>{{ item.title }}</a>
         <button class="nav-toggle" type="button" aria-expanded="{{ 'true' if open else 'false' }}" aria-controls="nav-sub-{{ loop.index }}">
           <span class="visually-hidden">{{ item.title }} pages</span>
-          <svg class="nav-toggle__icon" viewBox="0 0 20 20" width="18" height="18" aria-hidden="true" focusable="false"><path d="M2.6 3.1c4.9-.6 9.8-.7 14.6-.3.5 4.6.6 9.4.2 14.3-4.8.5-9.7.6-14.6.1-.6-4.7-.7-9.4-.2-14.1z"/><path d="M5.8 10.2c2.8-.3 5.6-.3 8.4.1"/><path class="nav-toggle__plus" d="M10.1 5.9c.2 2.8.2 5.5-.1 8.3"/></svg>
+          <span class="nav-toggle__icon" aria-hidden="true"></span>
         </button>
       </div>
       <ul class="nav-sub" id="nav-sub-{{ loop.index }}">
@@ -22,7 +24,7 @@
       </ul>
     </li>
     {%- else %}
-    <li><a href="{{ item.url }}"{% if page.url == item.url %} aria-current="page"{% endif %}>{{ item.title }}</a></li>
+    <li{% if item.groupStart %} class="nav-group-start"{% endif %}><a href="{{ item.url }}"{% if page.url == item.url %} aria-current="page"{% endif %}>{{ item.title }}</a></li>
     {%- endif %}
     {%- endfor %}
   </ul>

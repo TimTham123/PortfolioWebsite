@@ -1,15 +1,4 @@
-{#-
-  The title row at the top of every page, written like a line of HTML:
-  <title> Callum Tham </title>. The opening tag sits in the nav column and
-  the name starts where the page text starts. The page's date sits on the
-  right, like the date at the top of a notebook page.
--#}
+{#- Your name, signed by hand: the one handwritten mark on the page. #}
 <header class="site-header">
-  <span class="code-tag site-header__open" aria-hidden="true">&lt;title&gt;</span>
-  <div class="site-header__main">
-    <p class="site-title"><a href="/">{{ site.name }}</a><span class="code-tag" aria-hidden="true">&lt;/title&gt;</span></p>
-    {%- if not hideStamp %}
-    {% include "partials/stamp.njk" %}
-    {%- endif %}
-  </div>
+  <p class="signature"><a href="/">{{ site.name }}</a></p>
 </header>
