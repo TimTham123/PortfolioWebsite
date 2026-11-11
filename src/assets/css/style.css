@@ -437,6 +437,19 @@ blockquote {
   color: var(--muted);
 }
 
+/* The same, written by hand */
+.quote--hand {
+  max-width: 32rem;
+  font-family: var(--font-hand);
+  font-size: 1.75rem;
+  line-height: 1.15;
+  letter-spacing: 0;
+}
+
+.quote--hand .quote__by {
+  margin-top: 0.35em;
+}
+
 .table-scroll {
   overflow-x: auto;
 }
