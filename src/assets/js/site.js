@@ -10,7 +10,7 @@
   };
 
   /*
-    1. Dropdown for "Video Game Sound Design" (and any nav item with children).
+    1. Dropdowns for "Interests" and "Sound Design" (any nav item with sub-pages).
 
     The [+] / [-] button opens and closes the list of sub-pages underneath it.
     It's a plain click/tap toggle (no hover) so it behaves the same with a

@@ -289,8 +289,20 @@ a:hover {
   list-style: none;
 }
 
-.nav-group-start {
+/* Sections (Me, Work) and the closing pair are separated by a blank line.
+   A section's label is black and isn't a link. */
+.nav-section + li {
   margin-top: var(--gap);
+}
+
+.nav-label {
+  display: block;
+  color: var(--fg);
+}
+
+/* Headings, subheadings, sub-pages: each level steps in a little */
+.site-nav .nav-section > ul {
+  padding-left: 1em;
 }
 
 /* Where you are is black */
@@ -410,6 +422,19 @@ a:hover {
 
 blockquote {
   padding-left: 1em;
+}
+
+/* A quote: the words in black, who said it underneath in grey */
+.quote {
+  padding-left: 0;
+}
+
+.content .quote p {
+  margin-bottom: 0;
+}
+
+.quote__by {
+  color: var(--muted);
 }
 
 .table-scroll {

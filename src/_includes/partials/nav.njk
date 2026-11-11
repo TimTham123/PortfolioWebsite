@@ -1,36 +1,56 @@
 {#-
   Main navigation (the index). The items come from src/_data/navigation.json;
   edit that file (not this one) to rename, reorder or add pages.
-  "groupStart" there leaves a blank line before an item.
+
+  Three levels:
+    a section label with no page (Me, Work)
+      → pages (About Me, Sounds Of…), some with sub-pages behind a "+"
+        → sub-pages (Music, Cyberpedia…)
+  A top-level item with a url (Qualifications…, Contact) is a plain link.
 -#}
-<nav class="site-nav" aria-label="Main">
-  <ul class="nav-list">
-    {%- for item in navigation %}
-    {%- set groupClass = " nav-group-start" if item.groupStart else "" %}
-    {%- if item.children %}
-    {%- set open = page.url | inSection(item.url) %}
-    <li class="nav-group{{ groupClass }}" data-open="{{ 'true' if open else 'false' }}">
+{%- macro navItem(item, id, currentUrl) %}
+  {%- if item.children %}
+    {%- set open = currentUrl | inSection(item.url) %}
+    <li class="nav-group" data-open="{{ 'true' if open else 'false' }}">
       <div class="nav-group__head">
-        <a href="{{ item.url }}"{% if page.url == item.url %} aria-current="page"{% elif open %} class="is-section"{% endif %}>{{ item.title }}</a>
-        <button class="nav-toggle" type="button" aria-expanded="{{ 'true' if open else 'false' }}" aria-controls="nav-sub-{{ loop.index }}">
+        <a href="{{ item.url }}"{% if currentUrl == item.url %} aria-current="page"{% elif open %} class="is-section"{% endif %}>{{ item.title }}</a>
+        <button class="nav-toggle" type="button" aria-expanded="{{ 'true' if open else 'false' }}" aria-controls="{{ id }}">
           <span class="visually-hidden">{{ item.title }} pages</span>
           <span class="nav-toggle__icon" aria-hidden="true"></span>
         </button>
       </div>
-      <ul class="nav-sub" id="nav-sub-{{ loop.index }}">
+      <ul class="nav-sub" id="{{ id }}">
         {%- for child in item.children %}
-        <li><a href="{{ child.url }}"{% if page.url == child.url %} aria-current="page"{% endif %}>{{ child.title }}</a></li>
+        <li><a href="{{ child.url }}"{% if currentUrl == child.url %} aria-current="page"{% endif %}>{{ child.title }}</a></li>
         {%- endfor %}
       </ul>
     </li>
+  {%- else %}
+    <li><a href="{{ item.url }}"{% if currentUrl == item.url %} aria-current="page"{% endif %}>{{ item.title }}</a></li>
+  {%- endif %}
+{%- endmacro %}
+
+<nav class="site-nav" aria-label="Main">
+  <ul class="nav-list">
+    {%- for section in navigation %}
+    {%- set sectionIndex = loop.index %}
+    {%- if section.url %}
+    {{ navItem(section, "nav-sub-" + sectionIndex, page.url) }}
     {%- else %}
-    <li{% if item.groupStart %} class="nav-group-start"{% endif %}><a href="{{ item.url }}"{% if page.url == item.url %} aria-current="page"{% endif %}>{{ item.title }}</a></li>
+    <li class="nav-section">
+      <span class="nav-label" id="nav-label-{{ sectionIndex }}">{{ section.title }}</span>
+      <ul aria-labelledby="nav-label-{{ sectionIndex }}">
+        {%- for item in section.children %}
+        {{ navItem(item, "nav-sub-" + sectionIndex + "-" + loop.index, page.url) }}
+        {%- endfor %}
+      </ul>
+    </li>
     {%- endif %}
     {%- endfor %}
   </ul>
 </nav>
 <script>
-  /* Small screens start with the dropdown closed so the page itself stays near the top.
+  /* Small screens start with the dropdowns closed so the page itself stays near the top.
      Runs here, before the rest of the page is drawn, so nothing jumps. */
   if (window.matchMedia("(max-width: 759.98px)").matches) {
     document.querySelectorAll(".nav-group[data-open='true']").forEach(function (group) {

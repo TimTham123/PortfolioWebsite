@@ -40,31 +40,39 @@ npm run build
 src/
 ├── _data/
 │   ├── site.json          ← your name, footer text, email, placeholder markers
-│   ├── navigation.json    ← the index (titles, order, groups, dropdown items)
+│   ├── navigation.json    ← the index (sections, pages, dropdown items)
 │   └── build.js           ← the year shown in the footer
 ├── _includes/
 │   ├── layouts/
 │   │   ├── base.njk       ← the page: signature, index | text | images, footer
-│   │   └── project.njk    ← base + ← previous / next → links, for game projects
+│   │   └── project.njk    ← base + ← previous / next → links, for sub-pages
 │   └── partials/          ← signature, nav, footer and the page date
 ├── assets/
 │   ├── css/style.css      ← all the styling, with comments
 │   ├── js/site.js         ← dropdown toggle (the only script)
 │   ├── fonts/             ← Instrument Sans + Reenie Beanie (open-licence fonts)
 │   └── img/               ← put your images here
-├── index.njk              ← About Me (the home page)
-├── sounds-of.njk
-├── video-game-sound-design/
-│   ├── index.njk          ← Video Game Sound Design overview
-│   ├── sound-design-reel.njk
-│   ├── cyberpedia.njk
-│   ├── alchemeow.njk
-│   ├── okiro.njk
-│   └── a-little-bit-of-gore.njk
-├── social-media-marketing.njk
-├── my-music.njk
-├── qualifications-and-other-credits.njk
-├── contact.njk
+│                            Me
+├── index.njk              ← About Me (the home page)            /
+├── interests/
+│   ├── index.njk          ← Interests overview                 /interests/
+│   ├── music.njk                                               /interests/music/
+│   ├── climbing.njk                                            /interests/climbing/
+│   └── my-cat.njk                                              /interests/my-cat/
+│                            Work
+├── sounds-of.njk                                               /sounds-of/
+├── sound-design/
+│   ├── index.njk          ← Sound Design overview              /sound-design/
+│   ├── reel.njk           ← Game Sound Design Reel             /sound-design/reel/
+│   ├── alchemeow.njk                                           /sound-design/alchemeow/
+│   ├── cyberpedia.njk                                          /sound-design/cyberpedia/
+│   ├── okiro.njk                                               /sound-design/okiro/
+│   ├── a-little-bit-of-gore.njk                                /sound-design/a-little-bit-of-gore/
+│   └── hubworld.njk                                            /sound-design/hubworld/
+├── social-media-strategy.njk                                   /social-media-strategy/
+│
+├── qualifications.njk     ← Qualifications and Additional Credits  /qualifications/
+├── contact.njk                                                 /contact/
 └── 404.njk                ← "Not Found" page
 lib/                       ← the media components and template filters
 ```
@@ -107,12 +115,19 @@ above it, and the text follows straight underneath.
 
 ### The index (navigation)
 
-Edit `src/_data/navigation.json`. The order there is the order in the index.
-`"groupStart": true` leaves a blank line before an item, which is how the
-index is split into About Me / the work / Qualifications and Contact. Any item
-with `children` gets a `+` dropdown. To add a page, create the `.njk` file and
-add a line for it here. Its address follows its file name, so
-`src/my-music.njk` becomes `/my-music/`.
+Edit `src/_data/navigation.json`. The order there is the order in the index,
+in three levels:
+
+- **Sections** with no page of their own (`Me`, `Work`) show as black labels.
+- **Pages** sit under them. A page with `children` (Interests, Sound Design)
+  gets a `+` dropdown.
+- **Sub-pages** sit under those, and get ← previous / next → links to each
+  other.
+
+A top-level item with a `url` (Qualifications and Additional Credits, Contact)
+is a plain link. To add a page, create the `.njk` file and add a line for it
+here. Its address follows its file name and folder, so
+`src/sound-design/hubworld.njk` becomes `/sound-design/hubworld/`.
 
 ### Images, video and audio
 
@@ -176,12 +191,16 @@ one size of type, hierarchy from spacing and grey versus black.
 Between 760px and 1100px the images move below the text. Below 760px it's one
 column: signature, index, then the page.
 
-**The dropdown.** "Video Game Sound Design" is a link to its own overview page.
-The `+` next to it opens the five project pages underneath, indented. It works
+**The index.** Me and Work are black labels with their pages indented
+underneath; Qualifications and Additional Credits and Contact close the list.
+Each level steps in a little, like an outline.
+
+**The dropdowns.** "Interests" and "Sound Design" link to their own overview
+pages. The `+` next to each opens its sub-pages underneath, indented. It works
 by click, tap or keyboard (Enter/Space; Escape closes it), not on hover, so
 nothing jumps around as the mouse passes. It's open automatically when you're
 on one of those pages, except on phones, where it starts closed to keep the
-page near the top. Without JavaScript the five pages are simply always listed.
+page near the top. Without JavaScript the sub-pages are simply always listed.
 
 **Accessibility.** The site has a skip link, a labelled nav with
 `aria-current` on the current page, a real `<button>` with `aria-expanded` for
