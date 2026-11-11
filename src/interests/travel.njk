@@ -1,0 +1,30 @@
+---
+layout: layouts/base.njk
+title: Travel
+description: Photos and videos from the road.
+updated: 2026-11-11
+placeholder: true
+---
+{#- No text on this page: just the photos and videos from media/travel/
+    (see src/_data/travel.js). The heading is for screen readers only. #}
+<h1 class="visually-hidden">Travel</h1>
+
+{#- How wide a tile is at each screen size, so the browser fetches a big
+    enough photo (see the gallery in style.css). #}
+{%- set sizes = "(min-width: 1236px) 18rem, (min-width: 1100px) 23rem, (min-width: 760px) 18rem, calc(50vw - 20px)" %}
+<div class="gallery wide">
+  {%- for item in travel.items %}
+  {%- if item.type == "photo" %}
+  <a class="gallery__item{% if item.tall %} gallery__item--tall{% endif %}" href="{{ item.full }}">
+    <picture>
+      <source type="image/webp" srcset="{{ item.webp }}" sizes="{{ sizes }}">
+      <img src="{{ item.fallback }}" srcset="{{ item.jpeg }}" sizes="{{ sizes }}" width="{{ item.width }}" height="{{ item.height }}" alt="{{ item.alt }}" loading="lazy" decoding="async">
+    </picture>
+  </a>
+  {%- else %}
+  <figure class="gallery__item gallery__item--video">
+    <video controls playsinline preload="metadata" src="{{ item.src }}#t=0.5" title="{{ item.title }}" aria-label="{{ item.title }}"></video>
+  </figure>
+  {%- endif %}
+  {%- endfor %}
+</div>

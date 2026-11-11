@@ -9,7 +9,8 @@
         "children": [
           { "title": "Music", "url": "/interests/music/" },
           { "title": "Climbing", "url": "/interests/climbing/" },
-          { "title": "Cat", "url": "/interests/cat/" }
+          { "title": "Cat", "url": "/interests/cat/" },
+          { "title": "Travel", "url": "/interests/travel/" }
         ]
       }
     ]

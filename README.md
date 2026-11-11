@@ -44,6 +44,7 @@ src/
 │   ├── sounds-of.csv      ← every Sounds Of episode (drives the map)
 │   ├── sounds-of-routes.json ← the roads between episodes (npm run routes)
 │   ├── soundsOf.js        ← reads the CSV and places episodes on the map
+│   ├── travel.js          ← builds the Travel gallery from media/travel/
 │   └── build.js           ← the year, and a version tag for the CSS/JS links
 ├── _includes/
 │   ├── layouts/
@@ -62,7 +63,8 @@ src/
 │   ├── index.njk          ← Interests overview                 /interests/
 │   ├── music.njk                                               /interests/music/
 │   ├── climbing.njk                                            /interests/climbing/
-│   └── cat.njk                                                 /interests/cat/
+│   ├── cat.njk                                                 /interests/cat/
+│   └── travel.njk         ← photo and video gallery            /interests/travel/
 │                            Work
 ├── sounds-of.njk                                               /sounds-of/
 ├── sound-design/
@@ -79,6 +81,7 @@ src/
 ├── contact.njk                                                 /contact/
 └── 404.njk                ← "Not Found" page
 lib/                       ← media components, filters, CSV reader, map outline and projection
+media/travel/              ← the Travel photos and videos
 ```
 
 ## Everyday edits
@@ -190,6 +193,28 @@ The episode list under the map is made from the same file, so it always
 matches. The outline of Australia is generated from Natural Earth's public
 domain coastline (`lib/australia-map.js`); there's no need to touch it.
 
+### The Travel page
+
+The Travel page has no text, just a grid of photos and videos. To fill it,
+put your files in `media/travel/`:
+
+- **Photos** (`.jpg`, `.png`, `.webp`) go in at full size. The build makes
+  smaller copies for the grid, and clicking a photo opens the large one.
+  Export iPhone photos as JPEG (HEIC won't work).
+- **Videos** (`.mp4` is safest) are used as they are, so keep them small:
+  under about 50 MB each, 1080p or less.
+- **Order** follows the file names, so number them: `001.jpg`, `002.jpg`…
+  The videos are spread evenly through the photos.
+- **Descriptions**: a file name such as `014-kalgoorlie-sunset.jpg` becomes
+  "Kalgoorlie sunset" for screen readers.
+
+Each photo is a 3:2 tile, cropped to fit. Portrait photos take two tiles,
+one above the other, and each video takes four, two across and two down.
+Until you add files, `placeholder-photo.jpg` and `placeholder-video.mp4` are
+repeated to show the layout (100 photos, 3 videos). Once there's a real photo
+they're ignored, and the same goes for the video once there's a real video.
+Delete them when you're done.
+
 ## Finding and replacing placeholder content
 
 All of the current text and media is placeholder. It's marked so you can find
@@ -202,6 +227,7 @@ it on the page and in the code:
 | Grey box marked *placeholder* | `{% image %}`, `{% video %}`, `{% audio %}` or `{% embed %}` with no file/URL |
 | `[square brackets]` | facts to fill in, such as `[City]` or `[2025]` |
 | "· placeholder content" in the footer | `placeholder: true` at the top of the page |
+| The same photo and video repeated on the Travel page | `media/travel/placeholder-photo.jpg` and `placeholder-video.mp4` |
 
 When a section is finished, delete its `class="ph"` (or the wrapper `div`) and
 its comment. To preview the site without any markers, set

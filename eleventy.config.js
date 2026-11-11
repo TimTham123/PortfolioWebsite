@@ -9,6 +9,11 @@ export default function (eleventyConfig) {
   // Static files are copied as-is: CSS, JS, images, audio, video…
   eleventyConfig.addPassthroughCopy({ "src/assets": "assets" });
 
+  // Travel videos are copied as they are; travel photos are resized by
+  // src/_data/travel.js. Rebuild when the folder changes.
+  eleventyConfig.addPassthroughCopy({ "media/travel/*.{mp4,webm,m4v,mov}": "assets/travel" });
+  eleventyConfig.addWatchTarget("media/travel/");
+
   // Filters used by the templates (see lib/filters.js).
   for (const [name, fn] of Object.entries(filters)) {
     eleventyConfig.addFilter(name, fn);
