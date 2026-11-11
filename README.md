@@ -42,6 +42,7 @@ src/
 │   ├── site.json          ← your name, footer text, email, placeholder markers
 │   ├── navigation.json    ← the index (sections, pages, dropdown items)
 │   ├── sounds-of.csv      ← every Sounds Of episode (drives the map)
+│   ├── sounds-of-routes.json ← the roads between episodes (npm run routes)
 │   ├── soundsOf.js        ← reads the CSV and places episodes on the map
 │   └── build.js           ← the year, and a version tag for the CSS/JS links
 ├── _includes/
@@ -171,7 +172,16 @@ doesn't matter):
 | `youtube` | `https://www.youtube.com/watch?v=qX9Ej2ddQ5k` | the full link or just the ID |
 | `description` | `Grub is a singer-songwriter…` | a sentence or two |
 
-Episodes are sorted by date, and that order is the route. The current file was
+Episodes are sorted by date, and that order is the route. Each leg follows
+the roads, using driving routes saved in `src/_data/sounds-of-routes.json`
+(from OpenStreetMap, via the free OSRM router). After adding or moving
+episodes, fetch the new legs with:
+
+```bash
+npm run routes
+```
+
+Until you do, a new leg is drawn as a gentle curve. The current file was
 built from the videos on the Sounds Of YouTube channel: names, dates and the
 first lines of each description, with approximate coordinates. The Big Dance
 Festival and Gippsland locations are guesses.

@@ -18,6 +18,8 @@ import { viewBox, fit, outline, echo } from "../../lib/australia-map.js";
 import { youtubeId, embedUrl, watchUrl } from "../../lib/youtube.js";
 
 const CSV = new URL("./sounds-of.csv", import.meta.url);
+// Road routes between episodes, made by `npm run routes` (scripts/fetch-routes.mjs).
+const ROUTES = new URL("./sounds-of-routes.json", import.meta.url);
 
 // Muted marker colours, one per state or territory.
 const STATE_COLOURS = {
@@ -60,6 +62,8 @@ export default function () {
       const [x, y] = toMap(row.lat, row.lng);
       return {
         index: i,
+        lat: row.lat,
+        lng: row.lng,
         name: row.name,
         location: row.location,
         place: row.location.split(",")[0].trim(),
@@ -100,12 +104,21 @@ export default function () {
     ep.y = round(ep.y, 1);
   }
 
-  // The route: a gentle curve from each episode to the next, bowing away
-  // from the middle of the country so it reads as a road trip round the edge.
+  // The route follows the roads between episodes (sounds-of-routes.json).
+  // A leg without a saved road (a new episode, before `npm run routes`) is
+  // drawn as a gentle curve instead.
+  const roads = fs.existsSync(ROUTES) ? JSON.parse(fs.readFileSync(ROUTES, "utf8")) : {};
   const cx = viewBox.width / 2;
   const cy = viewBox.height / 2;
   const segments = episodes.slice(1).map((ep, i) => {
     const a = episodes[i];
+    const road = roads[`${a.lat},${a.lng}|${ep.lat},${ep.lng}`];
+    if (road && road.length > 1) {
+      const pts = road.map(([lat, lng]) => toMap(lat, lng));
+      pts[0] = [a.x, a.y];
+      pts[pts.length - 1] = [ep.x, ep.y];
+      return { d: "M" + pts.map(([x, y]) => `${round(x, 1)} ${round(y, 1)}`).join("L") };
+    }
     const mx = (a.x + ep.x) / 2;
     const my = (a.y + ep.y) / 2;
     const dx = ep.x - a.x;
