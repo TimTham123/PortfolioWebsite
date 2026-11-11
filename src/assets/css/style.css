@@ -666,6 +666,526 @@ div.ph {
 }
 
 
+/* 9b. The Sounds Of map
+   --------------------------------------------------------------------------
+   A hand-drawn Australia (the coast is drawn twice and roughened with an SVG
+   filter, like Reenie Beanie's pen), muted markers, a popup with the video,
+   and a timeline. The route is drawn faintly; the black ink on top grows as
+   you go (see assets/js/sounds-of-map.js).
+   ========================================================================== */
+
+.sm {
+  margin: 0 0 var(--gap);
+}
+
+.sm__stage {
+  --zoom: 1;
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  touch-action: pan-y; /* pinch is handled by the map; swipes still scroll the page */
+}
+
+.sm.is-zoomed .sm__stage {
+  touch-action: none;
+  cursor: grab;
+}
+
+.sm.is-dragging .sm__stage {
+  cursor: grabbing;
+}
+
+.sm__map {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.sm__coast,
+.sm__echo {
+  fill: none;
+  stroke: var(--fg);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.sm__coast {
+  stroke-width: 1.4;
+}
+
+.sm__echo {
+  stroke-width: 0.9;
+  stroke-opacity: 0.3;
+}
+
+/* Sizes divide by --zoom so labels and lines stay the same size on screen */
+.sm__labels text {
+  fill: #8c8c8c;
+  font-family: var(--font-hand);
+  font-size: calc(30px / var(--zoom));
+  letter-spacing: 0.04em;
+}
+
+.sm__route path {
+  fill: none;
+  stroke: var(--fg);
+  stroke-linecap: round;
+}
+
+/* The whole route, faintly */
+.sm__route-faint path {
+  stroke-opacity: 0.16;
+  stroke-width: calc(2.2px / var(--zoom));
+}
+
+/* ...and the part travelled so far, in black */
+.sm__route-ink path {
+  stroke-width: calc(2.6px / var(--zoom));
+  transition-property: stroke-dashoffset;
+  transition-timing-function: ease-in-out;
+}
+
+.sm__markers {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sm__marker {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  margin: -13px 0 0 -13px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.sm__dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--c);
+  box-shadow: 0 0 0 1px rgba(10, 10, 10, 0.35);
+  transition: transform 0.15s ease;
+}
+
+.sm__marker:hover .sm__dot {
+  transform: scale(1.3);
+}
+
+.sm__marker.is-current {
+  z-index: 1;
+}
+
+.sm__marker.is-current .sm__dot {
+  box-shadow: 0 0 0 2px var(--bg), 0 0 0 3.5px var(--fg);
+  transform: scale(1.3);
+}
+
+.sm__marker:focus-visible,
+.sm__tick:focus-visible {
+  outline-offset: 0;
+}
+
+/* The handwritten name of the place you're at, next to its marker */
+.sm__place {
+  position: absolute;
+  margin: 0;
+  transform: translate(14px, -55%);
+  font-family: var(--font-hand);
+  font-size: 1.75rem;
+  line-height: 1;
+  letter-spacing: 0;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.sm__place.is-left {
+  transform: translate(calc(-100% - 14px), -55%);
+}
+
+.sm__place:empty {
+  display: none;
+}
+
+/* The popup, inside the map */
+.sm__popup {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
+  width: min(21rem, calc(100% - 24px));
+  max-height: calc(100% - 24px);
+  overflow-y: auto;
+  padding: 12px 16px 16px;
+  border: 1px solid var(--fg);
+  background: var(--bg);
+  font-size: 0.9375rem;
+  line-height: 1.42;
+  overscroll-behavior: contain;
+}
+
+.sm__popup.is-left {
+  right: auto;
+  left: 12px;
+}
+
+.sm__popup[hidden] {
+  display: none;
+}
+
+.sm__close {
+  position: absolute;
+  top: 2px;
+  right: 4px;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--fg);
+  font: inherit;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.sm__date {
+  margin: 0 2.25rem 0 0;
+  font-size: 0.8125rem;
+}
+
+.sm__name {
+  margin: 0.15em 2rem 0 0;
+  font-family: var(--font-hand);
+  font-size: 2rem;
+  line-height: 1;
+  letter-spacing: 0;
+}
+
+.sm__location {
+  margin: 0.2em 0 0.75em;
+}
+
+.sm__video {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  margin-bottom: 0.75em;
+  background: var(--faint);
+}
+
+.sm__video[hidden] {
+  display: none;
+}
+
+.sm__video iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.content .sm__description {
+  margin-bottom: 0.6em;
+}
+
+.content .sm__watch {
+  margin: 0;
+}
+
+/* Zoom buttons: bottom left, or bottom right when the popup is on the left */
+.sm__zoom {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.sm:not(.is-ready) .sm__zoom {
+  display: none;
+}
+
+.sm__popup.is-left:not([hidden]) ~ .sm__zoom {
+  left: auto;
+  right: 10px;
+  align-items: flex-end;
+}
+
+.sm__zoom-btn {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid var(--fg);
+  background: var(--bg);
+  color: var(--fg);
+  font: inherit;
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.sm__zoom-btn[aria-disabled="true"] {
+  border-color: #c8c8c8;
+  color: #c8c8c8;
+  cursor: default;
+}
+
+.sm__zoom-reset {
+  display: none;
+  padding: 2px 0;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.sm__zoom-reset:hover {
+  color: var(--fg);
+}
+
+.sm.is-zoomed .sm__zoom-reset {
+  display: block;
+}
+
+/* "Hold Ctrl and scroll to zoom" */
+.sm__hint {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  z-index: 3;
+  margin: 0;
+  padding: 4px 10px;
+  background: var(--fg);
+  color: var(--bg);
+  font-size: 0.8125rem;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateX(-50%);
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.sm__hint.is-visible {
+  opacity: 1;
+}
+
+/* The timeline */
+.sm__timeline {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.sm:not(.is-ready) .sm__timeline {
+  display: none;
+}
+
+.sm__step {
+  flex: none;
+  height: 26px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.sm__step:hover {
+  color: var(--fg);
+}
+
+.sm__step[aria-disabled="true"] {
+  color: #c8c8c8;
+  cursor: default;
+}
+
+.sm__track {
+  flex: 1;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.sm__track::-webkit-scrollbar {
+  display: none;
+}
+
+.sm__ticks {
+  position: relative;
+  display: flex;
+  margin: 0;
+  padding: 0 0 2.6rem;
+  list-style: none;
+}
+
+/* the line: faint end to end, black up to where you are */
+.sm__ticks::before,
+.sm__ticks::after {
+  content: "";
+  position: absolute;
+  top: 12.5px;
+  left: var(--start, 13px);
+  height: 1px;
+}
+
+.sm__ticks::before {
+  width: var(--end, 0px);
+  background: rgba(10, 10, 10, 0.18);
+}
+
+.sm__ticks::after {
+  width: var(--ink, 0px);
+  background: var(--fg);
+  transition: width 0.4s ease;
+}
+
+.sm__ticks > li {
+  position: relative;
+  display: flex;
+  flex: 1 0 26px;
+  justify-content: center;
+}
+
+.sm__tick {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.sm__tick-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--c);
+  box-shadow: 0 0 0 1px rgba(10, 10, 10, 0.3);
+  transition: transform 0.15s ease;
+}
+
+.sm__tick:hover .sm__tick-dot {
+  transform: scale(1.3);
+}
+
+.sm__tick.is-current .sm__tick-dot {
+  box-shadow: 0 0 0 2px var(--bg), 0 0 0 3.5px var(--fg);
+  transform: scale(1.3);
+}
+
+/* Month names, handwritten, where the month changes */
+.sm__month {
+  position: absolute;
+  top: 26px;
+  left: 50%;
+  max-width: 3.2em;
+  color: var(--fg);
+  font-family: var(--font-hand);
+  font-size: 1.25rem;
+  line-height: 0.95;
+  text-align: center;
+  transform: translateX(-50%);
+  white-space: pre-line;
+  pointer-events: none;
+}
+
+.sm__status {
+  margin-top: 0.25em;
+  font-size: 0.875rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sm__route-ink path,
+  .sm__ticks::after {
+    transition: none !important;
+  }
+}
+
+/* On wide screens the map also takes the (empty) image column */
+@media (min-width: 1100px) {
+  .sm {
+    width: min(calc(100% + var(--col-gap) + var(--fig-w)), calc((100vh - 220px) * 1.067));
+    min-width: 100%;
+  }
+}
+
+/* Phones: the popup covers the map, and lines are drawn a little heavier */
+@media (max-width: 599.98px) {
+  .sm__popup,
+  .sm__popup.is-left {
+    left: 6px;
+    right: 6px;
+    top: 6px;
+    width: auto;
+    max-height: calc(100% - 12px);
+  }
+
+  .sm__route-faint path {
+    stroke-width: calc(4px / var(--zoom));
+  }
+
+  .sm__route-ink path {
+    stroke-width: calc(4.5px / var(--zoom));
+  }
+
+  .sm__labels text {
+    font-size: calc(44px / var(--zoom));
+  }
+
+  .sm__place {
+    font-size: 1.5rem;
+  }
+
+  /* Just the arrows (the words stay for screen readers) */
+  .sm__step,
+  .sm__step[aria-disabled="true"] {
+    position: relative;
+    width: 44px;
+    height: 44px;
+    margin-top: -9px;
+    overflow: hidden;
+    color: transparent;
+  }
+
+  .sm__step [aria-hidden="true"] {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    color: var(--muted);
+  }
+
+  .sm__step[aria-disabled="true"] [aria-hidden="true"] {
+    color: #c8c8c8;
+  }
+}
+
+
 /* 10. Tablet: images go under the text
    ========================================================================== */
 

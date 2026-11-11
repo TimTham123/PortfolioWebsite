@@ -2,20 +2,15 @@
 layout: layouts/base.njk
 title: Sounds Of
 description: Sounds Of, a travelling live-music video series documenting emerging Australian artists.
-updated: 2026-11-10
+updated: 2026-11-11
 placeholder: true
-figures:
-  - alt: "Still from an episode: an artist playing in a lounge room"
-    caption: "(Episode 03, [Town])"
-    ratio: "4/5"
-  - alt: "The recording rig packed into the boot of a car"
-    caption: "(the whole studio, packed)"
-    ratio: "1/1"
+scripts:
+  - /assets/js/sounds-of-map.js
 ---
 <h1>Sounds Of</h1>
 <p class="standfirst">A travelling live-music video series documenting emerging Australian artists.</p>
 
-{% video { youtube: "", title: "Sounds Of: latest episode", caption: "Latest episode: [Artist name], recorded in [Town], [State]." } %}
+{% include "partials/sounds-of-map.njk" %}
 
 <h2>About the series</h2>
 <!-- PLACEHOLDER -->
@@ -25,17 +20,12 @@ figures:
 </div>
 
 <h2>Episodes</h2>
-<!-- PLACEHOLDER: one <dt>/<dd> pair per episode, newest first -->
-<div class="ph">
-  <dl>
-    <dt><a href="https://www.youtube.com/">Episode 03 &ndash; [Artist name]</a>, [Town], [State]</dt>
-    <dd>Two songs in a [century-old church hall]. One take each, four microphones, two cameras.</dd>
-    <dt><a href="https://www.youtube.com/">Episode 02 &ndash; [Artist name]</a>, [Town], [State]</dt>
-    <dd>A solo set on a [verandah at dusk], with the cicadas left in the mix.</dd>
-    <dt><a href="https://www.youtube.com/">Episode 01 &ndash; [Artist name]</a>, [Town], [State]</dt>
-    <dd>The pilot: a three-piece band squeezed into a [lounge room] on a 35-degree day.</dd>
-  </dl>
-</div>
+{#- Listed from src/_data/sounds-of.csv, newest first. #}
+<ol class="episode-list">
+  {%- for ep in soundsOf.episodes | reverse %}
+  <li>{% if ep.video %}<a href="{{ ep.video.watch }}">{{ ep.name }}</a>{% else %}{{ ep.name }}{% endif %}, {{ ep.location }} &middot; {{ ep.dateLong }}</li>
+  {%- endfor %}
+</ol>
 
 <h2>How it's made</h2>
 <!-- PLACEHOLDER -->
@@ -50,8 +40,8 @@ figures:
 </div>
 
 <h2>Watch &amp; follow</h2>
-<!-- PLACEHOLDER: swap the links for the series' own channels -->
+<!-- PLACEHOLDER: add the series' Instagram and TikTok links -->
 <div class="ph">
-  <p>New episodes go up on <a href="https://www.youtube.com/">YouTube</a>, with clips and behind-the-scenes on <a href="https://www.instagram.com/">Instagram</a> and <a href="https://www.tiktok.com/">TikTok</a>.</p>
+  <p>Every episode is on <a href="https://www.youtube.com/@soundsofchannel">YouTube</a>, with clips and behind-the-scenes on <a href="https://www.instagram.com/">Instagram</a> and <a href="https://www.tiktok.com/">TikTok</a>.</p>
   <p>Are you an artist, or know one, who'd suit the series? <a href="/contact/">Get in touch</a>.</p>
 </div>

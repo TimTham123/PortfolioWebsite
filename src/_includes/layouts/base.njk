@@ -11,6 +11,9 @@
   <link rel="stylesheet" href="/assets/css/style.css?v={{ build.version }}">
   <script>document.documentElement.classList.add("js");</script>
   <script src="/assets/js/site.js?v={{ build.version }}" defer></script>
+  {%- for src in scripts %}
+  <script src="{{ src }}?v={{ build.version }}" defer></script>
+  {%- endfor %}
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>

@@ -41,15 +41,18 @@ src/
 ├── _data/
 │   ├── site.json          ← your name, footer text, email, placeholder markers
 │   ├── navigation.json    ← the index (sections, pages, dropdown items)
-│   └── build.js           ← the year shown in the footer
+│   ├── sounds-of.csv      ← every Sounds Of episode (drives the map)
+│   ├── soundsOf.js        ← reads the CSV and places episodes on the map
+│   └── build.js           ← the year, and a version tag for the CSS/JS links
 ├── _includes/
 │   ├── layouts/
 │   │   ├── base.njk       ← the page: signature, index | text | images, footer
 │   │   └── project.njk    ← base + ← previous / next → links, for sub-pages
-│   └── partials/          ← signature, nav, footer and the page date
+│   └── partials/          ← signature, nav, footer, page date, Sounds Of map
 ├── assets/
 │   ├── css/style.css      ← all the styling, with comments
-│   ├── js/site.js         ← dropdown toggle (the only script)
+│   ├── js/site.js         ← dropdown toggles
+│   ├── js/sounds-of-map.js ← the map's markers, popup, timeline, route and zoom
 │   ├── fonts/             ← Instrument Sans + Reenie Beanie (open-licence fonts)
 │   └── img/               ← put your images here
 │                            Me
@@ -74,7 +77,7 @@ src/
 ├── qualifications.njk     ← Qualifications and Additional Credits  /qualifications/
 ├── contact.njk                                                 /contact/
 └── 404.njk                ← "Not Found" page
-lib/                       ← the media components and template filters
+lib/                       ← media components, filters, CSV reader, map outline and projection
 ```
 
 ## Everyday edits
@@ -150,6 +153,32 @@ placeholder box at the same size. When you fill it in, the placeholder becomes
 the real thing and nothing else on the page moves. Put your own files in
 `src/assets/` (for example `src/assets/audio/`). For the `embed`, paste the
 `src` from the player's "embed" code on Bandcamp, Spotify or SoundCloud.
+
+### The Sounds Of map
+
+The map on the Sounds Of page is drawn from `src/_data/sounds-of.csv`. It's a
+plain spreadsheet: open it in Excel, Numbers or Google Sheets, edit it, and
+save it as CSV with the same name. These are the column headings (the order
+doesn't matter):
+
+| Column | Example | Notes |
+| --- | --- | --- |
+| `date` | `2026-03-01` or `1/3/2026` | day/month/year is fine |
+| `name` | `Grub` | the artist |
+| `location` | `Gippsland, VIC` | the state at the end picks the marker colour |
+| `latitude` | `-38.20` | in Google Maps, right-click the place and click the numbers to copy them |
+| `longitude` | `146.54` | |
+| `youtube` | `https://www.youtube.com/watch?v=qX9Ej2ddQ5k` | the full link or just the ID |
+| `description` | `Grub is a singer-songwriter…` | a sentence or two |
+
+Episodes are sorted by date, and that order is the route. The current file was
+built from the videos on the Sounds Of YouTube channel: names, dates and the
+first lines of each description, with approximate coordinates. The Big Dance
+Festival and Gippsland locations are guesses.
+
+The episode list under the map is made from the same file, so it always
+matches. The outline of Australia is generated from Natural Earth's public
+domain coastline (`lib/australia-map.js`); there's no need to touch it.
 
 ## Finding and replacing placeholder content
 
