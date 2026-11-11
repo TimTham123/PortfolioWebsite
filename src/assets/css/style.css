@@ -424,7 +424,8 @@ blockquote {
   padding-left: 1em;
 }
 
-/* A quote: the words in black, who said it underneath in grey */
+/* A quote, with who said it underneath. Both in black: grey on this site
+   means a link. */
 .quote {
   padding-left: 0;
 }
@@ -434,7 +435,7 @@ blockquote {
 }
 
 .quote__by {
-  color: var(--muted);
+  color: var(--fg);
 }
 
 /* The same, written by hand */
