@@ -58,7 +58,7 @@ src/
 │   ├── index.njk          ← Interests overview                 /interests/
 │   ├── music.njk                                               /interests/music/
 │   ├── climbing.njk                                            /interests/climbing/
-│   └── my-cat.njk                                              /interests/my-cat/
+│   └── cat.njk                                                 /interests/cat/
 │                            Work
 ├── sounds-of.njk                                               /sounds-of/
 ├── sound-design/

@@ -9,7 +9,7 @@
         "children": [
           { "title": "Music", "url": "/interests/music/" },
           { "title": "Climbing", "url": "/interests/climbing/" },
-          { "title": "My Cat", "url": "/interests/my-cat/" }
+          { "title": "Cat", "url": "/interests/cat/" }
         ]
       }
     ]
