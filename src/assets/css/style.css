@@ -58,6 +58,7 @@
   --muted: #737373;     /* links and secondary text (4.7:1 on white) */
   --faint: #f2f2f2;     /* placeholder boxes */
   --on-faint: #616161;  /* text on placeholder boxes (5.5:1) */
+  --draft: #a85555;     /* washed-out red: placeholder text, for now (4.6:1+) */
   --track: #cfcfcf;
 
   --font: "Instrument Sans", "Inter", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
@@ -440,9 +441,10 @@ blockquote {
 
 /* The same, written by hand */
 .quote--hand {
-  max-width: 32rem;
+  max-width: 30rem;
+  margin-top: calc(var(--gap) * 2);
   font-family: var(--font-hand);
-  font-size: 1.75rem;
+  font-size: 1.5rem;
   line-height: 1.15;
   letter-spacing: 0;
 }
@@ -599,14 +601,22 @@ div.ph {
 
 .show-ph div.ph::before {
   content: "placeholder";
-  color: var(--muted);
+  color: var(--draft);
   float: right;
   margin: -0.12em 0 0.2em 1em;
 }
 
-.show-ph span.ph,
-.show-ph figcaption.ph {
-  color: var(--muted);
+/* Placeholder text in washed-out red until it's replaced */
+.show-ph .ph,
+.show-ph .ph-note {
+  color: var(--draft);
+}
+
+/* Links inside red placeholder text are underlined so they still stand out */
+.show-ph .ph a {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
 }
 
 .ph-box {

@@ -158,8 +158,8 @@ it on the page and in the code:
 
 | On the page | In the code |
 | --- | --- |
-| A small handwritten *placeholder* note beside the text | `<div class="ph">` (with a `<!-- PLACEHOLDER -->` comment above it) |
-| Short bits in grey | `<span class="ph">`, and captions of placeholder images |
+| Washed-out red text with a small handwritten *placeholder* note | `<div class="ph">` (with a `<!-- PLACEHOLDER -->` comment above it) |
+| Short bits in washed-out red | `<span class="ph">`, and captions of placeholder images |
 | Grey box marked *placeholder* | `{% image %}`, `{% video %}`, `{% audio %}` or `{% embed %}` with no file/URL |
 | `[square brackets]` | facts to fill in, such as `[City]` or `[2025]` |
 | "· placeholder content" in the footer | `placeholder: true` at the top of the page |
@@ -184,7 +184,7 @@ one size of type, hierarchy from spacing and grey versus black.
 | Links | grey `#737373`; black and underlined when you point at them |
 | Current page | black (and its section, on project pages) |
 | Signature | your name in Reenie Beanie, top left |
-| Placeholders | grey boxes `#f2f2f2`, small handwritten notes |
+| Placeholders | washed-out red text `#a85555`, grey boxes `#f2f2f2`, small handwritten notes |
 | Columns (wide screens) | index 16rem, 2rem gap, text 35rem, 2rem gap, images 15rem |
 
 **Responsive.** Wide screens (1100px and up) get index | text | images.
