@@ -9,10 +9,10 @@
     {%- set open = page.url | inSection(item.url) %}
     <li class="nav-group" data-open="{{ 'true' if open else 'false' }}">
       <div class="nav-group__head">
-        <a href="{{ item.url }}"{% if page.url == item.url %} aria-current="page"{% endif %}>{{ item.title }}</a>
+        <a href="{{ item.url }}"{% if page.url == item.url %} aria-current="page"{% elif open %} class="is-section"{% endif %}>{{ item.title }}</a>
         <button class="nav-toggle" type="button" aria-expanded="{{ 'true' if open else 'false' }}" aria-controls="nav-sub-{{ loop.index }}">
           <span class="visually-hidden">{{ item.title }} pages</span>
-          <svg class="nav-toggle__icon" viewBox="0 0 13 13" width="13" height="13" aria-hidden="true" focusable="false" shape-rendering="crispEdges"><rect x=".5" y=".5" width="12" height="12" fill="#fff" stroke="#808080"/><path d="M3 6h7v1H3z"/><path class="nav-toggle__plus" d="M6 3h1v7H6z"/></svg>
+          <svg class="nav-toggle__icon" viewBox="0 0 20 20" width="18" height="18" aria-hidden="true" focusable="false"><path d="M2.6 3.1c4.9-.6 9.8-.7 14.6-.3.5 4.6.6 9.4.2 14.3-4.8.5-9.7.6-14.6.1-.6-4.7-.7-9.4-.2-14.1z"/><path d="M5.8 10.2c2.8-.3 5.6-.3 8.4.1"/><path class="nav-toggle__plus" d="M10.1 5.9c.2 2.8.2 5.5-.1 8.3"/></svg>
         </button>
       </div>
       <ul class="nav-sub" id="nav-sub-{{ loop.index }}">

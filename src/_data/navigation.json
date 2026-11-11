@@ -1,4 +1,5 @@
 [
+  { "title": "About Me", "url": "/" },
   { "title": "Sounds Of", "url": "/sounds-of/" },
   {
     "title": "Video Game Sound Design",

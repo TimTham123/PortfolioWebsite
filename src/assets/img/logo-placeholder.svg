@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 190 90" width="190" height="90">
   <title>Logo placeholder</title>
   <!-- PLACEHOLDER: replace this file with your own logo (or point "logo" in src/_data/site.json at it). -->
-  <g fill="#000">
+  <g fill="#2b211a">
     <rect x="4" y="43.5" width="32.5" height="3"/>
     <rect x="153.5" y="43.5" width="32.5" height="3"/>
     <rect x="39.5" y="42" width="3" height="6" rx="1.5"/>
