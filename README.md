@@ -218,9 +218,8 @@ put your files in `media/travel/`:
 - **Videos** (`.mp4` is safest) are used as they are, so keep them small:
   under about 50 MB each, 1080p or less.
 - **Order** follows the file names, so number them: `001.jpg`, `002.jpg`…
-  The first video goes in the second and third rows, filling the middle two
-  columns; each one after that comes five rows of photos further down, on the
-  left, then the right.
+  Videos go in the middle two columns: the first in the second and third
+  rows, and each one after that five rows of photos further down.
 - **Descriptions**: a file name such as `014-kalgoorlie-sunset.jpg` becomes
   "Kalgoorlie sunset" for screen readers.
 

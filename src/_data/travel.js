@@ -31,9 +31,9 @@ function describe(file) {
 }
 
 // Where each video goes in the grid, which is four photos across; a video
-// fills a 2 x 2 block. The first takes rows 2-3 of the middle two columns;
-// each one after that comes five rows of photos further down, on the left,
-// then the right, and so on (rows 2-3, 9-10, 16-17…). On a big screen each
+// fills a 2 x 2 block, always in the middle two columns. The first takes rows
+// 2-3; each one after that comes five rows of photos further down (rows 2-3,
+// 9-10, 16-17…). On a big screen each
 // video is pinned to its spot (see style.css), so portrait photos (two tiles
 // tall) can't push it about; `before` is how many photos come before it in
 // the page, so it's also read out in about the right place.
@@ -44,7 +44,7 @@ function videoPlaces(photoCells, videoCount) {
   const places = [];
   for (let k = 0; k < videoCount; k++) {
     const row = 2 + k * (2 + ROWS_BETWEEN);
-    const column = k === 0 ? 2 : k % 2 ? 1 : 3;
+    const column = 2;
     const cellsBefore = (row - 1) * COLUMNS + (column - 1) - 4 * k;
     let before = 0;
     for (let cells = 0; before < photoCells.length && cells < cellsBefore; before++) cells += photoCells[before];
