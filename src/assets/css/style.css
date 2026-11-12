@@ -441,6 +441,11 @@ a:hover {
   margin-bottom: 0;
 }
 
+/* A list of credits: who and what on the first line, the roles under it */
+.content .credits li + li {
+  margin-top: 0.6em;
+}
+
 blockquote {
   padding-left: 1em;
 }
@@ -500,6 +505,22 @@ thead th {
 caption {
   color: var(--muted);
   text-align: left;
+}
+
+/* Release lists (Music): the same columns in every table, so they line up */
+.releases {
+  width: 100%;
+}
+
+.releases th:first-child,
+.releases td:first-child {
+  width: 3.75em;
+}
+
+.releases th:last-child,
+.releases td:last-child {
+  width: 4.5em;
+  padding-right: 0;
 }
 
 

@@ -1,64 +1,58 @@
 ---
 layout: layouts/project.njk
 title: Music
-description: Original music, releases and live performance.
-updated: 2026-11-11
+description: My own music as Callum Tam, my band Melonade, and production and mixing for other artists.
+updated: 2026-11-12
 placeholder: true
 figures:
   - alt: "Live photo: playing on stage"
     caption: "(live at [venue])"
     ratio: "3/4"
-  - alt: "Cover art for the latest release"
-    caption: "([Release title] cover art)"
+  - alt: "Cover art for The Happy Songs"
+    caption: "(The Happy Songs cover art)"
     ratio: "1/1"
 ---
 <h1 class="visually-hidden">Music</h1>
-<p class="standfirst">Original music, collaborations and live performance.</p>
 
-<!-- PLACEHOLDER -->
-<div class="ph">
-  <p>Outside of sound design I write, record and produce my own music as [project name], somewhere between [genre] and [genre]. I also play [instrument] in [band name] and help other artists with production and mixing.</p>
+<p>In my spare time, I write, record and produce my own music as Callum Tam, somewhere between folk and shoegaze. I’m also the frontman of a band called Melonade, and help other artists with production and mixing.</p>
+
+{% embed { src: "https://open.spotify.com/embed/track/08XaLHxJmbbEUG4RgbO1b4", title: "Drift Off to Space, by Callum Tam (Spotify player)", height: 152 } %}
+
+<h2>Solo releases</h2>
+<div class="table-scroll">
+  <table class="releases">
+    <thead>
+      <tr><th scope="col">Year</th><th scope="col">Title</th><th scope="col">Format</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>2026</td><td><a href="https://open.spotify.com/album/4e8Jq6QhxuSqA88AVPlV0w">The Happy Songs</a></td><td>EP</td></tr>
+      <tr><td>2025</td><td><a href="https://open.spotify.com/album/0DQfkubc1woLbHbBIlz22e">Ferry Ride</a></td><td>Single</td></tr>
+      <tr><td>2025</td><td><a href="https://open.spotify.com/album/4u09OZwBGqtopDWM1nRmor">Is It a New Year Already?</a></td><td>EP</td></tr>
+      <tr><td>2024</td><td><a href="https://open.spotify.com/album/6Khzbg1RmVABLIc8Mb1vNm">Time Moves Too Fast for My Liking</a></td><td>EP</td></tr>
+    </tbody>
+  </table>
 </div>
 
-<h2>Listen</h2>
-{% embed { src: "", title: "Latest release: Bandcamp, Spotify or SoundCloud player", height: 152 } %}
-
-<h2>Releases</h2>
-<!-- PLACEHOLDER: newest first -->
-<div class="ph">
-  <div class="table-scroll">
-    <table>
-      <thead>
-        <tr><th scope="col">Year</th><th scope="col">Title</th><th scope="col">Format</th><th scope="col">Listen</th></tr>
-      </thead>
-      <tbody>
-        <tr><td>[2026]</td><td>[Single title]</td><td>Single</td><td><a href="https://bandcamp.com/">Bandcamp</a></td></tr>
-        <tr><td>[2025]</td><td>[EP title]</td><td>EP</td><td><a href="https://open.spotify.com/">Spotify</a></td></tr>
-        <tr><td>[2024]</td><td>[Single title]</td><td>Single</td><td><a href="https://soundcloud.com/">SoundCloud</a></td></tr>
-      </tbody>
-    </table>
-  </div>
+<h2>Band releases</h2>
+<div class="table-scroll">
+  <table class="releases">
+    <thead>
+      <tr><th scope="col">Year</th><th scope="col">Title</th><th scope="col">Format</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>2025</td><td><a href="https://open.spotify.com/album/0yCBbwqkaMH7QkKCYvyED9">Boogie with You</a></td><td>Single</td></tr>
+      <tr><td>2023</td><td><a href="https://open.spotify.com/album/4Zo8r69BQ3PX2gppWozYee">Wings</a></td><td>Single</td></tr>
+      <tr><td>2022</td><td><a href="https://open.spotify.com/album/2wFiofr6Xx3Z9b0xlYGta6">Kids Trilogy</a></td><td>EP</td></tr>
+    </tbody>
+  </table>
 </div>
 
-<h2>Projects &amp; collaborations</h2>
-<!-- PLACEHOLDER -->
-<div class="ph">
-  <dl>
-    <dt><b>[Project name]</b>, solo</dt>
-    <dd>Writing, recording, production and mixing.</dd>
-    <dt><b>[Band name]</b>, [instrument]</dt>
-    <dd>A [genre] [four-piece] from Melbourne, playing regular shows around town.</dd>
-    <dt><b>[Artist name]</b>, production</dt>
-    <dd>Co-production and mixing on [release title].</dd>
-  </dl>
-</div>
-
-<h2>Demos &amp; sketches</h2>
-{% audio { src: "", title: "[Track title] (demo)", caption: "unreleased, [2026]" } %}
-{% audio { src: "", title: "[Track title] (sketch)", caption: "from voice memo to finished idea" } %}
-
-<h2>Live</h2>
-<!-- PLACEHOLDER -->
-<div class="ph">
-  <p>No shows announced right now. Follow along on <a href="https://www.instagram.com/">Instagram</a> for dates, or <a href="/contact/">get in touch</a> about bookings.</p>
-</div>
+<h2>Projects, collaborations and credits</h2>
+<ul class="credits">
+  <li><b>Adam Harpaz</b>, Ash (Is Something Changing?), 2026<br>Writing, production, recording</li>
+  <li><b>The Goddamn Darlings</b>, <a href="https://thegoddamndarlings.bandcamp.com/album/heed-my-advice-live-24-09-2026">Heed My Advice (Live)</a>, 2026, RTRFM feature music<br>Recording, mixing, mastering</li>
+  <li><b>Runway Four</b>, multiple tracks, duo, 2025<br>Writing, production, recording, performance (guitar, bass, vocals), mixing</li>
+  <li><b>Wes Couer</b>, multiple tracks, solo, 2024&ndash;2026<br>Production, recording, mixing, performance</li>
+  <li><b>Jarrod Smitt</b>, Free Ride On The Bus, solo, 2023</li>
+  <li><b>Operation Karma</b>, <span class="ph">[title]</span> demos, EP, 2023</li>
+</ul>
