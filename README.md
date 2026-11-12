@@ -238,6 +238,7 @@ until then the video plays silently with a "Turn sound on" button, and the
 first click or tap anywhere brings the sound in. iPhones and iPads don't let
 a website change a video's volume, so there the sound plays without the
 fades.
+
 The photos were resized to at most 2400px wide when they were added, with
 their camera details stripped out (the site never shows them bigger than
 1800px). If the folder is ever empty, any files named `placeholder-…` are
