@@ -228,11 +228,16 @@ past the usual right-hand margin. Each photo is a 3:2 tile, cropped to fit;
 clicking it opens the whole photo in a popup, closed with the × in its corner
 or a click anywhere else. Portrait photos take two tiles, one above the
 other, and each video takes four, two across and two down. Videos play by
-themselves, with the sound on, as you scroll to them and pause when you
-scroll past, carrying on from the same point when you come back. Some
+themselves, with the sound on, as they come onto the screen, and pause once
+they've gone off it, carrying on from the same point when you come back. The
+volume is how much of the video is on screen (half on screen, half volume),
+so the sound fades out as a video scrolls away and back in as it returns;
+the first time each video is heard, it also fades in over 3 seconds. Some
 browsers won't play sound until a visitor has clicked or tapped the page:
 until then the video plays silently with a "Turn sound on" button, and the
-first click or tap anywhere brings the sound in.
+first click or tap anywhere brings the sound in. iPhones and iPads don't let
+a website change a video's volume, so there the sound plays without the
+fades.
 The photos were resized to at most 2400px wide when they were added, with
 their camera details stripped out (the site never shows them bigger than
 1800px). If the folder is ever empty, any files named `placeholder-…` are

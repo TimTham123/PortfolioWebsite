@@ -1,15 +1,21 @@
 /*
   Travel page.
 
-  1. Videos play by themselves, with the sound on, as you scroll to them,
-     and pause when you scroll past, so they pick up from the same point
-     when you come back. Some browsers won't play sound until the visitor
-     has clicked or tapped the page: until then the video plays silently
-     with a "Turn sound on" button, and the first click or tap anywhere
-     brings the sound in. If someone mutes a video, the rest stay muted
-     until they turn the sound back on. A video someone pauses stays
-     paused, and nothing plays by itself for people who've asked their
-     device to reduce motion.
+  1. Videos play by themselves, with the sound on, as they come onto the
+     screen, and pause once they've gone off it, so they pick up from the
+     same point when you come back. The volume is how much of the video is
+     on screen: half on screen, half volume, so the sound fades out as a
+     video scrolls away and back in as it returns. The first time each
+     video is heard, its sound also fades in over 3 seconds.
+
+     Some browsers won't play sound until the visitor has clicked or tapped
+     the page: until then the video plays silently with a "Turn sound on"
+     button, and the first click or tap anywhere brings the sound in (with
+     the 3-second fade). If someone mutes a video, the rest stay muted until
+     they turn the sound back on. A video someone pauses stays paused, and
+     nothing plays by itself for people who've asked their device to reduce
+     motion. (iPhones and iPads don't let a page change a video's volume,
+     so there the sound plays without the fades.)
 
   2. Clicking a photo opens it in a popup, closed with the × in its corner,
      a click anywhere else, or Escape. Without JavaScript, a photo link
@@ -28,6 +34,14 @@
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   var soundOn = true;        // sound on, unless someone mutes a video
   var soundBlocked = false;  // the browser won't play sound yet
+  var FIRST_FADE = 3000;     // ms: the first time a video is heard
+
+  // How much of a video is on screen, from 0 to 1.
+  function onScreen(video) {
+    var box = video.getBoundingClientRect();
+    var shown = Math.min(box.bottom, window.innerHeight) - Math.max(box.top, 0);
+    return Math.max(0, Math.min(1, shown / (box.height || 1)));
+  }
 
   function autoPause(video) {
     if (video.paused) return;
@@ -39,6 +53,7 @@
   function muteForNow(video) {
     video.dataset.autoMuted = "true";
     video.muted = true;
+    if (video.heardFor < 250) video.heardFor = 0; // it hasn't really been heard yet
   }
 
   function autoPlay(video) {
@@ -51,14 +66,16 @@
     } else {
       video.muted = true;
     }
+    if (video.heardFor < FIRST_FADE) video.volume = 0; // the first fade starts from silence
+    video.dataset.autoPlay = "true";
     var playing = video.play();
     if (playing && playing.catch) {
       playing.catch(function () {
-        if (video.muted) return; // the browser won't autoplay at all
+        if (video.muted) { delete video.dataset.autoPlay; return; } // no autoplay at all
         // No sound allowed yet: play silently until the visitor clicks or taps.
         soundBlocked = true;
         muteForNow(video);
-        video.play().catch(function () { /* not even silently */ });
+        video.play().catch(function () { delete video.dataset.autoPlay; });
       });
     }
   }
@@ -79,7 +96,35 @@
   document.addEventListener("click", letSoundIn, true);
   document.addEventListener("keydown", letSoundIn, true);
 
+  // The volume, every frame while anything's playing: how much of the video
+  // is on screen, times the first fade-in (over its first 3 seconds of being
+  // heard), times the level the visitor has set with the video's own volume
+  // control (full to begin with).
+  var fading = null;
+  function fade(now) {
+    fading = null;
+    videos.forEach(function (video) {
+      if (video.paused) { video.lastFrame = null; return; }
+      if (!video.muted && video.lastFrame != null) {
+        video.heardFor += Math.min(now - video.lastFrame, 100);
+      }
+      video.lastFrame = now;
+      var ramp = Math.min(1, video.heardFor / FIRST_FADE);
+      video.gain = onScreen(video) * ramp;
+      video.setVolume = Math.round(video.gain * video.level * 1000) / 1000;
+      if (Math.abs(video.volume - video.setVolume) > 0.0005) video.volume = video.setVolume;
+      fading = fading || requestAnimationFrame(fade);
+    });
+  }
+  function startFading() {
+    if (!fading) fading = requestAnimationFrame(fade);
+  }
+
   videos.forEach(function (video) {
+    video.level = 1;
+    video.heardFor = 0;
+    video.wasMuted = video.muted;
+
     // "Turn sound on", over a video that's playing silently (clicking it,
     // like any click, lets the sound in).
     var button = document.createElement("button");
@@ -93,36 +138,54 @@
     }
 
     video.addEventListener("play", function () {
+      var auto = video.dataset.autoPlay;
+      delete video.dataset.autoPlay;
       delete video.dataset.autoPaused;
       delete video.dataset.userPaused;
-      // One at a time.
-      videos.forEach(function (other) { if (other !== video) autoPause(other); });
+      // Someone pressing play on one video pauses the others.
+      if (!auto) videos.forEach(function (other) { if (other !== video) autoPause(other); });
       showButton();
+      startFading();
     });
     video.addEventListener("pause", function () {
       showButton();
-      // Only a pause while the video is on screen counts as someone pausing
-      // it (browsers pause off-screen or background videos themselves).
-      if (video.dataset.autoPaused || video.ended || document.hidden || Number(video.dataset.seen || 0) < 0.25) return;
-      video.dataset.userPaused = "true";
+      if (video.dataset.autoPaused || video.ended || document.hidden || onScreen(video) === 0) return;
+      // Someone pressed pause (they've just clicked or pressed a key)...
+      if (!navigator.userActivation || navigator.userActivation.isActive) {
+        video.dataset.userPaused = "true";
+        return;
+      }
+      // ...or the browser paused it, which (with the sound on) means it
+      // won't allow sound yet: carry on silently.
+      if (!video.muted) {
+        soundBlocked = true;
+        muteForNow(video);
+        video.dataset.autoPlay = "true";
+        video.play().catch(function () { delete video.dataset.autoPlay; });
+      }
     });
     video.addEventListener("volumechange", function () {
-      showButton();
-      if (video.muted && video.dataset.autoMuted) return; // muted by this script
-      delete video.dataset.autoMuted;
-      soundOn = !video.muted; // the visitor's choice
-      if (soundOn) soundBlocked = false;
+      if (video.muted !== video.wasMuted) {
+        video.wasMuted = video.muted;
+        showButton();
+        if (video.muted && video.dataset.autoMuted) return; // muted by this script
+        delete video.dataset.autoMuted;
+        soundOn = !video.muted; // the visitor's choice
+        if (soundOn) soundBlocked = false;
+      } else if (video.setVolume != null && Math.abs(video.volume - video.setVolume) > 0.02 && video.gain > 0.05) {
+        // The visitor moved the volume slider: that's the new top level.
+        video.level = Math.min(1, video.volume / video.gain);
+      }
     });
   });
 
   if (videos.length && "IntersectionObserver" in window) {
     var watcher = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
-        entry.target.dataset.seen = entry.intersectionRatio.toFixed(2);
-        if (entry.intersectionRatio >= 0.5) autoPlay(entry.target);
-        else if (entry.intersectionRatio < 0.25) autoPause(entry.target);
+        if (entry.isIntersecting) autoPlay(entry.target);
+        else autoPause(entry.target);
       });
-    }, { threshold: [0, 0.25, 0.5, 0.75, 1] });
+    });
     videos.forEach(function (video) { watcher.observe(video); });
   }
 
