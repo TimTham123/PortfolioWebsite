@@ -4,14 +4,19 @@ title: Travel
 description: Photos and videos from the road.
 updated: 2026-11-11
 placeholder: true
+wide: true
+scripts:
+  - /assets/js/travel.js
 ---
 {#- No text on this page: just the photos and videos from media/travel/
-    (see src/_data/travel.js). The heading is for screen readers only. #}
+    (see src/_data/travel.js). The heading is for screen readers only.
+    Clicking a photo opens it in a popup, and videos play as you scroll to
+    them (see assets/js/travel.js). #}
 <h1 class="visually-hidden">Travel</h1>
 
 {#- How wide a tile is at each screen size, so the browser fetches a big
     enough photo (see the gallery in style.css). #}
-{%- set sizes = "(min-width: 1236px) 18rem, (min-width: 1100px) 23rem, (min-width: 760px) 18rem, calc(50vw - 20px)" %}
+{%- set sizes = "(min-width: 1100px) calc(25vw - 90px), (min-width: 760px) 16rem, calc(50vw - 20px)" %}
 <div class="gallery wide">
   {%- for item in travel.items %}
   {%- if item.type == "photo" %}

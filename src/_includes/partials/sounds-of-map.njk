@@ -1,7 +1,8 @@
 {#-
   The Sounds Of map: a hand-drawn Australia with a marker per episode, a
   popup with the episode's video, and a timeline underneath. The route
-  between episodes is drawn faintly, and inks itself in as you go.
+  between stops is drawn as a faint dotted line, and inks itself in as you
+  go. Stops with no episode yet have empty (hollow) markers.
 
   Data: src/_data/sounds-of.csv (see src/_data/soundsOf.js).
   Behaviour: src/assets/js/sounds-of-map.js. Without JavaScript the map
@@ -9,7 +10,7 @@
   every video.
 -#}
 {%- set map = soundsOf %}
-<figure class="sm" data-sounds-of-map aria-labelledby="sm-caption">
+<figure class="sm wide" data-sounds-of-map aria-labelledby="sm-caption">
   <div class="sm__stage" style="aspect-ratio: {{ map.viewBox.width }} / {{ map.viewBox.height }}">
     <svg class="sm__map" viewBox="0 0 {{ map.viewBox.width }} {{ map.viewBox.height }}" aria-hidden="true" focusable="false">
       <defs>
@@ -41,13 +42,16 @@
           <path d="{{ segment.d }}"/>
           {%- endfor %}
         </g>
+        {%- if map.home %}
+        <circle class="sm__home" cx="{{ map.home.x }}" cy="{{ map.home.y }}" r="4.5"/>
+        {%- endif %}
       </g>
     </svg>
 
     <ol class="sm__markers">
       {%- for ep in map.episodes %}
       <li>
-        <button class="sm__marker" type="button" data-index="{{ ep.index }}" style="left: {{ ep.left }}%; top: {{ ep.top }}%; --c: {{ ep.colour }}" aria-label="{{ ep.name | escape }}, {{ ep.location | escape }}, {{ ep.dateLong }}">
+        <button class="sm__marker{% if ep.empty %} is-empty{% endif %}" type="button" data-index="{{ ep.index }}" style="left: {{ ep.left }}%; top: {{ ep.top }}%; --c: {{ ep.colour }}" aria-label="{{ ep.label | escape }}">
           <span class="sm__dot" aria-hidden="true"></span>
         </button>
       </li>
@@ -61,6 +65,7 @@
       <p class="sm__date"></p>
       <h2 class="sm__name" id="sm-popup-name" tabindex="-1"></h2>
       <p class="sm__location"></p>
+      <p class="sm__empty ph-note">placeholder</p>
       <div class="sm__video"></div>
       <p class="sm__description"></p>
       <p class="sm__watch"><a href="https://www.youtube.com/@soundsofchannel" target="_blank" rel="noopener">Watch on YouTube</a></p>
@@ -80,7 +85,7 @@
       <ol class="sm__ticks">
         {%- for ep in map.episodes %}
         <li>
-          <button class="sm__tick" type="button" data-index="{{ ep.index }}" style="--c: {{ ep.colour }}" aria-label="{{ ep.dateLong }}: {{ ep.name | escape }}, {{ ep.location | escape }}">
+          <button class="sm__tick{% if ep.empty %} is-empty{% endif %}" type="button" data-index="{{ ep.index }}" style="--c: {{ ep.colour }}" aria-label="{{ ep.label | escape }}">
             <span class="sm__tick-dot" aria-hidden="true"></span>
           </button>
           {%- if ep.timelineLabel %}<span class="sm__month" aria-hidden="true">{{ ep.timelineLabel }}</span>{% endif %}
@@ -91,6 +96,6 @@
     <button class="sm__step" type="button" data-step="1">Later <span aria-hidden="true">&rarr;</span></button>
   </div>
 
-  <figcaption class="sm__status" id="sm-caption" aria-live="polite">{{ map.episodes.length }} episodes around Australia.</figcaption>
+  <figcaption class="sm__status" id="sm-caption" aria-live="polite">{{ map.episodeCount }} episodes around Australia.</figcaption>
 </figure>
 <script type="application/json" id="sounds-of-data">{{ map.episodes | jsonScript | safe }}</script>

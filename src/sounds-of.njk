@@ -6,11 +6,14 @@ updated: 2026-11-11
 placeholder: true
 scripts:
   - /assets/js/sounds-of-map.js
+wide: true
 ---
-<h1>Sounds Of</h1>
-<p class="standfirst">A travelling live-music video series documenting emerging Australian artists.</p>
+<h1 class="visually-hidden">Sounds Of</h1>
 
+{#- The map comes first, as big as the window allows. #}
 {% include "partials/sounds-of-map.njk" %}
+
+<p class="standfirst">A travelling live-music video series documenting emerging Australian artists.</p>
 
 <h2>About the series</h2>
 <!-- PLACEHOLDER -->
@@ -20,10 +23,12 @@ scripts:
 </div>
 
 <h2>Episodes</h2>
-{#- Listed from src/_data/sounds-of.csv, newest first. #}
+{#- Listed from src/_data/sounds-of.csv, newest first (stops with no episode yet are left out). #}
 <ol class="episode-list">
   {%- for ep in soundsOf.episodes | reverse %}
+  {%- if not ep.empty %}
   <li>{% if ep.video %}<a href="{{ ep.video.watch }}">{{ ep.name }}</a>{% else %}{{ ep.name }}{% endif %}, {{ ep.location }} &middot; {{ ep.dateLong }}</li>
+  {%- endif %}
   {%- endfor %}
 </ol>
 

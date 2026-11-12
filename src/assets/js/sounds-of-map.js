@@ -1,9 +1,11 @@
 /*
   Sounds Of map: markers, a popup with each episode's video, a timeline, a
-  route that inks itself in as you move through the episodes, and zoom.
+  route that inks itself in as you move through the stops, and zoom.
 
-  Episodes come from the JSON block the page writes out (from
-  src/_data/sounds-of.csv), already sorted by date.
+  Stops come from the JSON block the page writes out (from
+  src/_data/sounds-of.csv), already in order. A stop with no episode yet has
+  an empty marker. After the last stop the route heads home, and that last
+  leg is inked when you reach the last stop.
 
   Zoom: the + / − buttons, Ctrl/⌘ + scroll or a trackpad pinch, double-click,
   and two-finger pinch on phones. Drag to move around once zoomed in. Zooming
@@ -30,6 +32,8 @@
   var markers = $$(".sm__marker");
   var ticks = $$(".sm__tick");
   var segments = $$(".sm__route-ink path");
+  var homeDot = $(".sm__home");
+  var homeLeg = segments.length > last; // the drive home after the last stop
   var popup = $(".sm__popup");
   var place = $(".sm__place");
   var status = $(".sm__status");
@@ -44,6 +48,7 @@
     date: $(".sm__date"),
     name: $(".sm__name"),
     location: $(".sm__location"),
+    empty: $(".sm__empty"),
     video: $(".sm__video"),
     description: $(".sm__description"),
     watch: $(".sm__watch a"),
@@ -269,9 +274,11 @@
     path.dataset.length = length;
   });
 
-  // Draw (or rub out) the legs up to episode `index`, one after another.
+  // Draw (or rub out) the legs up to stop `index`, one after another. At the
+  // last stop the drive home is drawn too, ending in a dot.
   function inkTo(index) {
     var target = Math.max(index, 0);
+    if (index === last && homeLeg) target = last + 1;
     var count = Math.abs(target - inked);
     if (!count) return;
     var each = reduceMotion.matches ? 0 : Math.max(110, Math.min(480, 2600 / count));
@@ -283,6 +290,10 @@
       path.style.strokeDashoffset = forward ? 0 : path.dataset.length;
     }
     inked = target;
+    if (homeDot) {
+      homeDot.style.transitionDelay = forward ? count * each + "ms" : "0ms";
+      root.classList.toggle("is-home", inked > last);
+    }
   }
 
   /* The timeline line ---------------------------------------------------- */
@@ -326,9 +337,12 @@
 
   function openPopup(ep) {
     field.date.textContent = ep.dateLong;
-    field.name.textContent = ep.name;
+    field.date.hidden = !ep.dateLong;
+    field.name.textContent = ep.title;
     field.location.textContent = ep.location;
-    field.description.textContent = ep.description;
+    field.empty.hidden = !ep.empty;
+    field.description.textContent = ep.description || "";
+    field.description.hidden = !ep.description;
     field.watch.href = ep.video ? ep.video.watch : "https://www.youtube.com/@soundsofchannel";
     field.watch.parentNode.hidden = !ep.video;
     showVideo(ep);
@@ -376,7 +390,7 @@
     earlier.setAttribute("aria-disabled", index === 0 ? "true" : "false");
     later.setAttribute("aria-disabled", index === last ? "true" : "false");
 
-    status.textContent = index + 1 + " of " + episodes.length + ": " + ep.name + ", " + ep.location + ", " + ep.dateLong;
+    status.textContent = "Stop " + (index + 1) + " of " + episodes.length + ": " + ep.label;
     openPopup(ep);
   }
 

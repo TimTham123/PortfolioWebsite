@@ -1,24 +1,19 @@
 // Data for the Sounds Of map, read from src/_data/sounds-of.csv.
+// The columns are explained in lib/sounds-of.js (and in the README).
 //
-// CSV columns (the first row must be these headings, in any order):
-//   date         2026-03-01 or 1/3/2026 (day/month/year)
-//   name         the artist
-//   location     e.g. "Darwin, NT" – the state picks the marker colour
-//   latitude     e.g. -12.46   (Google Maps: right-click a place, click the numbers)
-//   longitude    e.g. 130.85
-//   youtube      the video's link (or just its ID)
-//   description  a sentence or two
-//
-// Episodes are sorted by date: that order is the route drawn on the map.
+// Each row is a stop on the road: an episode, or (with no artist name) an
+// empty marker for a place still to be filled in. Stops are sorted by date,
+// and that order is the route, which then heads home (HOME in
+// lib/sounds-of.js).
 
 import fs from "node:fs";
-import { parseCSV } from "../../lib/csv.js";
+import { readStops, legKey, HOME } from "../../lib/sounds-of.js";
 import { makeToMap } from "../../lib/projection.js";
 import { viewBox, fit, outline, echo } from "../../lib/australia-map.js";
 import { youtubeId, embedUrl, watchUrl } from "../../lib/youtube.js";
 
 const CSV = new URL("./sounds-of.csv", import.meta.url);
-// Road routes between episodes, made by `npm run routes` (scripts/fetch-routes.mjs).
+// Road routes between stops, made by `npm run routes` (scripts/fetch-routes.mjs).
 const ROUTES = new URL("./sounds-of-routes.json", import.meta.url);
 
 // Muted marker colours, one per state or territory.
@@ -36,51 +31,51 @@ const SPARE_COLOURS = Object.values(STATE_COLOURS);
 
 const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
-function parseDate(value) {
-  const v = String(value).trim();
-  let m = v.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
-  if (m) return new Date(Date.UTC(+m[1], +m[2] - 1, +m[3]));
-  m = v.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/); // Australian day/month/year
-  if (m) return new Date(Date.UTC(+m[3] < 100 ? 2000 + +m[3] : +m[3], +m[2] - 1, +m[1]));
-  const d = new Date(v);
-  return isNaN(d) ? null : d;
-}
-
 const round = (n, places = 2) => +n.toFixed(places);
+const clamp = (n, min, max) => Math.min(Math.max(n, min), max);
 
 export default function () {
   const toMap = makeToMap(fit);
-  const rows = parseCSV(fs.readFileSync(CSV, "utf8"));
+  const rows = readStops(fs.readFileSync(CSV, "utf8"));
 
-  const episodes = rows
-    .map((row) => ({ ...row, when: parseDate(row.date), lat: parseFloat(row.latitude), lng: parseFloat(row.longitude) }))
-    .filter((row) => row.when && Number.isFinite(row.lat) && Number.isFinite(row.lng))
-    .sort((a, b) => a.when - b.when)
-    .map((row, i) => {
-      const state = (row.location.split(",").pop() || "").trim().toUpperCase();
-      const id = youtubeId(row.youtube);
-      const [x, y] = toMap(row.lat, row.lng);
-      return {
-        index: i,
-        lat: row.lat,
-        lng: row.lng,
-        name: row.name,
-        location: row.location,
-        place: row.location.split(",")[0].trim(),
-        description: row.description,
-        date: row.when.toISOString().slice(0, 10),
-        dateLong: `${row.when.getUTCDate()} ${MONTHS[row.when.getUTCMonth()]} ${row.when.getUTCFullYear()}`,
-        month: `${MONTHS[row.when.getUTCMonth()].slice(0, 3)}`,
-        year: row.when.getUTCFullYear(),
-        video: id ? { id, embed: embedUrl(id), watch: watchUrl(id) } : null,
-        colour: STATE_COLOURS[state] || SPARE_COLOURS[i % SPARE_COLOURS.length],
-        x,
-        y,
-      };
-    });
+  const episodes = rows.map((row, i) => {
+    const state = (row.location.split(",").pop() || "").trim().toUpperCase();
+    const id = youtubeId(row.youtube);
+    const [x, y] = toMap(row.lat, row.lng);
+    const when = row.when;
+    const place = row.location.split(",")[0].trim();
+    return {
+      index: i,
+      empty: !row.name,
+      lat: row.lat,
+      lng: row.lng,
+      via: row.via.map(({ lat, lng }) => ({ lat, lng })),
+      name: row.name,
+      // What the stop is called on the map and in the timeline.
+      title: row.name || place,
+      location: row.location,
+      place,
+      description: row.description,
+      date: when ? when.toISOString().slice(0, 10) : "",
+      dateLong: when ? `${when.getUTCDate()} ${MONTHS[when.getUTCMonth()]} ${when.getUTCFullYear()}` : "",
+      month: when ? MONTHS[when.getUTCMonth()].slice(0, 3) : "",
+      year: when ? when.getUTCFullYear() : null,
+      video: id ? { id, embed: embedUrl(id), watch: watchUrl(id) } : null,
+      colour: STATE_COLOURS[state] || SPARE_COLOURS[i % SPARE_COLOURS.length],
+      x,
+      y,
+    };
+  });
 
-  // Episodes filmed in the same place are fanned out a little so each marker
-  // can still be clicked.
+  // For the markers' labels and the status line.
+  for (const ep of episodes) {
+    ep.label = ep.empty
+      ? `${ep.location}${ep.dateLong ? `, ${ep.dateLong}` : ""} (no episode yet)`
+      : `${ep.name}, ${ep.location}, ${ep.dateLong}`;
+  }
+
+  // Stops in the same place are fanned out a little so each marker can
+  // still be clicked.
   const groups = new Map();
   for (const ep of episodes) {
     const key = `${ep.x.toFixed(0)},${ep.y.toFixed(0)}`;
@@ -104,25 +99,28 @@ export default function () {
     ep.y = round(ep.y, 1);
   }
 
-  // The route follows the roads between episodes (sounds-of-routes.json).
-  // A leg without a saved road (a new episode, before `npm run routes`) is
+  // Where the trip ends.
+  const [hx, hy] = HOME ? toMap(HOME.lat, HOME.lng) : [];
+  const home = HOME ? { ...HOME, via: [], x: round(hx, 1), y: round(hy, 1) } : null;
+
+  // The route follows the roads between stops (sounds-of-routes.json).
+  // A leg without a saved road (a new stop, before `npm run routes`) is
   // drawn as a gentle curve instead.
   const roads = fs.existsSync(ROUTES) ? JSON.parse(fs.readFileSync(ROUTES, "utf8")) : {};
   const cx = viewBox.width / 2;
   const cy = viewBox.height / 2;
-  const segments = episodes.slice(1).map((ep, i) => {
-    const a = episodes[i];
-    const road = roads[`${a.lat},${a.lng}|${ep.lat},${ep.lng}`];
+  function leg(a, b) {
+    const road = roads[legKey(a, b)];
     if (road && road.length > 1) {
       const pts = road.map(([lat, lng]) => toMap(lat, lng));
       pts[0] = [a.x, a.y];
-      pts[pts.length - 1] = [ep.x, ep.y];
-      return { d: "M" + pts.map(([x, y]) => `${round(x, 1)} ${round(y, 1)}`).join("L") };
+      pts[pts.length - 1] = [b.x, b.y];
+      return "M" + pts.map(([x, y]) => `${round(x, 1)} ${round(y, 1)}`).join("L");
     }
-    const mx = (a.x + ep.x) / 2;
-    const my = (a.y + ep.y) / 2;
-    const dx = ep.x - a.x;
-    const dy = ep.y - a.y;
+    const mx = (a.x + b.x) / 2;
+    const my = (a.y + b.y) / 2;
+    const dx = b.x - a.x;
+    const dy = b.y - a.y;
     const len = Math.hypot(dx, dy) || 1;
     let nx = -dy / len;
     let ny = dx / len;
@@ -130,28 +128,44 @@ export default function () {
     const bow = Math.min(len * 0.18, 40);
     const qx = round(mx + nx * bow, 1);
     const qy = round(my + ny * bow, 1);
-    return { d: `M${a.x} ${a.y}Q${qx} ${qy} ${ep.x} ${ep.y}` };
-  });
+    return `M${a.x} ${a.y}Q${qx} ${qy} ${b.x} ${b.y}`;
+  }
+  const segments = episodes.slice(1).map((ep, i) => ({ d: leg(episodes[i], ep) }));
+  if (home && episodes.length) segments.push({ d: leg(episodes[episodes.length - 1], home), home: true });
 
-  // Hand-lettered sea names.
+  // Hand-lettered sea names, kept inside the map (sized for the biggest the
+  // lettering gets, on phones).
+  const LETTER = 44 * 0.42; // average letter width, in map units
   const labels = [
     { text: "Indian Ocean", lat: -26.5, lng: 109.5, rotate: -90 },
     { text: "Timor Sea", lat: -11.5, lng: 125.5, rotate: -8 },
-    { text: "Coral Sea", lat: -17, lng: 151.5, rotate: 0 },
+    { text: "Coral Sea", lat: -13, lng: 149.5, rotate: 0 },
     { text: "Tasman Sea", lat: -36.5, lng: 154.5, rotate: -70 },
     { text: "Southern Ocean", lat: -38.5, lng: 128, rotate: 0 },
   ].map((label) => {
     const [x, y] = toMap(label.lat, label.lng);
-    return { ...label, x: round(Math.min(Math.max(x, 20), viewBox.width - 20), 1), y: round(Math.min(Math.max(y, 24), viewBox.height - 12), 1) };
+    const half = (label.text.length * LETTER) / 2;
+    const turn = (Math.abs(label.rotate) * Math.PI) / 180;
+    const across = half * Math.abs(Math.cos(turn)) + 26 * Math.abs(Math.sin(turn));
+    const down = half * Math.abs(Math.sin(turn)) + 26 * Math.abs(Math.cos(turn));
+    return {
+      ...label,
+      x: round(clamp(x, across + 6, viewBox.width - across - 6), 1),
+      y: round(clamp(y, down + 6, viewBox.height - down - 6), 1),
+    };
   });
 
   // Month labels for the timeline: shown where the month changes.
-  episodes.forEach((ep, i) => {
-    const prev = episodes[i - 1];
-    ep.timelineLabel = !prev || prev.month !== ep.month || prev.year !== ep.year
-      ? (!prev || prev.year !== ep.year ? `${ep.month} ${ep.year}` : ep.month)
-      : "";
-  });
+  let previous = null;
+  for (const ep of episodes) {
+    ep.timelineLabel = "";
+    if (!ep.month) continue;
+    if (!previous || previous.month !== ep.month || previous.year !== ep.year) {
+      ep.timelineLabel = !previous || previous.year !== ep.year ? `${ep.month} ${ep.year}` : ep.month;
+    }
+    previous = ep;
+  }
 
-  return { viewBox, outline, echo, episodes, segments, labels };
+  const episodeCount = episodes.filter((ep) => !ep.empty).length;
+  return { viewBox, outline, echo, episodes, episodeCount, segments, home, labels };
 }

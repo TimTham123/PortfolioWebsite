@@ -60,6 +60,7 @@
   --on-faint: #616161;  /* text on placeholder boxes (5.5:1) */
   --draft: #a85555;     /* washed-out red: "placeholder" notes, for now */
   --track: #cfcfcf;
+  --pencil: #949494;    /* the Sounds Of map's coastline (3:1 on white) */
 
   --font: "Instrument Sans", "Inter", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
   --font-hand: "Reenie Beanie", "Bradley Hand", "Segoe Print", cursive;
@@ -280,6 +281,24 @@ a:hover {
   gap: 1.75rem;
 }
 
+/* Wide pages (Sounds Of, Travel: `wide: true` at the top of the page) run on
+   into the empty space on the right, for the map and the photos. Their text
+   still keeps to the reading width. */
+.page--wide {
+  grid-template-areas:
+    "header .    .    ."
+    "nav    main main main"
+    "footer footer footer footer";
+}
+
+.page--wide .main {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.page--wide .content > :not(.wide) {
+  max-width: var(--text-w);
+}
+
 
 /* 5. Navigation
    ========================================================================== */
@@ -372,14 +391,15 @@ a:hover {
 /* 6. Content
    --------------------------------------------------------------------------
    Everything is one size. A heading is a black line with a blank line above
-   it; the text follows straight underneath.
+   it; the text follows straight underneath. Page titles are hidden (the
+   index shows where you are); they're still there for screen readers.
    ========================================================================== */
 
-.content h1 {
+.content h1:not(.visually-hidden) {
   margin-bottom: var(--gap);
 }
 
-.content h1 + .standfirst {
+.content h1:not(.visually-hidden) + .standfirst {
   margin-top: calc(-1 * var(--gap));
 }
 
@@ -703,22 +723,24 @@ div.ph {
   overflow: visible;
 }
 
+/* The coast is drawn in pencil grey, so the route (in black ink) stands
+   out from it */
 .sm__coast,
 .sm__echo {
   fill: none;
-  stroke: var(--fg);
+  stroke: var(--pencil);
   stroke-linecap: round;
   stroke-linejoin: round;
   vector-effect: non-scaling-stroke;
 }
 
 .sm__coast {
-  stroke-width: 1.4;
+  stroke-width: 1.3;
 }
 
 .sm__echo {
   stroke-width: 0.9;
-  stroke-opacity: 0.3;
+  stroke-opacity: 0.45;
 }
 
 /* Sizes divide by --zoom so labels and lines stay the same size on screen */
@@ -735,17 +757,30 @@ div.ph {
   stroke-linecap: round;
 }
 
-/* The whole route, faintly */
+/* The whole route as a faint dotted line... */
 .sm__route-faint path {
-  stroke-opacity: 0.16;
-  stroke-width: calc(2.2px / var(--zoom));
+  stroke-opacity: 0.4;
+  stroke-width: calc(2.4px / var(--zoom));
+  stroke-dasharray: 0 calc(6px / var(--zoom));
 }
 
-/* ...and the part travelled so far, in black */
+/* ...and the part travelled so far, in solid black */
 .sm__route-ink path {
-  stroke-width: calc(2.6px / var(--zoom));
+  stroke-width: calc(2.8px / var(--zoom));
   transition-property: stroke-dashoffset;
   transition-timing-function: ease-in-out;
+}
+
+/* A full stop where the road ends, back home */
+.sm__home {
+  r: calc(4.5px / var(--zoom));
+  fill: var(--fg);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.sm.is-home .sm__home {
+  opacity: 1;
 }
 
 .sm__markers {
@@ -789,6 +824,18 @@ div.ph {
 .sm__marker.is-current .sm__dot {
   box-shadow: 0 0 0 2px var(--bg), 0 0 0 3.5px var(--fg);
   transform: scale(1.3);
+}
+
+/* A stop with no episode yet: an empty marker */
+.sm__marker.is-empty .sm__dot,
+.sm__tick.is-empty .sm__tick-dot {
+  background: var(--bg);
+  box-shadow: inset 0 0 0 2px var(--c), 0 0 0 1px rgba(10, 10, 10, 0.35);
+}
+
+.sm__marker.is-empty.is-current .sm__dot,
+.sm__tick.is-empty.is-current .sm__tick-dot {
+  box-shadow: inset 0 0 0 2px var(--c), 0 0 0 2px var(--bg), 0 0 0 3.5px var(--fg);
 }
 
 .sm__marker:focus-visible,
@@ -859,21 +906,35 @@ div.ph {
   cursor: pointer;
 }
 
-.sm__date {
+.sm__popup .sm__date {
   margin: 0 2.25rem 0 0;
   font-size: 0.8125rem;
 }
 
-.sm__name {
-  margin: 0.15em 2rem 0 0;
+.sm__popup .sm__name {
+  margin: 0 2rem 0 0;
   font-family: var(--font-hand);
   font-size: 2rem;
   line-height: 1;
   letter-spacing: 0;
 }
 
-.sm__location {
+.sm__popup .sm__date[hidden] + .sm__name {
+  margin-top: 0.2em;
+}
+
+.sm__popup .sm__location {
   margin: 0.2em 0 0.75em;
+}
+
+/* "placeholder", on a stop with no episode yet */
+.sm__popup .sm__empty {
+  display: none;
+  margin: -0.4em 0 0.6em;
+}
+
+.show-ph .sm__popup .sm__empty:not([hidden]) {
+  display: block;
 }
 
 .sm__video {
@@ -1033,8 +1094,14 @@ div.ph {
   position: relative;
   display: flex;
   margin: 0;
-  padding: 0 0 2.6rem;
   list-style: none;
+}
+
+/* Room below for the month names (two lines for a new year). The extra
+   .sm beats the general list spacing in .content */
+.sm .sm__ticks {
+  margin: 0;
+  padding: 0 0 2.4rem;
 }
 
 /* the line: faint end to end, black up to where you are */
@@ -1126,11 +1193,11 @@ div.ph {
   }
 }
 
-/* On wide screens the map also takes the (empty) image column */
-@media (min-width: 1100px) {
+/* As big as the window allows, with the timeline still in view below it
+   (1.067 is the map's width / height) */
+@media (min-width: 760px) {
   .sm {
-    width: min(calc(100% + var(--col-gap) + var(--fig-w)), calc((100vh - 220px) * 1.067));
-    min-width: 100%;
+    width: max(min(100%, 32rem), min(100%, calc((100vh - 160px) * 1.067)));
   }
 }
 
@@ -1188,20 +1255,24 @@ div.ph {
 
 /* 9c. Travel gallery
    --------------------------------------------------------------------------
-   A tight grid of equal 3:2 photo tiles (click a photo to see all of it).
-   A portrait photo takes two tiles, one above the other; a video takes
-   four, two across and two down. Every row is the same height, so the
-   blocks line up even when a video fills a whole row on a phone.
+   A tight grid of equal 3:2 photo tiles, four across (three or two on
+   smaller screens), running on past the usual right-hand margin. A portrait
+   photo takes two tiles, one above the other; a video takes four, two
+   across and two down. Every row is the same height, so the blocks line up
+   even when a video fills a whole row on a phone. Clicking a photo opens it
+   in a popup (.lightbox, below).
    ========================================================================== */
 
 .gallery {
   --tile-gap: 6px;
   display: grid;
-  /* Tiles at least 15rem wide, and never fewer than two columns */
-  grid-template-columns: repeat(auto-fill, minmax(min(15rem, calc(50% - var(--tile-gap) / 2)), 1fr));
+  /* Four across when there's room for tiles of at least 10.5rem, then
+     three, but never fewer than two */
+  grid-template-columns: repeat(auto-fill, minmax(clamp(calc(25% - var(--tile-gap) * 0.75), 10.5rem, calc(50% - var(--tile-gap) / 2)), 1fr));
   grid-auto-rows: 1fr;
   grid-auto-flow: row dense;
   gap: var(--tile-gap);
+  max-width: 100rem;
   margin-bottom: var(--gap);
 }
 
@@ -1251,11 +1322,51 @@ div.ph {
   outline-offset: 1px;
 }
 
-/* Wide blocks (the map, the gallery) also use the empty image column */
-@media (min-width: 1100px) {
-  .wide {
-    width: calc(100% + var(--col-gap) + var(--fig-w));
-  }
+/* The photo popup: the photo in a white window, with a close button on its
+   top-right corner. Click anywhere else (or press Escape) to close it. */
+.lightbox {
+  max-width: none;
+  max-height: none;
+  margin: auto;
+  padding: 10px;
+  border: 1px solid var(--fg);
+  background: var(--bg);
+  color: var(--fg);
+  overflow: visible;
+}
+
+.lightbox::backdrop {
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.lightbox__img {
+  display: block;
+  background: var(--faint) center / cover no-repeat;
+}
+
+.lightbox__close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid var(--fg);
+  background: var(--bg);
+  color: var(--fg);
+  font: inherit;
+  font-size: 1.5rem;
+  line-height: 1;
+  transform: translate(50%, -50%);
+  cursor: pointer;
+}
+
+/* The page stays put behind the popup */
+html.has-lightbox {
+  overflow: hidden;
+  scrollbar-gutter: stable;
 }
 
 @media (max-width: 759.98px) {
@@ -1279,6 +1390,13 @@ div.ph {
 
   .main {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .page--wide {
+    grid-template-areas:
+      "header .    ."
+      "nav    main main"
+      "footer footer footer";
   }
 
   .figures {

@@ -41,9 +41,9 @@ src/
 ├── _data/
 │   ├── site.json          ← your name, footer text, email, placeholder markers
 │   ├── navigation.json    ← the index (sections, pages, dropdown items)
-│   ├── sounds-of.csv      ← every Sounds Of episode (drives the map)
-│   ├── sounds-of-routes.json ← the roads between episodes (npm run routes)
-│   ├── soundsOf.js        ← reads the CSV and places episodes on the map
+│   ├── sounds-of.csv      ← every Sounds Of stop on the road (drives the map)
+│   ├── sounds-of-routes.json ← the roads between stops (npm run routes)
+│   ├── soundsOf.js        ← places the stops and roads on the map
 │   ├── travel.js          ← builds the Travel gallery from media/travel/
 │   └── build.js           ← the year, and a version tag for the CSS/JS links
 ├── _includes/
@@ -55,6 +55,7 @@ src/
 │   ├── css/style.css      ← all the styling, with comments
 │   ├── js/site.js         ← dropdown toggles
 │   ├── js/sounds-of-map.js ← the map's markers, popup, timeline, route and zoom
+│   ├── js/travel.js       ← Travel: the photo popup, videos that play as you scroll
 │   ├── fonts/             ← Instrument Sans + Reenie Beanie (open-licence fonts)
 │   └── img/               ← put your images here
 │                            Me
@@ -80,7 +81,8 @@ src/
 ├── qualifications.njk     ← Qualifications and Additional Credits  /qualifications/
 ├── contact.njk                                                 /contact/
 └── 404.njk                ← "Not Found" page
-lib/                       ← media components, filters, CSV reader, map outline and projection
+lib/                       ← media components, filters, CSV reader, map outline and projection,
+                             and sounds-of.js (reads the trip from the CSV; where it ends)
 media/travel/              ← the Travel photos and videos
 ```
 
@@ -106,19 +108,22 @@ title: Cyberpedia             # browser tab title
 description: One-line summary for search engines.
 updated: 2026-11-10           # "Updated …" in the footer
 placeholder: true             # adds "placeholder content" to that line
+wide: true                    # (optional) run on past the right-hand margin, like Sounds Of and Travel
 figures:                      # images beside the text (optional)
   - src: /assets/img/cyberpedia-key-art.jpg
     alt: Cyberpedia key art
     caption: (key art)
     ratio: 3/4
 ---
-<h1>Cyberpedia</h1>
-<p class="standfirst">The grey line under the title.</p>
+<h1 class="visually-hidden">Cyberpedia</h1>
+<p class="standfirst">The grey line at the top.</p>
 …
 ```
 
 Everything is the same size. A heading is just a black line with a blank line
-above it, and the text follows straight underneath.
+above it, and the text follows straight underneath. Page titles aren't shown
+(the index already shows where you are), but each page keeps one, hidden with
+`class="visually-hidden"`, for screen readers and search engines.
 
 ### The index (navigation)
 
@@ -162,32 +167,41 @@ the real thing and nothing else on the page moves. Put your own files in
 
 The map on the Sounds Of page is drawn from `src/_data/sounds-of.csv`. It's a
 plain spreadsheet: open it in Excel, Numbers or Google Sheets, edit it, and
-save it as CSV with the same name. These are the column headings (the order
-doesn't matter):
+save it as CSV with the same name. Each row is a stop on the road. These are
+the column headings (the order doesn't matter):
 
 | Column | Example | Notes |
 | --- | --- | --- |
 | `date` | `2026-03-01` or `1/3/2026` | day/month/year is fine |
-| `name` | `Grub` | the artist |
+| `name` | `Grub` | the artist. Leave it empty for a stop with no episode yet (an empty marker) |
 | `location` | `Gippsland, VIC` | the state at the end picks the marker colour |
 | `latitude` | `-38.20` | in Google Maps, right-click the place and click the numbers to copy them |
 | `longitude` | `146.54` | |
 | `youtube` | `https://www.youtube.com/watch?v=qX9Ej2ddQ5k` | the full link or just the ID |
 | `description` | `Grub is a singer-songwriter…` | a sentence or two |
+| `via` | `Hughenden -20.84 144.2` | optional: towns the road goes through on the way to this stop (name, latitude, longitude; separate several with `;`) |
 
-Episodes are sorted by date, and that order is the route. Each leg follows
-the roads, using driving routes saved in `src/_data/sounds-of-routes.json`
-(from OpenStreetMap, via the free OSRM router). After adding or moving
-episodes, fetch the new legs with:
+Stops are sorted by date, and that order is the route. A stop with no date
+stays where it is in the list, straight after the row above it. After the
+last stop, the route drives home to Melbourne (to change that, edit `HOME` in
+`lib/sounds-of.js`). Each leg follows the roads, using driving routes saved in
+`src/_data/sounds-of-routes.json` (from OpenStreetMap, via the free OSRM
+router). After adding or moving stops, or changing a `via`, fetch the new
+legs with:
 
 ```bash
 npm run routes
 ```
 
-Until you do, a new leg is drawn as a gentle curve. The current file was
-built from the videos on the Sounds Of YouTube channel: names, dates and the
-first lines of each description, with approximate coordinates. The Big Dance
-Festival and Gippsland locations are guesses.
+Until you do, a new leg is drawn as a gentle curve. The whole route shows as
+a faint dotted line, and inks itself in solid black as you move through the
+stops; the coast is drawn in pencil grey so the two don't get mixed up.
+
+The current file was built from the videos on the Sounds Of YouTube channel:
+names, dates and the first lines of each description, with approximate
+coordinates. The Big Dance Festival and Gippsland locations are guesses. The
+empty stops (Brisbane, Mount Isa, Uluru, Kalgoorlie and two in Adelaide) have
+no dates yet; Uluru is placed between Alice Springs and Darwin.
 
 The episode list under the map is made from the same file, so it always
 matches. The outline of Australia is generated from Natural Earth's public
@@ -204,12 +218,20 @@ put your files in `media/travel/`:
 - **Videos** (`.mp4` is safest) are used as they are, so keep them small:
   under about 50 MB each, 1080p or less.
 - **Order** follows the file names, so number them: `001.jpg`, `002.jpg`…
-  The videos are spread evenly through the photos.
+  The first video goes in the second and third rows, filling the middle two
+  columns; the others are spread evenly down the page.
 - **Descriptions**: a file name such as `014-kalgoorlie-sunset.jpg` becomes
   "Kalgoorlie sunset" for screen readers.
 
-Each photo is a 3:2 tile, cropped to fit. Portrait photos take two tiles,
-one above the other, and each video takes four, two across and two down.
+The grid is four photos across (three or two on smaller screens) and runs on
+past the usual right-hand margin. Each photo is a 3:2 tile, cropped to fit;
+clicking it opens the whole photo in a popup, closed with the × in its corner
+or a click anywhere else. Portrait photos take two tiles, one above the
+other, and each video takes four, two across and two down. Videos play by
+themselves as you scroll to them and pause when you scroll past, carrying on
+from the same point when you come back. Browsers only allow that with the
+sound off, so they start muted; once a visitor turns the sound on, the rest
+play with sound.
 Until you add files, `placeholder-photo.jpg` and `placeholder-video.mp4` are
 repeated to show the layout (100 photos, 3 videos). Once there's a real photo
 they're ignored, and the same goes for the video once there's a real video.
