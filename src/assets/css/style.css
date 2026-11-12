@@ -379,6 +379,43 @@ a:hover {
   content: "\2013";
 }
 
+/* Interests isn't a page: its name is the button that opens its list, with
+   the + / – after it. Without JavaScript it's just a label over the list. */
+.nav-toggle--label {
+  display: inline;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  line-height: inherit;
+  text-align: left;
+}
+
+.js .nav-toggle--label {
+  display: inline-flex;
+  align-items: baseline;
+  width: auto;
+  height: auto;
+  margin: 0;
+  line-height: inherit;
+}
+
+.nav-toggle--label .nav-toggle__icon {
+  display: none;
+}
+
+.js .nav-toggle--label .nav-toggle__icon {
+  display: inline-block;
+  width: 1.75em;
+  margin-left: 0.1em;
+  text-align: center;
+}
+
+.nav-toggle--label.is-section {
+  color: var(--fg);
+}
+
 .nav-sub {
   padding-left: 1em !important;
 }
@@ -441,10 +478,6 @@ a:hover {
   margin-bottom: 0;
 }
 
-/* A list of credits: who and what on the first line, the roles under it */
-.content .credits li + li {
-  margin-top: 0.6em;
-}
 
 blockquote {
   padding-left: 1em;
@@ -505,6 +538,25 @@ thead th {
 caption {
   color: var(--muted);
   text-align: left;
+}
+
+/* Credits (Music): full width; the year never breaks, the rest wraps */
+.credits {
+  width: 100%;
+}
+
+.credits td {
+  padding-bottom: 0.4em;
+}
+
+.credits td:first-child {
+  white-space: nowrap;
+}
+
+.credits th:last-child,
+.credits td:last-child {
+  width: 45%;
+  padding-right: 0;
 }
 
 /* Release lists (Music): the same columns in every table, so they line up */
@@ -1494,6 +1546,13 @@ html.has-lightbox {
     width: 44px;
     height: 44px;
     margin: -10px 0 -10px 0;
+  }
+
+  .js .nav-toggle--label {
+    width: auto;
+    height: auto;
+    margin: 0;
+    padding: 3px 0;
   }
 
   .main {

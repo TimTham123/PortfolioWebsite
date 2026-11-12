@@ -7,17 +7,23 @@
       → pages (About Me, Sounds Of…), some with sub-pages behind a "+"
         → sub-pages (Music, Cyberpedia…)
   A top-level item with a url (Qualifications…, Contact) is a plain link.
+  An item with "link": false (Interests) isn't a link: clicking its name
+  opens and closes its sub-pages.
 -#}
 {%- macro navItem(item, id, currentUrl) %}
   {%- if item.children %}
     {%- set open = currentUrl | inSection(item.url) %}
-    <li class="nav-group" data-open="{{ 'true' if open else 'false' }}">
+    <li class="nav-group" data-open="{{ 'true' if open else 'false' }}" data-key="{{ item.url }}">
       <div class="nav-group__head">
+        {%- if item.link === false %}
+        <button class="nav-toggle nav-toggle--label{% if open %} is-section{% endif %}" type="button" aria-expanded="{{ 'true' if open else 'false' }}" aria-controls="{{ id }}">{{ item.title }}<span class="nav-toggle__icon" aria-hidden="true"></span></button>
+        {%- else %}
         <a href="{{ item.url }}"{% if currentUrl == item.url %} aria-current="page"{% elif open %} class="is-section"{% endif %}>{{ item.title }}</a>
         <button class="nav-toggle" type="button" aria-expanded="{{ 'true' if open else 'false' }}" aria-controls="{{ id }}">
           <span class="visually-hidden">{{ item.title }} pages</span>
           <span class="nav-toggle__icon" aria-hidden="true"></span>
         </button>
+        {%- endif %}
       </div>
       <ul class="nav-sub" id="{{ id }}">
         {%- for child in item.children %}
@@ -62,7 +68,7 @@
     try { open = JSON.parse(sessionStorage.getItem("nav-open")) || []; } catch (e) {}
     var small = window.matchMedia("(max-width: 759.98px)").matches;
     document.querySelectorAll(".nav-group").forEach(function (group) {
-      var key = group.querySelector(".nav-group__head a").getAttribute("href");
+      var key = group.getAttribute("data-key");
       var isOpen = open.indexOf(key) !== -1 || (!small && group.getAttribute("data-open") === "true");
       group.setAttribute("data-open", isOpen ? "true" : "false");
       group.querySelector(".nav-toggle").setAttribute("aria-expanded", isOpen ? "true" : "false");

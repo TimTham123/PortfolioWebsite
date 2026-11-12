@@ -132,7 +132,9 @@ in three levels:
 
 - **Sections** with no page of their own (`Me`, `Work`) show as black labels.
 - **Pages** sit under them. A page with `children` (Interests, Sound Design)
-  gets a `+` dropdown.
+  gets a `+` dropdown. With `"link": false` (Interests) its name isn't a link:
+  clicking it opens and closes the list instead. Once a dropdown has been
+  open, it stays open from page to page until it's closed.
 - **Sub-pages** sit under those, and get ← previous / next → links to each
   other.
 

@@ -22,7 +22,7 @@
     var button = group.querySelector(".nav-toggle");
     if (!button) return;
 
-    var key = group.querySelector(".nav-group__head a").getAttribute("href");
+    var key = group.getAttribute("data-key");
 
     function setOpen(open) {
       group.setAttribute("data-open", open ? "true" : "false");
