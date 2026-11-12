@@ -1505,6 +1505,17 @@ html.has-lightbox {
   fill: var(--fg);
 }
 
+.luna__white path {
+  fill: var(--bg);
+}
+
+/* White paws, inked round so they show against the page */
+.luna__paws ellipse {
+  fill: var(--bg);
+  stroke: var(--fg);
+  stroke-width: 2.2;
+}
+
 .luna__tail path {
   fill: none;
   stroke: var(--fg);
