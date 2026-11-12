@@ -1484,9 +1484,9 @@ html.has-lightbox {
 
 /* 9d. Luna, the cat at the bottom of the Cat page
    --------------------------------------------------------------------------
-   An ink silhouette (src/_includes/partials/luna.njk). She blinks, flicks
-   her tail and swats at the mouse (assets/js/luna.js); without JavaScript,
-   or for people who'd rather not have motion, she just sits there.
+   An ink silhouette (src/_includes/partials/luna.njk). Her eyes follow the
+   cursor and her tail flicks now and then (assets/js/luna.js); without
+   JavaScript, or for people who'd rather not have motion, she just sits.
    ========================================================================== */
 
 .luna {
@@ -1501,74 +1501,25 @@ html.has-lightbox {
 }
 
 .luna__body,
-.luna__arm circle,
 .luna__pupils circle {
   fill: var(--fg);
 }
 
-.luna__tail path,
-.luna__arm path {
+.luna__tail path {
   fill: none;
   stroke: var(--fg);
+  stroke-width: 4.2;
   stroke-linecap: round;
 }
 
-.luna__tail path {
-  stroke-width: 4.2;
-}
-
-.luna__arm path {
-  stroke-width: 9;
-}
-
-/* Calm: ring eyes. Alert: big eyes that follow the mouse. */
-.luna__calm circle {
-  fill: none;
-  stroke: var(--bg);
-  stroke-width: 2.2;
-}
-
-.luna__alert > circle {
+/* White eyes, always this size; the black inside them moves */
+.luna__eyes > circle {
   fill: var(--bg);
 }
 
-.luna__alert,
-.luna.is-alert .luna__calm {
-  opacity: 0;
-}
-
-.luna.is-alert .luna__alert {
-  opacity: 1;
-}
-
-.luna__tail,
-.luna__arm,
-.luna__eyes {
-  transform-box: view-box;
-}
-
 .luna__tail {
+  transform-box: view-box;
   transform-origin: 86px 196px;
-}
-
-/* Arms rest tucked behind her body; the script swings them out */
-.luna__arm--right {
-  transform-origin: 84px 118px;
-  transform: rotate(150deg);
-}
-
-.luna__arm--left {
-  transform-origin: 49px 118px;
-  transform: rotate(-150deg);
-}
-
-.luna__eyes {
-  transform-origin: 67px 64px;
-  transition: transform 70ms ease-in;
-}
-
-.luna.is-blinking .luna__eyes {
-  transform: scaleY(0.12);
 }
 
 .luna.is-awake .luna__tail {
