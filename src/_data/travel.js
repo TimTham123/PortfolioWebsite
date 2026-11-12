@@ -30,22 +30,30 @@ function describe(file) {
   return words ? words[0].toUpperCase() + words.slice(1) : "";
 }
 
-// Where each video goes: how many photos come before it. The grid is four
-// photos across, and a video fills a 2 x 2 block. The first video takes the
-// second and third rows of the middle two columns; each one after that comes
-// five rows of photos further down, on the left, then the right, and so on
-// (rows 2-3, 9-10, 16-17…).
+// Where each video goes in the grid, which is four photos across; a video
+// fills a 2 x 2 block. The first takes rows 2-3 of the middle two columns;
+// each one after that comes five rows of photos further down, on the left,
+// then the right, and so on (rows 2-3, 9-10, 16-17…). On a big screen each
+// video is pinned to its spot (see style.css), so portrait photos (two tiles
+// tall) can't push it about; `before` is how many photos come before it in
+// the page, so it's also read out in about the right place.
 const COLUMNS = 4;
 const ROWS_BETWEEN = 5;
-function videoSlots(photoCount, videoCount) {
-  const slots = [];
+function videoPlaces(photoCells, videoCount) {
+  const total = photoCells.reduce((sum, cells) => sum + cells, 0);
+  const places = [];
   for (let k = 0; k < videoCount; k++) {
     const row = 2 + k * (2 + ROWS_BETWEEN);
     const column = k === 0 ? 2 : k % 2 ? 1 : 3;
-    const before = (row - 1) * COLUMNS + (column - 1) - 4 * k;
-    slots.push(Math.min(photoCount, Math.max(slots[k - 1] || 0, before)));
+    const cellsBefore = (row - 1) * COLUMNS + (column - 1) - 4 * k;
+    let before = 0;
+    for (let cells = 0; before < photoCells.length && cells < cellsBefore; before++) cells += photoCells[before];
+    before = Math.max(before, k ? places[k - 1].before : 0);
+    // Pinned only if there are enough photos to fill the rows around it.
+    const pinned = total >= (row + 1) * COLUMNS - 4 * (k + 1);
+    places.push({ row: pinned ? row : null, column: pinned ? column : null, before });
   }
-  return slots;
+  return places;
 }
 
 function pick(files, test, count) {
@@ -97,14 +105,15 @@ export default async function () {
     title: videos.placeholder ? `Travel video ${i + 1} (placeholder)` : describe(file) || `Travel video ${i + 1}`,
   }));
 
-  // Put the videos in among the photos (see videoSlots).
-  const slots = videoSlots(photoItems.length, videoItems.length);
+  // Put the videos in among the photos (see videoPlaces).
+  const places = videoPlaces(photoItems.map((photo) => (photo.tall ? 2 : 1)), videoItems.length);
+  videoItems.forEach((video, v) => { video.row = places[v].row; video.column = places[v].column; });
   const items = [];
   photoItems.forEach((photo, i) => {
-    videoItems.forEach((video, v) => { if (slots[v] === i) items.push(video); });
+    videoItems.forEach((video, v) => { if (places[v].before === i) items.push(video); });
     items.push(photo);
   });
-  videoItems.forEach((video, v) => { if (slots[v] >= photoItems.length) items.push(video); });
+  videoItems.forEach((video, v) => { if (places[v].before >= photoItems.length) items.push(video); });
 
   return {
     items,

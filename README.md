@@ -234,10 +234,10 @@ scroll past, carrying on from the same point when you come back. Some
 browsers won't play sound until a visitor has clicked or tapped the page:
 until then the video plays silently with a "Turn sound on" button, and the
 first click or tap anywhere brings the sound in.
-Until you add files, `placeholder-photo.jpg` and `placeholder-video.mp4` are
-repeated to show the layout (100 photos, 3 videos). Once there's a real photo
-they're ignored, and the same goes for the video once there's a real video.
-Delete them when you're done.
+The photos were resized to at most 2400px wide when they were added, with
+their camera details stripped out (the site never shows them bigger than
+1800px). If the folder is ever empty, any files named `placeholder-…` are
+repeated to show the layout instead.
 
 ## Finding and replacing placeholder content
 
@@ -251,7 +251,6 @@ it on the page and in the code:
 | Grey box marked *placeholder* | `{% image %}`, `{% video %}`, `{% audio %}` or `{% embed %}` with no file/URL |
 | `[square brackets]` | facts to fill in, such as `[City]` or `[2025]` |
 | "· placeholder content" in the footer | `placeholder: true` at the top of the page |
-| The same photo and video repeated on the Travel page | `media/travel/placeholder-photo.jpg` and `placeholder-video.mp4` |
 
 When a section is finished, delete its `class="ph"` (or the wrapper `div`) and
 its comment. To preview the site without any markers, set

@@ -1322,6 +1322,19 @@ div.ph {
   outline-offset: 1px;
 }
 
+/* On a big screen: always four across, with each video pinned to its rows
+   (src/_data/travel.js works out where) */
+@media (min-width: 1100px) {
+  .gallery {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .gallery__item--video[style] {
+    grid-row: var(--row) / span 2;
+    grid-column: var(--column) / span 2;
+  }
+}
+
 /* Over a video playing silently until the browser allows sound */
 .gallery__sound {
   position: absolute;

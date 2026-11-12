@@ -2,8 +2,7 @@
 layout: layouts/base.njk
 title: Travel
 description: Photos and videos from the road.
-updated: 2026-11-11
-placeholder: true
+updated: 2026-11-12
 wide: true
 scripts:
   - /assets/js/travel.js
@@ -27,7 +26,7 @@ scripts:
     </picture>
   </a>
   {%- else %}
-  <figure class="gallery__item gallery__item--video">
+  <figure class="gallery__item gallery__item--video"{% if item.row %} style="--row: {{ item.row }}; --column: {{ item.column }}"{% endif %}>
     <video controls playsinline preload="metadata" src="{{ item.src }}#t=0.5" title="{{ item.title }}" aria-label="{{ item.title }}"></video>
   </figure>
   {%- endif %}
