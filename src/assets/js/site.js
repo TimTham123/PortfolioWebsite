@@ -14,16 +14,24 @@
 
     The [+] / [-] button opens and closes the list of sub-pages underneath it.
     It's a plain click/tap toggle (no hover) so it behaves the same with a
-    mouse, a finger or a keyboard. Without JavaScript the sub-pages are simply
-    always shown.
+    mouse, a finger or a keyboard. Once open, a dropdown stays open on every
+    page until it's closed (the script after the nav in nav.njk reads this
+    back). Without JavaScript the sub-pages are simply always shown.
   */
   each(".nav-group", function (group) {
     var button = group.querySelector(".nav-toggle");
     if (!button) return;
 
+    var key = group.querySelector(".nav-group__head a").getAttribute("href");
+
     function setOpen(open) {
       group.setAttribute("data-open", open ? "true" : "false");
       button.setAttribute("aria-expanded", open ? "true" : "false");
+      try {
+        var remembered = (JSON.parse(sessionStorage.getItem("nav-open")) || []).filter(function (k) { return k !== key; });
+        if (open) remembered.push(key);
+        sessionStorage.setItem("nav-open", JSON.stringify(remembered));
+      } catch (e) { /* storage unavailable: it just won't be remembered */ }
     }
 
     button.addEventListener("click", function () {

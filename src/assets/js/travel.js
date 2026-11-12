@@ -35,6 +35,17 @@
   var soundOn = true;        // sound on, unless someone mutes a video
   var soundBlocked = false;  // the browser won't play sound yet
   var FIRST_FADE = 3000;     // ms: the first time a video is heard
+  // Volume changes are smoothed (over about SMOOTH ms) and never swing from
+  // silent to full in less than FULL_SWING ms, so scrolling fast doesn't
+  // make the sound click. A video leaving the screen fades out, then pauses.
+  var SMOOTH = 80;
+  var FULL_SWING = 250;
+  // iPhones and iPads don't let a page change a video's volume.
+  var canFade = (function () {
+    var test = document.createElement("video");
+    test.volume = 0.5;
+    return test.volume === 0.5;
+  })();
 
   // How much of a video is on screen, from 0 to 1.
   function onScreen(video) {
@@ -43,7 +54,20 @@
     return Math.max(0, Math.min(1, shown / (box.height || 1)));
   }
 
+  // Fade the sound out, then pause (straight away if there's nothing to hear).
   function autoPause(video) {
+    if (video.paused || video.stopping) return;
+    var level = video.setVolume == null ? video.volume : video.setVolume;
+    if (!canFade || video.muted || level < 0.005) { stopNow(video); return; }
+    video.stopping = true;
+    // In case the page stops drawing frames (a background tab) mid-fade.
+    video.stopTimer = setTimeout(function () { if (video.stopping) stopNow(video); }, 600);
+    startFading();
+  }
+
+  function stopNow(video) {
+    video.stopping = false;
+    clearTimeout(video.stopTimer);
     if (video.paused) return;
     video.dataset.autoPaused = "true";
     video.pause();
@@ -57,6 +81,11 @@
   }
 
   function autoPlay(video) {
+    if (video.stopping) { // came back before it had faded out: carry on
+      video.stopping = false;
+      clearTimeout(video.stopTimer);
+      return;
+    }
     if (!video.paused || video.ended || video.dataset.userPaused || reduceMotion.matches) return;
     if (soundOn && !soundBlocked) {
       delete video.dataset.autoMuted;
@@ -66,7 +95,7 @@
     } else {
       video.muted = true;
     }
-    if (video.heardFor < FIRST_FADE) video.volume = 0; // the first fade starts from silence
+    if (video.heardFor < FIRST_FADE) video.volume = video.setVolume = 0; // the first fade starts from silence
     video.dataset.autoPlay = "true";
     var playing = video.play();
     if (playing && playing.catch) {
@@ -96,23 +125,30 @@
   document.addEventListener("click", letSoundIn, true);
   document.addEventListener("keydown", letSoundIn, true);
 
-  // The volume, every frame while anything's playing: how much of the video
-  // is on screen, times the first fade-in (over its first 3 seconds of being
-  // heard), times the level the visitor has set with the video's own volume
-  // control (full to begin with).
+  // The volume, every frame while anything's playing, eases towards: how
+  // much of the video is on screen, times the first fade-in (over its first
+  // 3 seconds of being heard), times the level the visitor has set with the
+  // video's own volume control (full to begin with). Silence if it's on its
+  // way out.
   var fading = null;
   function fade(now) {
     fading = null;
     videos.forEach(function (video) {
       if (video.paused) { video.lastFrame = null; return; }
-      if (!video.muted && video.lastFrame != null) {
-        video.heardFor += Math.min(now - video.lastFrame, 100);
-      }
+      var dt = video.lastFrame == null ? 16 : Math.min(now - video.lastFrame, 100);
+      if (!video.muted && video.lastFrame != null) video.heardFor += dt;
       video.lastFrame = now;
       var ramp = Math.min(1, video.heardFor / FIRST_FADE);
       video.gain = onScreen(video) * ramp;
-      video.setVolume = Math.round(video.gain * video.level * 1000) / 1000;
-      if (Math.abs(video.volume - video.setVolume) > 0.0005) video.volume = video.setVolume;
+      var target = video.stopping ? 0 : video.gain * video.level;
+      var current = video.setVolume == null ? video.volume : video.setVolume;
+      var step = (target - current) * (1 - Math.exp(-dt / SMOOTH));
+      var most = Math.min(dt, 16) / FULL_SWING; // a slow frame just fades more slowly
+      step = Math.max(-most, Math.min(most, step));
+      var next = Math.abs(target - current - step) < 0.002 ? target : current + step;
+      video.setVolume = Math.min(1, Math.max(0, Math.round(next * 10000) / 10000));
+      if (Math.abs(video.volume - video.setVolume) > 0.00005) video.volume = video.setVolume;
+      if (video.stopping && video.setVolume <= 0.002) stopNow(video);
       fading = fading || requestAnimationFrame(fade);
     });
   }
@@ -148,6 +184,8 @@
       startFading();
     });
     video.addEventListener("pause", function () {
+      video.stopping = false;
+      clearTimeout(video.stopTimer);
       showButton();
       if (video.dataset.autoPaused || video.ended || document.hidden || onScreen(video) === 0) return;
       // Someone pressed pause (they've just clicked or pressed a key)...
@@ -175,6 +213,7 @@
       } else if (video.setVolume != null && Math.abs(video.volume - video.setVolume) > 0.02 && video.gain > 0.05) {
         // The visitor moved the volume slider: that's the new top level.
         video.level = Math.min(1, video.volume / video.gain);
+        video.setVolume = video.volume;
       }
     });
   });
@@ -232,7 +271,7 @@
     image.srcset = tile.srcset;
     image.src = link.href;
 
-    resume = videos.filter(function (video) { return !video.paused; });
+    resume = videos.filter(function (video) { return !video.paused && !video.stopping; });
     resume.forEach(autoPause);
     document.documentElement.classList.add("has-lightbox");
     dialog.showModal();
@@ -243,7 +282,7 @@
     image.removeAttribute("srcset");
     image.removeAttribute("src");
     source.removeAttribute("srcset");
-    resume.forEach(autoPlay);
+    resume.forEach(function (video) { if (onScreen(video) > 0) autoPlay(video); });
     resume = [];
     if (opener) opener.focus();
   });

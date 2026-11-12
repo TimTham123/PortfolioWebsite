@@ -50,12 +50,24 @@
   </ul>
 </nav>
 <script>
-  /* Small screens start with the dropdowns closed so the page itself stays near the top.
-     Runs here, before the rest of the page is drawn, so nothing jumps. */
-  if (window.matchMedia("(max-width: 759.98px)").matches) {
-    document.querySelectorAll(".nav-group[data-open='true']").forEach(function (group) {
-      group.setAttribute("data-open", "false");
-      group.querySelector(".nav-toggle").setAttribute("aria-expanded", "false");
+  /* Which dropdowns (Interests, Sound Design) start open. Once one has been
+     open, it stays open from page to page until it's closed with its button
+     (remembered for the visit, in the browser's session storage; see also
+     site.js). Otherwise the one for the section you're in is open, except on
+     small screens, which start with them closed so the page itself stays
+     near the top. Runs here, before the rest of the page is drawn, so
+     nothing jumps. */
+  (function () {
+    var open = [];
+    try { open = JSON.parse(sessionStorage.getItem("nav-open")) || []; } catch (e) {}
+    var small = window.matchMedia("(max-width: 759.98px)").matches;
+    document.querySelectorAll(".nav-group").forEach(function (group) {
+      var key = group.querySelector(".nav-group__head a").getAttribute("href");
+      var isOpen = open.indexOf(key) !== -1 || (!small && group.getAttribute("data-open") === "true");
+      group.setAttribute("data-open", isOpen ? "true" : "false");
+      group.querySelector(".nav-toggle").setAttribute("aria-expanded", isOpen ? "true" : "false");
+      if (isOpen && open.indexOf(key) === -1) open.push(key);
     });
-  }
+    try { sessionStorage.setItem("nav-open", JSON.stringify(open)); } catch (e) {}
+  })();
 </script>
