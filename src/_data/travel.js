@@ -32,20 +32,18 @@ function describe(file) {
 
 // Where each video goes: how many photos come before it. The grid is four
 // photos across, and a video fills a 2 x 2 block. The first video takes the
-// second and third rows of the middle two columns; the rest are spread evenly
-// down the page, on the left, then the right, and so on.
+// second and third rows of the middle two columns; each one after that comes
+// five rows of photos further down, on the left, then the right, and so on
+// (rows 2-3, 9-10, 16-17…).
 const COLUMNS = 4;
+const ROWS_BETWEEN = 5;
 function videoSlots(photoCount, videoCount) {
-  if (!videoCount) return [];
-  const slots = [Math.min(5, photoCount)]; // after the first row and one photo
-  const rows = Math.ceil((photoCount + videoCount * 4) / COLUMNS);
-  const rest = videoCount - 1;
-  const spacing = (rows - 3 - rest * 2) / (rest + 1); // rows of photos between videos
-  for (let k = 1; k <= rest; k++) {
-    const row = Math.round(3 + spacing * k + 2 * (k - 1)) + 1;
-    const column = k % 2 ? 1 : 3;
+  const slots = [];
+  for (let k = 0; k < videoCount; k++) {
+    const row = 2 + k * (2 + ROWS_BETWEEN);
+    const column = k === 0 ? 2 : k % 2 ? 1 : 3;
     const before = (row - 1) * COLUMNS + (column - 1) - 4 * k;
-    slots.push(Math.min(photoCount, Math.max(slots[k - 1], before)));
+    slots.push(Math.min(photoCount, Math.max(slots[k - 1] || 0, before)));
   }
   return slots;
 }

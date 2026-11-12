@@ -1322,6 +1322,26 @@ div.ph {
   outline-offset: 1px;
 }
 
+/* Over a video playing silently until the browser allows sound */
+.gallery__sound {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 1;
+  padding: 5px 10px;
+  border: 0;
+  background: rgba(10, 10, 10, 0.78);
+  color: #fff;
+  font: inherit;
+  font-size: 0.8125rem;
+  line-height: 1.3;
+  cursor: pointer;
+}
+
+.gallery__sound[hidden] {
+  display: none;
+}
+
 /* The photo popup: the photo in a white window, with a close button on its
    top-right corner. Click anywhere else (or press Escape) to close it. */
 .lightbox {

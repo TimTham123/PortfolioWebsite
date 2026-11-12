@@ -219,7 +219,8 @@ put your files in `media/travel/`:
   under about 50 MB each, 1080p or less.
 - **Order** follows the file names, so number them: `001.jpg`, `002.jpg`…
   The first video goes in the second and third rows, filling the middle two
-  columns; the others are spread evenly down the page.
+  columns; each one after that comes five rows of photos further down, on the
+  left, then the right.
 - **Descriptions**: a file name such as `014-kalgoorlie-sunset.jpg` becomes
   "Kalgoorlie sunset" for screen readers.
 
@@ -228,10 +229,11 @@ past the usual right-hand margin. Each photo is a 3:2 tile, cropped to fit;
 clicking it opens the whole photo in a popup, closed with the × in its corner
 or a click anywhere else. Portrait photos take two tiles, one above the
 other, and each video takes four, two across and two down. Videos play by
-themselves as you scroll to them and pause when you scroll past, carrying on
-from the same point when you come back. Browsers only allow that with the
-sound off, so they start muted; once a visitor turns the sound on, the rest
-play with sound.
+themselves, with the sound on, as you scroll to them and pause when you
+scroll past, carrying on from the same point when you come back. Some
+browsers won't play sound until a visitor has clicked or tapped the page:
+until then the video plays silently with a "Turn sound on" button, and the
+first click or tap anywhere brings the sound in.
 Until you add files, `placeholder-photo.jpg` and `placeholder-video.mp4` are
 repeated to show the layout (100 photos, 3 videos). Once there's a real photo
 they're ignored, and the same goes for the video once there's a real video.
