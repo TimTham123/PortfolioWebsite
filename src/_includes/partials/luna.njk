@@ -1,0 +1,47 @@
+{#-
+  Luna, drawn in ink, sitting at the bottom of the Cat page. She blinks,
+  flicks her tail, and swats at the mouse if it comes too close (see
+  assets/js/luna.js). Her arms are tucked behind her body until she swats.
+  Purely decorative, so screen readers skip her.
+-#}
+<div class="luna" aria-hidden="true">
+  <svg class="luna__cat" viewBox="0 0 130 210" width="66" height="106" focusable="false">
+    <defs>
+      <!-- a gentle pen wobble, like the Sounds Of map -->
+      <filter id="luna-pen" x="-25%" y="-15%" width="150%" height="130%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="3" result="wobble"/>
+        <feDisplacementMap in="SourceGraphic" in2="wobble" scale="1.8" xChannelSelector="R" yChannelSelector="G" result="wobbled"/>
+        <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="1" seed="7" result="grain"/>
+        <feDisplacementMap in="wobbled" in2="grain" scale="1.1" xChannelSelector="R" yChannelSelector="G"/>
+      </filter>
+    </defs>
+    <g filter="url(#luna-pen)">
+      <g class="luna__tail">
+        <path d="M84 196 C 104 192, 106 166, 109 146 C 111 132, 121 129, 124 137"/>
+      </g>
+      <g class="luna__arm luna__arm--right">
+        <path d="M84 118 C 96 108, 106 96, 114 84"/>
+        <circle cx="116" cy="81" r="6.5"/>
+      </g>
+      <g class="luna__arm luna__arm--left">
+        <path d="M49 118 C 37 108, 27 96, 19 84"/>
+        <circle cx="17" cy="81" r="6.5"/>
+      </g>
+      <path class="luna__body" d="M45 197 C 35 168, 37 128, 47 106 C 51 96, 50 88, 45 80 C 39 70, 41 57, 50 50 L 46 21 L 61 44 C 65 42, 71 42, 75 44 L 89 19 L 86 51 C 94 58, 94 72, 86 81 C 81 89, 81 97, 85 106 C 95 130, 96 170, 87 197 C 74 202, 57 202, 45 197 Z"/>
+      <g class="luna__eyes">
+        <g class="luna__calm">
+          <circle cx="57" cy="64" r="7"/>
+          <circle cx="77" cy="64" r="7"/>
+        </g>
+        <g class="luna__alert">
+          <circle cx="57" cy="64" r="8.5"/>
+          <circle cx="77" cy="64" r="8.5"/>
+          <g class="luna__pupils">
+            <circle cx="57" cy="64" r="4.2"/>
+            <circle cx="77" cy="64" r="4.2"/>
+          </g>
+        </g>
+      </g>
+    </g>
+  </svg>
+</div>
