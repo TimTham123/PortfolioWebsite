@@ -531,6 +531,21 @@ blockquote {
   margin-top: 0.35em;
 }
 
+/* A quote that signs a page off (`signoff:` at the top of the page, About
+   Me): at the very bottom of the text column, however tall the window, and
+   after the pictures on a phone */
+@media (min-width: 760px) {
+  .main--signoff {
+    grid-template-rows: auto 1fr auto;
+  }
+
+  .main--signoff .signoff {
+    grid-row: 3;
+    grid-column: 1;
+    align-self: end;
+  }
+}
+
 .table-scroll {
   overflow-x: auto;
 }

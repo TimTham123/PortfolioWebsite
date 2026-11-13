@@ -23,7 +23,7 @@
 
     {% include "partials/nav.njk" %}
 
-    <main id="main" class="main" tabindex="-1">
+    <main id="main" class="main{% if signoff %} main--signoff{% endif %}" tabindex="-1">
       <div class="content">
 {{ content | safe }}
       </div>
@@ -35,6 +35,14 @@
         {% image figure %}
         {%- endeach %}
       </div>
+      {%- endif %}
+      {%- if signoff %}
+
+      {#- A quote that signs the page off, at the very bottom (About Me) #}
+      <blockquote class="quote quote--hand signoff">
+        <p>&ldquo;{{ signoff.quote }}&rdquo;</p>
+        <p class="quote__by">&ndash; {{ signoff.by }}</p>
+      </blockquote>
       {%- endif %}
     </main>
 

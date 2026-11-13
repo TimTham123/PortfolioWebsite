@@ -39,13 +39,13 @@ npm run build
 ```
 src/
 ├── _data/
-│   ├── site.json          ← your name, footer text, email, placeholder markers
+│   ├── site.json          ← your name, email, placeholder markers
 │   ├── navigation.json    ← the index (sections, pages, dropdown items)
 │   ├── sounds-of.csv      ← every Sounds Of stop on the road (drives the map)
 │   ├── sounds-of-routes.json ← the roads between stops (npm run routes)
 │   ├── soundsOf.js        ← places the stops and roads on the map
 │   ├── travel.js          ← builds the Travel gallery from media/travel/
-│   └── build.js           ← the year, and a version tag for the CSS/JS links
+│   └── build.js           ← a version tag for the CSS/JS links
 ├── _includes/
 │   ├── layouts/
 │   │   ├── base.njk       ← the page: signature, index | text | images, footer
@@ -96,7 +96,6 @@ Edit `src/_data/site.json`:
 
 - `name`: the handwritten signature at the top of every page, and the browser
   tab.
-- `footerText`: the small line in the footer. The year is added automatically.
 - `email`: used on the Contact page.
 
 ### Pages
@@ -111,6 +110,9 @@ description: One-line summary for search engines.
 updated: 2026-11-10           # "Updated …" in the footer
 placeholder: true             # adds "placeholder content" to that line
 wide: true                    # (optional) run on past the right-hand margin, like Sounds Of and Travel
+signoff:                      # (optional) a handwritten quote at the very bottom, like About Me
+  quote: Practicing an art…
+  by: Kurt Vonnegut
 figures:                      # pictures beside the text (optional)
   - src: media/sound-design/cyberpedia/bookworth.jpg
     alt: Bookworth, a book with glasses and a bow tie

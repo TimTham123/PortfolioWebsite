@@ -1,6 +1,6 @@
+{#- The footer: just the page's "Updated …" date (and the 404 page has none). #}
+{%- if not hideStamp %}
 <footer class="site-footer">
-  <p>{{ site.footerText }}, {{ build.year }}</p>
-  {%- if not hideStamp %}
   {% include "partials/stamp.njk" %}
-  {%- endif %}
 </footer>
+{%- endif %}
