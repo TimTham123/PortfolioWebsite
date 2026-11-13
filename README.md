@@ -301,24 +301,37 @@ repeated to show the layout instead.
 
 ## Finding and replacing placeholder content
 
-Some text and media is still placeholder (parts of the Feedra Prototype and
-Qualifications pages, and so on). It's marked so you can find it on the page
-and in the code:
+Some text and media is still placeholder: things to fill in, marked in the
+code. **Visitors never see placeholders**, so the live site always looks
+finished. To see them (with a small handwritten *placeholder* note in
+washed-out red beside each), add `?placeholders` to any address, for example
+`https://timtham123.github.io/PortfolioWebsite/?placeholders`. Your browser
+remembers until you visit an address ending in `?placeholders=off`. (Setting
+`"showPlaceholders": true` in `src/_data/site.json` shows them to everyone.)
 
-| On the page | In the code |
+| In the code | What it is |
 | --- | --- |
-| A small handwritten *placeholder* note in washed-out red beside the text | `<div class="ph">` (with a `<!-- PLACEHOLDER -->` comment above it) |
-| Bracketed bits like `[2025]` | `<span class="ph">`, and captions of placeholder images |
-| Grey box marked *placeholder* | `{% image %}`, `{% video %}`, `{% audio %}` or `{% embed %}` with no file/URL |
-| `[square brackets]` | facts to fill in, such as `[City]` or `[2025]` |
-| "· placeholder content" in the footer | `placeholder: true` at the top of the page |
+| `<div class="ph">`, `<tr class="ph">` (with a `<!-- PLACEHOLDER -->` comment) | text still to write |
+| `<span class="ph">[…]</span>` | a fact to fill in, such as `[Role]` or `[2025]` |
+| `{% image %}`, `{% video %}`, `{% audio %}` or `{% embed %}` with no file/URL | a picture or player still to add |
+| `placeholder: true` at the top of a page | "placeholder content" in its footer, when previewing |
 
-When a section is finished, delete its `class="ph"` (or the wrapper `div`) and
-its comment. To preview the site without any markers, set
-`"showPlaceholderMarkers": false` in `src/_data/site.json`.
+When something's finished, delete its `class="ph"` (or the wrapper `div`) and
+its comment, and it appears for everyone.
 
-Some external links (Instagram, TikTok, Vimeo and so on) still go to the
-platform's home page, and the email address is `hello@example.com`. Swap in your own.
+Still to fill in:
+
+- **Contact:** your email address (`"email"` in `src/_data/site.json`; until
+  it's set, Contact leads with Instagram, TikTok and YouTube), and links to
+  LinkedIn, Bandcamp and itch.io if you want them.
+- **Social Media Marketing:** the intro, what you do, a client case study,
+  results and tools. Only the Sounds Of channels show for now.
+- **Feedra Prototype:** your role, a sentence on what you did, the team and
+  the tools.
+- **Music and Qualifications:** the Operation Karma EP's title; a CV PDF.
+- **Photos:** a portrait (About Me), at the mixing desk (Contact), live and
+  cover art (Music), climbing (Climbing), Luna (Cat), and two for Social
+  Media Marketing.
 
 ## How it's designed
 

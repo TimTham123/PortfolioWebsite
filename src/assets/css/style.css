@@ -881,11 +881,25 @@ figcaption {
 
 /* 9. Placeholders
    --------------------------------------------------------------------------
-   Placeholder text (class="ph") gets a small pencil note: "placeholder".
-   Short bits and captions are grey. While `showPlaceholderMarkers` is true in
-   src/_data/site.json the notes show; set it to false to see the finished
-   look. Media placeholders are grey boxes until they're given a file.
+   Things still to fill in: text marked class="ph", and pictures, videos and
+   players with no file yet (class="is-ph", from the shortcodes). Visitors
+   don't see them. Previewing with ?placeholders (or `showPlaceholders` in
+   src/_data/site.json) shows them, with a small pencil note, "placeholder",
+   in washed-out red; media placeholders are grey boxes.
    ========================================================================== */
+
+html:not(.show-ph) .ph,
+html:not(.show-ph) .is-ph,
+html:not(.show-ph) .ph-note {
+  display: none !important;
+}
+
+/* ...nor a strip or row of pictures that are all placeholders */
+html:not(.show-ph) .figures:not(:has(> :not(.is-ph))),
+html:not(.show-ph) .thumbs:not(:has(> :not(.is-ph))),
+html:not(.show-ph) .media-grid:not(:has(> :not(.is-ph))) {
+  display: none;
+}
 
 .ph > :last-child {
   margin-bottom: 0;
@@ -1252,14 +1266,10 @@ div.ph {
   margin: 0.2em 0 0.75em;
 }
 
-/* "placeholder", on a stop with no episode yet */
+/* "No episode here yet.", on a stop with no episode */
 .sm__popup .sm__empty {
-  display: none;
   margin: -0.4em 0 0.6em;
-}
-
-.show-ph .sm__popup .sm__empty:not([hidden]) {
-  display: block;
+  color: var(--muted);
 }
 
 .sm__video {

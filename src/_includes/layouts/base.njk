@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="{{ site.language }}"{% if site.showPlaceholderMarkers %} class="show-ph"{% endif %}>
+<html lang="{{ site.language }}"{% if site.showPlaceholders %} class="show-ph"{% endif %}>
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,7 +9,17 @@
   <link rel="preload" href="/assets/fonts/instrument-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/reenie-beanie-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/assets/css/style.css?v={{ build.version }}">
-  <script>document.documentElement.classList.add("js");</script>
+  <script>
+    document.documentElement.classList.add("js");
+    /* Placeholders (things still to fill in) are hidden from visitors. Add
+       ?placeholders to any address to see them, with their notes, until
+       ?placeholders=off (the browser remembers). See the README. */
+    try {
+      var ph = location.search.match(/[?&]placeholders(?:=([^&]*))?/);
+      if (ph) localStorage.setItem("placeholders", ph[1] === "off" ? "off" : "on");
+      if (localStorage.getItem("placeholders") === "on") document.documentElement.classList.add("show-ph");
+    } catch (e) { /* no storage: placeholders stay hidden */ }
+  </script>
   <script src="/assets/js/site.js?v={{ build.version }}" defer></script>
   {%- for src in scripts %}
   <script src="{{ src }}?v={{ build.version }}" defer></script>

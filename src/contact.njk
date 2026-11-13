@@ -2,7 +2,7 @@
 layout: layouts/base.njk
 title: Contact
 description: Contact details and professional enquiries.
-updated: 2026-11-13
+updated: 2026-11-14
 placeholder: true
 figures:
   - alt: "Photo of me at the mixing desk"
@@ -12,14 +12,22 @@ figures:
 <h1 class="page-title">Contact</h1>
 <p class="standfirst">Contact details and professional enquiries.</p>
 
-<!-- PLACEHOLDER: your email address lives in src/_data/site.json -->
+{#- The email address is set in src/_data/site.json ("email"). Until it is,
+    the lines about it are a placeholder, so visitors don't see them. #}
+{%- if site.email %}
+<p>For work, collaborations or just to say hello, email is best. I usually reply within a couple of days.</p>
+<p><b>Email:</b> <a href="mailto:{{ site.email }}">{{ site.email }}</a><br>
+<b>Based in:</b> Melbourne, Australia, and happy to work remotely</p>
+{%- else %}
+<!-- PLACEHOLDER: add your email address to src/_data/site.json -->
 <div class="ph">
   <p>For work, collaborations or just to say hello, email is best. I usually reply within a couple of days.</p>
-  <p><b>Email:</b> <a href="mailto:{{ site.email }}">{{ site.email }}</a><br>
-  <b>Based in:</b> Melbourne, Australia, and happy to work remotely</p>
+  <p><b>Email:</b> [your email address]</p>
 </div>
+<p><b>Based in:</b> Melbourne, Australia, and happy to work remotely</p>
+{%- endif %}
 
-<h2>Elsewhere</h2>
+<h2>Find me online</h2>
 <ul>
   <li><a href="https://www.instagram.com/tim.tham/">Instagram</a> &ndash; @tim.tham</li>
   <li><a href="https://www.tiktok.com/@soundsof.aus">TikTok</a> &ndash; @soundsof.aus</li>
@@ -35,13 +43,10 @@ figures:
 </div>
 
 <h2>Professional enquiries</h2>
-<!-- PLACEHOLDER -->
-<div class="ph">
-  <p>If you're getting in touch about a project, it helps to include:</p>
-  <ul>
-    <li>a short description of the project, with links if you have them</li>
-    <li>what you need: sound design, implementation, recording, video or social content</li>
-    <li>your timeline and budget</li>
-  </ul>
-  <p>Artists keen to be part of <a href="/sounds-of/">Sounds Of</a>: send a link to your music and tell me where you're based.</p>
-</div>
+<p>If you're getting in touch about a project, it helps to include:</p>
+<ul>
+  <li>a short description of the project, with links if you have them</li>
+  <li>what you need: sound design, implementation, recording, video or social content</li>
+  <li>your timeline and budget</li>
+</ul>
+<p>Artists keen to be part of <a href="/sounds-of/">Sounds Of</a>: send a link to your music and tell me where you're based.</p>
