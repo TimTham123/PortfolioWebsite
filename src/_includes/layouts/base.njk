@@ -5,7 +5,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% if page.url != "/" %}{{ title }} &ndash; {% endif %}{{ site.name }}</title>
   <meta name="description" content="{{ description or site.description }}">
+  {#- How the page looks when its link is shared (messages, social media):
+      its title and description, and a picture of the signature. The
+      addresses have to be complete, so they start with site.origin. #}
+  {%- set pageTitle %}{% if page.url != "/" %}{{ title }} – {% endif %}{{ site.name }}{% endset %}
+  {%- if page.url != "/404.html" %}
+  <link rel="canonical" href="{{ site.origin }}{{ page.url | url }}">
+  <meta property="og:url" content="{{ site.origin }}{{ page.url | url }}">
+  {%- endif %}
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="{{ site.name }}">
+  <meta property="og:title" content="{{ pageTitle }}">
+  <meta property="og:description" content="{{ description or site.description }}">
+  <meta property="og:image" content="{{ site.origin }}{{ '/assets/img/share.png' | url }}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Callum Tham, handwritten: video creator, sound designer and producer, Melbourne, Australia">
+  <meta property="og:locale" content="en_AU">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#ffffff">
   <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
   <link rel="preload" href="/assets/fonts/instrument-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/reenie-beanie-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/assets/css/style.css?v={{ build.version }}">
