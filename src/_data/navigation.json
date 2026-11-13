@@ -26,12 +26,12 @@
         "link": false,
         "children": [
           { "title": "Game Sound Design Reel", "url": "/sound-design/reel/" },
-          { "title": "Feedra", "url": "/sound-design/feedra/" },
           { "title": "Alchemeow", "url": "/sound-design/alchemeow/" },
           { "title": "Cyberpedia", "url": "/sound-design/cyberpedia/" },
           { "title": "Okiro", "url": "/sound-design/okiro/" },
           { "title": "A Little Bit of Gore", "url": "/sound-design/a-little-bit-of-gore/" },
-          { "title": "Hubworld", "url": "/sound-design/hubworld/" }
+          { "title": "Hubworld", "url": "/sound-design/hubworld/" },
+          { "title": "Feedra Prototype", "url": "/sound-design/feedra/" }
         ]
       },
       { "title": "Social Media Strategy", "url": "/social-media-strategy/" }
