@@ -57,7 +57,8 @@ export default function () {
       place,
       description: row.description,
       date: when ? when.toISOString().slice(0, 10) : "",
-      dateLong: when ? `${when.getUTCDate()} ${MONTHS[when.getUTCMonth()]} ${when.getUTCFullYear()}` : "",
+      // A word in the date column (e.g. "unreleased") shows in place of a date.
+      dateLong: when ? `${when.getUTCDate()} ${MONTHS[when.getUTCMonth()]} ${when.getUTCFullYear()}` : (row.date || "").trim(),
       month: when ? MONTHS[when.getUTCMonth()].slice(0, 3) : "",
       year: when ? when.getUTCFullYear() : null,
       video: id ? { id, embed: embedUrl(id), watch: watchUrl(id) } : null,
@@ -71,24 +72,48 @@ export default function () {
   for (const ep of episodes) {
     ep.label = ep.empty
       ? `${ep.location}${ep.dateLong ? `, ${ep.dateLong}` : ""} (no episode yet)`
-      : `${ep.name}, ${ep.location}, ${ep.dateLong}`;
+      : [ep.name, ep.location, ep.dateLong].filter(Boolean).join(", ");
   }
 
-  // Stops in the same place are fanned out a little so each marker can
-  // still be clicked.
-  const groups = new Map();
+  // Markers that would sit on top of each other (stops in the same place, or
+  // close by, like Melbourne and the Big Dance Festival) are nudged apart,
+  // a little at a time, until each one can still be clicked, staying as
+  // close to its real place as it can. Stops in exactly the same place start
+  // fanned out in a small circle, so they spread out evenly.
+  const MIN = 21; // map units between markers (a marker is about 17 across on a laptop)
+  const same = new Map();
   for (const ep of episodes) {
-    const key = `${ep.x.toFixed(0)},${ep.y.toFixed(0)}`;
-    if (!groups.has(key)) groups.set(key, []);
-    groups.get(key).push(ep);
+    const key = `${ep.x.toFixed(1)},${ep.y.toFixed(1)}`;
+    if (!same.has(key)) same.set(key, []);
+    same.get(key).push(ep);
   }
-  for (const group of groups.values()) {
+  for (const group of same.values()) {
     if (group.length < 2) continue;
     group.forEach((ep, k) => {
       const angle = (k / group.length) * Math.PI * 2 - Math.PI / 2;
-      ep.x += Math.cos(angle) * 11;
-      ep.y += Math.sin(angle) * 11;
+      ep.x += Math.cos(angle) * 6;
+      ep.y += Math.sin(angle) * 6;
     });
+  }
+  for (let pass = 0; pass < 400; pass++) {
+    let moved = false;
+    for (let i = 0; i < episodes.length; i++) {
+      for (let j = i + 1; j < episodes.length; j++) {
+        const a = episodes[i];
+        const b = episodes[j];
+        const dx = b.x - a.x;
+        const dy = b.y - a.y;
+        const d = Math.hypot(dx, dy);
+        if (d >= MIN || d === 0) continue;
+        const push = ((MIN - d) / 2) * 0.5;
+        a.x -= (dx / d) * push;
+        a.y -= (dy / d) * push;
+        b.x += (dx / d) * push;
+        b.y += (dy / d) * push;
+        moved = true;
+      }
+    }
+    if (!moved) break;
   }
 
   // Positions as percentages of the map, for the marker buttons.

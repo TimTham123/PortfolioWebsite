@@ -2,13 +2,15 @@
 layout: layouts/base.njk
 title: Sounds Of
 description: Sounds Of, a travelling live-music video series documenting emerging Australian artists.
-updated: 2026-11-11
-placeholder: true
+updated: 2026-11-13
 scripts:
   - /assets/js/sounds-of-map.js
 wide: true
 ---
 <h1 class="visually-hidden">Sounds Of</h1>
+
+{#- The number counts every episode in src/_data/sounds-of.csv. #}
+<h2 class="sm-heading">{{ soundsOf.episodeCount }} artists, 1 year</h2>
 
 {#- The map comes first, as big as the window allows. #}
 {% include "partials/sounds-of-map.njk" %}
@@ -16,37 +18,37 @@ wide: true
 <p class="standfirst">A travelling live-music video series documenting emerging Australian artists.</p>
 
 <h2>About the series</h2>
-<!-- PLACEHOLDER -->
-<div class="ph">
-  <p>Sounds Of takes a portable recording rig on the road to film emerging Australian artists playing live in the places that shaped them: lounge rooms, community halls, beaches and back sheds. Every song is a single take, recorded and mixed on location, followed by a short conversation about where it came from.</p>
-  <p>I produce, film, record and mix each episode, and look after the series' YouTube and social channels.</p>
+<p>Sounds Of took a portable recording rig on the road to film emerging Australian artists playing live in the places that shaped them: lounge rooms, community halls, beaches and back sheds.</p>
+<p>Every song is a single take, minimal edits, all on the go.</p>
+<p>I produced, filmed, recorded and mixed each episode, and managed the series' YouTube and social channels.</p>
+
+<h2>How it's made</h2>
+<p>Everything fits in one car: two BMPCC 4Ks, a camcorder, a bag of microphones, a portable interface and a laptop. Songs were captured as multitracks on location, then mixed back through headphones using Reaper.</p>
+<div class="table-scroll">
+  <table class="gear">
+    <caption class="visually-hidden">Gear</caption>
+    <tbody>
+      <tr><th scope="row">Cameras</th><td>Blackmagic Design Pocket Cinema Camera 4K &times; 2, Panasonic NV-GS180</td></tr>
+      <tr><th scope="row">Recorder</th><td>Behringer XR18 into X-Air Edit</td></tr>
+      <tr><th scope="row">Microphones</th><td>Shure SM7B, Shure Beta 57A &times; 4, Rode NT5 &times; 2, Shure SM52, Sennheiser e906 &times; 2, Shure SM58</td></tr>
+      <tr><th scope="row">Cables</th><td>All hand-soldered</td></tr>
+      <tr><th scope="row">Editing &amp; mixing</th><td>DaVinci Resolve, Reaper</td></tr>
+      <tr><th scope="row">Additional tools</th><td>iZotope RX 11</td></tr>
+    </tbody>
+  </table>
 </div>
+
+<h2>Watch &amp; follow</h2>
+{#- The Instagram and TikTok links still go to the sites' home pages: swap in the series' own pages. #}
+<p>Every episode is on <a href="https://www.youtube.com/@soundsofchannel">YouTube</a>, with clips and behind-the-scenes on <a href="https://www.instagram.com/">Instagram</a> and <a href="https://www.tiktok.com/">TikTok</a>.</p>
+<p>Are you an artist, or know one, who'd suit the series? <a href="/contact/">Get in touch</a>.</p>
 
 <h2>Episodes</h2>
 {#- Listed from src/_data/sounds-of.csv, newest first (stops with no episode yet are left out). #}
 <ol class="episode-list">
   {%- for ep in soundsOf.episodes | reverse %}
   {%- if not ep.empty %}
-  <li>{% if ep.video %}<a href="{{ ep.video.watch }}">{{ ep.name }}</a>{% else %}{{ ep.name }}{% endif %}, {{ ep.location }} &middot; {{ ep.dateLong }}</li>
+  <li>{% if ep.video %}<a href="{{ ep.video.watch }}">{{ ep.name }}</a>{% else %}{{ ep.name }}{% endif %}, {{ ep.location }}{% if ep.dateLong %} &middot; {{ ep.dateLong }}{% endif %}</li>
   {%- endif %}
   {%- endfor %}
 </ol>
-
-<h2>How it's made</h2>
-<!-- PLACEHOLDER -->
-<div class="ph">
-  <p>Everything fits in one car: two cameras, a handful of microphones, a portable recorder and a laptop. Songs are captured as multitracks on location, then mixed back home with the sound of the room kept front and centre.</p>
-  <ul>
-    <li>Cameras: [camera model] &times; 2</li>
-    <li>Recorder: [portable multitrack recorder]</li>
-    <li>Microphones: [microphones]</li>
-    <li>Editing &amp; mixing: [Premiere Pro / DaVinci Resolve], [Reaper / Pro Tools]</li>
-  </ul>
-</div>
-
-<h2>Watch &amp; follow</h2>
-<!-- PLACEHOLDER: add the series' Instagram and TikTok links -->
-<div class="ph">
-  <p>Every episode is on <a href="https://www.youtube.com/@soundsofchannel">YouTube</a>, with clips and behind-the-scenes on <a href="https://www.instagram.com/">Instagram</a> and <a href="https://www.tiktok.com/">TikTok</a>.</p>
-  <p>Are you an artist, or know one, who'd suit the series? <a href="/contact/">Get in touch</a>.</p>
-</div>

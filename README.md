@@ -199,7 +199,7 @@ the column headings (the order doesn't matter):
 
 | Column | Example | Notes |
 | --- | --- | --- |
-| `date` | `2026-03-01` or `1/3/2026` | day/month/year is fine |
+| `date` | `2026-03-01` or `1/3/2026` | day/month/year is fine. A word such as `unreleased` shows instead of a date; leave it empty if you don't know it (the stop stays where it is in the list) |
 | `name` | `Grub` | the artist. Leave it empty for a stop with no episode yet (an empty marker) |
 | `location` | `Gippsland, VIC` | the state at the end picks the marker colour |
 | `latitude` | `-38.20` | in Google Maps, right-click the place and click the numbers to copy them |

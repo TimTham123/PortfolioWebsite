@@ -1,91 +1,72 @@
 ---
 layout: layouts/base.njk
 title: Qualifications and Additional Credits
-description: Education, professional experience, credits and qualifications.
+description: Education, credits, awards and qualifications.
 updated: 2026-11-13
 placeholder: true
 ---
 <h1 class="visually-hidden">Qualifications and Additional Credits</h1>
 <p class="standfirst">Education, professional experience, credits and qualifications.</p>
 
-<!-- PLACEHOLDER -->
-<div class="ph">
-  <p>Where I've studied, who I've worked with and what I've worked on. A full CV is available on request. [Or link a PDF here: put the file in src/assets/ and link to it.]</p>
-</div>
+<p>Where I've studied, who I've worked with and what I've worked on. A full CV is available on request. <span class="ph">[Or link a PDF here: put the file in src/assets/ and link to it.]</span></p>
 
 <h2>Education</h2>
-<!-- PLACEHOLDER -->
-<div class="ph">
-  <dl>
-    <dt><b>Bachelor of Design ([major])</b>, [University]</dt>
-    <dd>[2023&ndash;2026] &middot; Focus on sound design and implementation for games.</dd>
-    <dt><b>[Certificate or diploma]</b>, [Institution]</dt>
-    <dd>[Year]</dd>
-  </dl>
-</div>
+<dl>
+  <dt><b>Bachelor of Design (Digital Media)</b>, RMIT</dt>
+  <dd>2024&ndash;2025 &middot; Focus on sound design and implementation for games.</dd>
+  <dt><b>Advanced Diploma of Music (Sound Production)</b>, RMIT</dt>
+  <dd>2022 &middot; Training in the theory and practice of audio engineering.</dd>
+</dl>
 
 <h2>Credits</h2>
-<!-- PLACEHOLDER: one row per credit, newest first -->
-<div class="ph">
-  <div class="table-scroll">
-    <table>
-      <thead>
-        <tr><th scope="col">Year</th><th scope="col">Project</th><th scope="col">Role</th><th scope="col">Studio / client</th></tr>
-      </thead>
-      <tbody>
-        <tr><td>2024&ndash;</td><td><a href="/sound-design/cyberpedia/">Cyberpedia</a></td><td>Composer, sound designer</td><td>Bitcrush (Chris Erickson)</td></tr>
-        <tr><td>2024</td><td><a href="/sound-design/alchemeow/">Alchemeow</a></td><td>Sound design lead, composer</td><td>Trashpanda Studio</td></tr>
-        <tr><td>2024</td><td><a href="/sound-design/okiro/">Okiro</a></td><td>Sound designer, composer, Unreal Engine implementation</td><td>Ziya Gao, Songya Xu, Zhenxi Zhang &amp; Tina Yao</td></tr>
-        <tr><td>2024</td><td><a href="/sound-design/a-little-bit-of-gore/">A Little Bit of Gore</a></td><td>Sound designer, composer, FMOD implementation</td><td>Matthew Ganther</td></tr>
-        <tr><td>2024</td><td><a href="/sound-design/hubworld/">Hubworld</a></td><td>Sound designer</td><td>Bitcrush (Chris Erickson)</td></tr>
-        <tr><td>[2024&ndash;]</td><td><a href="/sounds-of/">Sounds Of</a></td><td>Creator, producer, recording and mixing</td><td>Independent</td></tr>
-      </tbody>
-    </table>
-  </div>
-</div>
-
-<h2>Professional experience</h2>
-<!-- PLACEHOLDER -->
-<div class="ph">
-  <dl>
-    <dt><b>[Job title]</b>, [Company] &middot; [2025&ndash;present]</dt>
-    <dd>[One or two lines about the role.]</dd>
-    <dt><b>Freelance sound designer and video producer</b> &middot; [2022&ndash;present]</dt>
-    <dd>Game audio, live-music recording, and social content for artists and small businesses.</dd>
-    <dt><b>[Job title]</b>, [Venue or studio] &middot; [2021&ndash;2023]</dt>
-    <dd>[Live sound, studio assistant, and so on.]</dd>
-  </dl>
-</div>
-
-<h2>Certifications &amp; courses</h2>
-<!-- PLACEHOLDER -->
-<div class="ph">
-  <ul>
-    <li>[Certification], [Provider] &middot; [Year]</li>
-    <li>[Course], [Provider] &middot; [Year]</li>
-  </ul>
-</div>
-
-<h2>Skills &amp; software</h2>
-<!-- PLACEHOLDER -->
-<div class="ph">
-  <div class="table-scroll">
-    <table>
-      <tbody>
-        <tr><th scope="row">Audio</th><td>Reaper, Pro Tools, iZotope RX, field recording, foley, dialogue editing</td></tr>
-        <tr><th scope="row">Game audio</th><td>FMOD Studio, Wwise, Unity, Unreal Engine</td></tr>
-        <tr><th scope="row">Video</th><td>Premiere Pro, DaVinci Resolve, multi-camera shoots</td></tr>
-        <tr><th scope="row">Social</th><td>Content planning, short-form editing, analytics</td></tr>
-      </tbody>
-    </table>
-  </div>
+{#- Newest first in each group. The Sounds Of episodes are listed from
+    src/_data/sounds-of.csv, so they stay in step with the map. #}
+<div class="table-scroll">
+  <table class="credit-list">
+    <thead>
+      <tr><th scope="col">Year</th><th scope="col">Project</th><th scope="col">Role</th><th scope="col">Studio / client</th></tr>
+    </thead>
+    <tbody>
+      <tr><th colspan="4" scope="rowgroup">Sound design</th></tr>
+      <tr><td><span class="ph">[2025]</span></td><td><a href="/sound-design/feedra/">Feedra Prototype</a></td><td><span class="ph">[Role]</span></td><td>RMIT</td></tr>
+      <tr><td>2024&ndash;</td><td><a href="/sound-design/cyberpedia/">Cyberpedia</a></td><td>Composer, sound designer</td><td>Bitcrush (Chris Erickson)</td></tr>
+      <tr><td>2024</td><td><a href="/sound-design/alchemeow/">Alchemeow</a></td><td>Sound design lead, composer</td><td>Trashpanda Studio</td></tr>
+      <tr><td>2024</td><td>Hypnagogia, a multisensory installation</td><td>Co-creator: binaural beats, haptics and light</td><td>RMIT, with Jez</td></tr>
+      <tr><td>2024</td><td><a href="/sound-design/okiro/">Okiro</a></td><td>Sound designer, composer, Unreal Engine implementation</td><td>Ziya Gao, Songya Xu, Zhenxi Zhang &amp; Tina Yao</td></tr>
+      <tr><td>2024</td><td><a href="/sound-design/a-little-bit-of-gore/">A Little Bit of Gore</a></td><td>Sound designer, composer, FMOD implementation</td><td>Matthew Ganther</td></tr>
+      <tr><td>2024</td><td><a href="/sound-design/hubworld/">Hubworld</a> (short film)</td><td>Sound designer</td><td>Bitcrush (Chris Erickson)</td></tr>
+    </tbody>
+    <tbody>
+      <tr><th colspan="4" scope="rowgroup">Music</th></tr>
+      <tr><td>2026</td><td><a href="https://open.spotify.com/album/4e8Jq6QhxuSqA88AVPlV0w">The Happy Songs</a> (EP)</td><td>Writing, recording, production, performance</td><td>Callum Tam (solo)</td></tr>
+      <tr><td>2026</td><td>Ash (Is Something Changing?)</td><td>Writing, production, recording</td><td>Adam Harpaz</td></tr>
+      <tr><td>2026</td><td><a href="https://thegoddamndarlings.bandcamp.com/album/heed-my-advice-live-24-09-2026">Heed My Advice (Live)</a>, RTRFM feature music</td><td>Recording, mixing, mastering</td><td>The Goddamn Darlings</td></tr>
+      <tr><td>2026</td><td><a href="https://www.youtube.com/watch?v=a-ItlGRZA58">Desert Rose (Live)</a>, Sounds Of live session</td><td>Recording, mixing</td><td>Alexia Parenzee</td></tr>
+      <tr><td>2025</td><td><a href="https://open.spotify.com/album/0DQfkubc1woLbHbBIlz22e">Ferry Ride</a> (single)</td><td>Writing, recording, production, performance</td><td>Callum Tam (solo)</td></tr>
+      <tr><td>2025</td><td><a href="https://open.spotify.com/album/4u09OZwBGqtopDWM1nRmor">Is It a New Year Already?</a> (EP)</td><td>Writing, recording, production, performance</td><td>Callum Tam (solo)</td></tr>
+      <tr><td>2025</td><td><a href="https://open.spotify.com/album/0yCBbwqkaMH7QkKCYvyED9">Boogie with You</a> (single)</td><td>Frontman</td><td>Melonade</td></tr>
+      <tr><td>2025</td><td>Multiple tracks</td><td>Writing, production, recording, performance (guitar, bass, vocals), mixing</td><td>Runway Four</td></tr>
+      <tr><td>2024&ndash;26</td><td>Multiple tracks</td><td>Production, recording, mixing, performance</td><td>Wes Couer</td></tr>
+      <tr><td>2024</td><td><a href="https://open.spotify.com/album/6Khzbg1RmVABLIc8Mb1vNm">Time Moves Too Fast for My Liking</a> (EP)</td><td>Writing, recording, production, performance</td><td>Callum Tam (solo)</td></tr>
+      <tr><td>2023</td><td><a href="https://open.spotify.com/album/4Zo8r69BQ3PX2gppWozYee">Wings</a> (single)</td><td>Frontman</td><td>Melonade</td></tr>
+      <tr><td>2023</td><td>Free Ride On The Bus</td><td><span class="ph">[Role]</span></td><td>Jarrod Smitt</td></tr>
+      <tr><td>2023</td><td><span class="ph">[Title]</span> demos (EP)</td><td><span class="ph">[Role]</span></td><td>Operation Karma</td></tr>
+      <tr><td>2022</td><td><a href="https://open.spotify.com/album/2wFiofr6Xx3Z9b0xlYGta6">Kids Trilogy</a> (EP)</td><td>Frontman</td><td>Melonade</td></tr>
+    </tbody>
+    <tbody>
+      <tr><th colspan="4" scope="rowgroup">Sounds Of</th></tr>
+      <tr><td>2026</td><td><a href="/sounds-of/">Sounds Of</a>, the series ({{ soundsOf.episodeCount }} episodes)</td><td>Creator, producer, filming, recording, mixing; YouTube and social channels</td><td>Independent</td></tr>
+      {%- for ep in soundsOf.episodes | reverse %}
+      {%- if not ep.empty %}
+      <tr><td>{{ ep.year or ep.dateLong }}</td><td>{% if ep.video %}<a href="{{ ep.video.watch }}">{{ ep.name }}</a>{% else %}{{ ep.name }}{% endif %}, {{ ep.location }}</td><td>Producer, filming, recording, mixing</td><td>Sounds Of</td></tr>
+      {%- endif %}
+      {%- endfor %}
+    </tbody>
+  </table>
 </div>
 
 <h2>Awards &amp; other credits</h2>
-<!-- PLACEHOLDER -->
-<div class="ph">
-  <ul>
-    <li>[Award or festival selection] &middot; [Year]</li>
-    <li>[Other credit] &middot; [Year]</li>
-  </ul>
-</div>
+<ul>
+  <li>Vice-Chancellor's List of Academic Excellence, RMIT (2025)</li>
+  <li>Whitefriars College Academic Excellence Scholarship (2017&ndash;2021)</li>
+</ul>

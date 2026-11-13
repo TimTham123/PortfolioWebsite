@@ -594,6 +594,34 @@ caption {
   padding-right: 0;
 }
 
+/* All credits (Qualifications): grouped, each group under a black heading
+   row; the year never breaks */
+.credit-list {
+  width: 100%;
+}
+
+.credit-list td {
+  padding-bottom: 0.4em;
+}
+
+.credit-list td:first-child {
+  white-space: nowrap;
+}
+
+.credit-list td:last-child,
+.credit-list thead th:last-child {
+  padding-right: 0;
+}
+
+.credit-list tbody th {
+  padding: var(--gap) 0 0.25em;
+  color: var(--fg);
+}
+
+.credit-list tbody:first-of-type th {
+  padding-top: 0.5em;
+}
+
 /* Release lists (Music): the same columns in every table, so they line up */
 .releases {
   width: 100%;
@@ -1358,11 +1386,11 @@ div.ph {
   }
 }
 
-/* As big as the window allows, with the timeline still in view below it
-   (1.067 is the map's width / height) */
+/* As big as the window allows, with the heading above it and the timeline
+   still in view below it (1.067 is the map's width / height) */
 @media (min-width: 760px) {
   .sm {
-    width: max(min(100%, 32rem), min(100%, calc((100vh - 160px) * 1.067)));
+    width: max(min(100%, 32rem), min(100%, calc((100vh - 185px) * 1.067)));
   }
 }
 
