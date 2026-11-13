@@ -130,7 +130,8 @@ line, such as "Email:", use `<b>`. Each page starts with its title,
 `<h1 class="page-title">`: it's hidden where the index sits beside the page
 (the index already shows where you are), and handwritten at the top of the
 page on phones. It's always there for screen readers and search engines.
-(About Me's stays hidden everywhere: "Hi, I'm Callum" does the job. Sounds
+(About Me's title is its greeting, "Hi, I'm Callum.", handwritten at every
+size: `<h1 class="greeting">`. Sounds
 Of's, "Sounds Of Australia", is handwritten and centred over the map at
 every size: `<h1 class="sm-heading wide">`.)
 

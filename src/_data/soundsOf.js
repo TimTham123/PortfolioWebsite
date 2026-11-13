@@ -65,6 +65,8 @@ export default function () {
       // A word in the date column (e.g. "unreleased") shows in place of a date.
       dateLong: when ? `${when.getUTCDate()} ${MONTHS[when.getUTCMonth()]} ${when.getUTCFullYear()}` : (row.date || "").trim(),
       month: when ? MONTHS[when.getUTCMonth()].slice(0, 3) : "",
+      // "30 Oct", for the list of episodes (or the word, e.g. "unreleased")
+      dateShort: when ? `${when.getUTCDate()} ${MONTHS[when.getUTCMonth()].slice(0, 3)}` : (row.date || "").trim(),
       year: when ? when.getUTCFullYear() : null,
       video: id ? { id, embed: embedUrl(id), watch: watchUrl(id) } : null,
       colour: STATE_COLOURS[state] || SPARE_COLOURS[i % SPARE_COLOURS.length],

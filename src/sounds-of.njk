@@ -42,11 +42,20 @@ wide: true
 <p>Are you an artist, or know one, who'd suit the series? <a href="/contact/">Get in touch</a>.</p>
 
 <h2>Episodes</h2>
-{#- Listed from src/_data/sounds-of.csv, newest first (stops with no episode yet are left out). #}
-<ol class="episode-list">
-  {%- for ep in soundsOf.episodes | reverse %}
-  {%- if not ep.empty %}
-  <li>{% if ep.video %}<a href="{{ ep.video.watch }}">{{ ep.name }}</a>{% else %}{{ ep.name }}{% endif %}, {{ ep.location }}{% if ep.dateLong %} &middot; {{ ep.dateLong }}{% endif %}</li>
-  {%- endif %}
-  {%- endfor %}
-</ol>
+{#- Listed from src/_data/sounds-of.csv, newest first (stops with no episode
+    yet are left out). #}
+<div class="table-scroll">
+  <table class="episodes">
+    <caption class="visually-hidden">Every episode, newest first</caption>
+    <thead>
+      <tr><th scope="col">Date</th><th scope="col">Artist</th><th scope="col">Where</th></tr>
+    </thead>
+    <tbody>
+      {%- for ep in soundsOf.episodes | reverse %}
+      {%- if not ep.empty %}
+      <tr><td{% if not ep.date %} class="is-word"{% endif %}>{{ ep.dateShort }}</td><td>{% if ep.video %}<a href="{{ ep.video.watch }}">{{ ep.name }}</a>{% else %}{{ ep.name }}{% endif %}</td><td>{{ ep.location }}</td></tr>
+      {%- endif %}
+      {%- endfor %}
+    </tbody>
+  </table>
+</div>
