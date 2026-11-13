@@ -128,7 +128,9 @@ line, such as "Email:", use `<b>`. Each page starts with its title,
 `<h1 class="page-title">`: it's hidden where the index sits beside the page
 (the index already shows where you are), and handwritten at the top of the
 page on phones. It's always there for screen readers and search engines.
-(About Me's stays hidden everywhere: "Hi, I'm Callum" does the job.)
+(About Me's stays hidden everywhere: "Hi, I'm Callum" does the job. Sounds
+Of's, "Sounds Of Australia", is handwritten and centred over the map at
+every size: `<h1 class="sm-heading wide">`.)
 
 ### The index (navigation)
 
@@ -232,14 +234,21 @@ the state each time the road crosses into a new one.
 
 The map puts being easy to read ahead of being exact:
 
+- No two markers ever touch. Markers stay the same size on screen at every
+  zoom, so on a small map (a phone, or zoomed right out) places near each
+  other would overlap. Whenever the map's size or zoom changes,
+  `assets/js/sounds-of-map.js` spreads the dots out just enough to keep them
+  18px apart, centre to centre (`SPACE`), each as near its real spot as it
+  can be, and redraws the route to meet them. Zooming in brings them back
+  to where they really are.
 - Stops with the same latitude and longitude (the four Melbourne episodes,
   the two at the Big Dance Festival) are drawn as a short diagonal line of
-  dots, and each dot can be clicked. The gap between them is `--pile-step`
-  in `style.css`.
-- Places close enough to touch are nudged apart until each can be clicked,
-  staying as near their real spot as they can (`MIN` in
-  `src/_data/soundsOf.js`). To move a place further, change its latitude
-  and longitude in the CSV.
+  dots, and each dot can be clicked. The drive home ends on the first
+  Melbourne dot, where the trip began.
+- Without JavaScript, the dots in a line are `--pile-step` apart (in
+  `style.css`), and places close enough to touch are nudged apart when the
+  site is built (`MIN` in `src/_data/soundsOf.js`).
+- To move a place, change its latitude and longitude in the CSV.
 
 The current file was built from the videos on the Sounds Of YouTube channel:
 names, dates and the first lines of each description, with approximate

@@ -1124,11 +1124,13 @@ div.ph {
 }
 
 /* Stops in the same place: a short line of dots, each a little up and to the
-   right of the one before. The step is on screen, so it's the same at every
-   zoom; each dot gets a smaller target so it can be clicked on its own (the
-   timeline has a full-size button for every episode too). */
+   right of the one before, 18px apart (12.75px across and up). The step is on
+   screen, so it's the same at every zoom; each dot gets a smaller target so
+   it can be clicked on its own (the timeline has a full-size button for
+   every episode too). With JavaScript, sounds-of-map.js places every dot
+   itself, spaced so that none touch at any size. */
 .sm {
-  --pile-step: 8px;
+  --pile-step: 12.75px;
 }
 
 .sm__marker.in-pile {
@@ -1136,6 +1138,10 @@ div.ph {
   height: 18px;
   margin: -9px 0 0 -9px;
   transform: translate(calc(var(--pk) * var(--pile-step)), calc(var(--pk) * var(--pile-step) * -1));
+}
+
+.sm.is-ready .sm__marker.in-pile {
+  transform: none;
 }
 
 .sm__marker.is-current .sm__dot {
@@ -1512,11 +1518,25 @@ div.ph {
   }
 }
 
-/* As big as the window allows, with the heading above it and the timeline
-   still in view below it (1.067 is the map's width / height) */
+/* The page's title, "Sounds Of Australia", handwritten and centred over the
+   map. Unlike other pages' titles it shows beside the index too. */
+.content .sm-heading {
+  margin: 0 0 0.12em;
+  font-family: var(--font-hand);
+  font-size: 3.5rem;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  text-align: center;
+}
+
+/* As big as the window allows, with its title above it and the timeline
+   still in view below it (1.067 is the map's width / height). The title is
+   as wide as the map, so it's centred over it. */
 @media (min-width: 760px) {
-  .sm {
-    width: max(min(100%, 32rem), min(100%, calc((100vh - 185px) * 1.067)));
+  .sm,
+  .content .sm-heading {
+    width: max(min(100%, 32rem), min(100%, calc((100vh - 224px) * 1.067)));
   }
 }
 
@@ -1567,10 +1587,6 @@ div.ph {
 
   .sm__place {
     font-size: 1.5rem;
-  }
-
-  .sm {
-    --pile-step: 4.5px;
   }
 
   /* Just the arrows (the words stay for screen readers) */
@@ -2011,6 +2027,12 @@ html.has-lightbox {
     font-size: 3rem;
     line-height: 0.9;
     letter-spacing: 0;
+  }
+
+  /* The Sounds Of title, over the map, a little smaller than other pages'
+     titles so it fits on one line */
+  .content .sm-heading {
+    font-size: min(2.75rem, 12vw);
   }
 
   .main {

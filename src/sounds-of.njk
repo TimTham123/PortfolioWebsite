@@ -7,10 +7,9 @@ scripts:
   - /assets/js/sounds-of-map.js
 wide: true
 ---
-<h1 class="page-title">Sounds Of</h1>
-
-{#- The number counts every episode in src/_data/sounds-of.csv. #}
-<h2 class="sm-heading">{{ soundsOf.episodeCount }} artists, 1 year</h2>
+{#- The page's title, handwritten and centred over the map. Unlike the
+    other pages' titles, it shows at every size. #}
+<h1 class="sm-heading wide">Sounds Of Australia</h1>
 
 {#- The map comes first, as big as the window allows. #}
 {% include "partials/sounds-of-map.njk" %}

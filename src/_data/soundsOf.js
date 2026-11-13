@@ -49,6 +49,10 @@ export default function () {
       empty: !row.name,
       lat: row.lat,
       lng: row.lng,
+      // Where it really is on the map (x and y, below, are where its marker
+      // goes without JavaScript, nudged clear of its neighbours).
+      tx: round(x, 1),
+      ty: round(y, 1),
       via: row.via.map(({ lat, lng }) => ({ lat, lng })),
       name: row.name,
       // What the stop is called on the map and in the timeline.
@@ -78,11 +82,13 @@ export default function () {
 
   // Stops in the same place (four in Melbourne, two at the Big Dance
   // Festival…) are drawn as a short line of dots, each a little up and to
-  // the right of the one before (the spacing is in style.css, so it's the
-  // same at every zoom), and each can be clicked. Places that are
-  // close enough to touch (Melbourne and Phillip Island, Bellingen and the
-  // Coffs Coast) are nudged apart, a little at a time, so each can still be
-  // clicked, staying as near their real spot as they can.
+  // the right of the one before, and each can be clicked. With JavaScript,
+  // sounds-of-map.js spaces every dot out for the size the map is drawn at
+  // (see "Spacing the markers" there). Without it, the line's spacing is in
+  // style.css (--pile-step), and places that are close enough to touch
+  // (Melbourne and Gippsland, Bellingen and the Coffs Coast) are nudged
+  // apart here, a little at a time, staying as near their real spot as they
+  // can.
   const MIN = 30; // map units between places (about 23px on a laptop; a marker is 11px)
   const places = [];
   for (const ep of episodes) {
