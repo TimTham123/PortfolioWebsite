@@ -70,14 +70,13 @@ src/
 ├── sounds-of.njk                                               /sounds-of/
 ├── sound-design/
 │   ├── index.njk          ← Sound Design overview (About Me links here) /sound-design/
-│   ├── reel.njk           ← Game Sound Design Reel             /sound-design/reel/
 │   ├── alchemeow.njk                                           /sound-design/alchemeow/
 │   ├── cyberpedia.njk                                          /sound-design/cyberpedia/
 │   ├── okiro.njk                                               /sound-design/okiro/
 │   ├── a-little-bit-of-gore.njk                                /sound-design/a-little-bit-of-gore/
 │   ├── hubworld.njk                                            /sound-design/hubworld/
 │   └── feedra.njk         ← Feedra Prototype                   /sound-design/feedra/
-├── social-media-strategy.njk                                   /social-media-strategy/
+├── social-media-marketing.njk                                  /social-media-marketing/
 │
 ├── qualifications.njk     ← Qualifications and Additional Credits  /qualifications/
 ├── contact.njk                                                 /contact/
@@ -154,7 +153,7 @@ Use these anywhere in a page:
 {% image { src: "media/sound-design/okiro/crate.jpg", alt: "What's in the picture", caption: "(caption)" } %}
 {% image { src: "/assets/img/photo.jpg", alt: "What's in the photo", caption: "(caption)", ratio: "4/3" } %}
 
-{% video { youtube: "https://youtu.be/VIDEO_ID", title: "Sound Design Reel", caption: "…" } %}
+{% video { youtube: "https://youtu.be/VIDEO_ID", title: "Okiro audio showcase", caption: "…" } %}
 {% video { vimeo: "123456789", title: "…" } %}
 {% video { src: "/assets/video/clip.mp4", title: "…" } %}
 
@@ -274,9 +273,9 @@ repeated to show the layout instead.
 
 ## Finding and replacing placeholder content
 
-Some text and media is still placeholder (the Game Sound Design Reel, parts of
-Feedra and Qualifications, and so on). It's marked so you can find it on the
-page and in the code:
+Some text and media is still placeholder (parts of the Feedra Prototype and
+Qualifications pages, and so on). It's marked so you can find it on the page
+and in the code:
 
 | On the page | In the code |
 | --- | --- |

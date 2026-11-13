@@ -25,7 +25,6 @@
         "url": "/sound-design/",
         "link": false,
         "children": [
-          { "title": "Game Sound Design Reel", "url": "/sound-design/reel/" },
           { "title": "Alchemeow", "url": "/sound-design/alchemeow/" },
           { "title": "Cyberpedia", "url": "/sound-design/cyberpedia/" },
           { "title": "Okiro", "url": "/sound-design/okiro/" },
@@ -34,7 +33,7 @@
           { "title": "Feedra Prototype", "url": "/sound-design/feedra/" }
         ]
       },
-      { "title": "Social Media Strategy", "url": "/social-media-strategy/" }
+      { "title": "Social Media Marketing", "url": "/social-media-marketing/" }
     ]
   },
   { "title": "Qualifications and Additional Credits", "url": "/qualifications/" },
