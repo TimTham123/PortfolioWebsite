@@ -2,7 +2,7 @@
 layout: layouts/base.njk
 title: Qualifications and Additional Credits
 description: Education, credits, awards and qualifications.
-updated: 2026-11-13
+updated: 2026-11-14
 placeholder: true
 ---
 <h1 class="page-title">Qualifications and Additional Credits</h1>
@@ -18,10 +18,17 @@ placeholder: true
   <dd>2022 &middot; Training in the theory and practice of audio engineering.</dd>
 </dl>
 
+<h2>Awards &amp; other credits</h2>
+<ul>
+  <li>Vice-Chancellor's List of Academic Excellence, RMIT (2025)</li>
+  <li>Whitefriars College Academic Excellence Scholarship (2017&ndash;2021)</li>
+</ul>
+
 <h2>Credits</h2>
-{#- Newest first in each group. The Sounds Of episodes are listed from
-    src/_data/sounds-of.csv, so they stay in step with the map. #}
-<div class="table-scroll">
+{#- Newest first in each group. The Sounds Of episodes (folded away under
+    the table) are listed from src/_data/sounds-of.csv, so they stay in step
+    with the map. #}
+<div class="table-scroll table-wide">
   <table class="credit-list">
     <thead>
       <tr><th scope="col">Year</th><th scope="col">Project</th><th scope="col">Role</th><th scope="col">Studio / client</th></tr>
@@ -56,17 +63,27 @@ placeholder: true
     <tbody>
       <tr><th colspan="4" scope="rowgroup">Sounds Of</th></tr>
       <tr><td>2026</td><td><a href="/sounds-of/">Sounds Of</a>, the series ({{ soundsOf.episodeCount }} episodes)</td><td>Creator, producer, filming, recording, mixing; YouTube and social channels</td><td>Independent</td></tr>
-      {%- for ep in soundsOf.episodes | reverse %}
-      {%- if not ep.empty %}
-      <tr><td{% if not ep.year %} class="is-word"{% endif %}>{{ ep.year or ep.dateLong }}</td><td>{% if ep.video %}<a href="{{ ep.video.watch }}">{{ ep.name }}</a>{% else %}{{ ep.name }}{% endif %}, {{ ep.location }}</td><td>Producer, filming, recording, mixing</td><td>Sounds Of</td></tr>
-      {%- endif %}
-      {%- endfor %}
     </tbody>
   </table>
 </div>
 
-<h2>Awards &amp; other credits</h2>
-<ul>
-  <li>Vice-Chancellor's List of Academic Excellence, RMIT (2025)</li>
-  <li>Whitefriars College Academic Excellence Scholarship (2017&ndash;2021)</li>
-</ul>
+{#- Every episode, folded away so the list above stays short. #}
+<details class="more">
+  <summary>Every Sounds Of episode</summary>
+  <div class="table-scroll table-wide">
+    <table class="credit-list">
+      <caption class="visually-hidden">Every Sounds Of episode</caption>
+      <thead>
+        <tr><th scope="col">Year</th><th scope="col">Artist and place</th><th scope="col">Role</th><th scope="col">Studio / client</th></tr>
+      </thead>
+      <tbody>
+        {%- for ep in soundsOf.episodes | reverse %}
+        {%- if not ep.empty %}
+        <tr><td{% if not ep.year %} class="is-word"{% endif %}>{{ ep.year or ep.dateLong }}</td><td>{% if ep.video %}<a href="{{ ep.video.watch }}">{{ ep.name }}</a>{% else %}{{ ep.name }}{% endif %}, {{ ep.location }}</td><td>Producer, filming, recording, mixing</td><td>Sounds Of</td></tr>
+        {%- endif %}
+        {%- endfor %}
+      </tbody>
+    </table>
+  </div>
+</details>
+

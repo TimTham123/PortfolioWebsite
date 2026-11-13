@@ -122,8 +122,10 @@ figures:                      # pictures beside the text (optional)
 …
 ```
 
-Everything is the same size. A heading (`<h2>`) is a bold line with a blank
-line above it, and the text follows straight underneath. For a label inside a
+Text is all one size. A section starts with its heading (`<h2>`): a size
+up, in medium weight, with a faint line and some room above it, so sections
+stand apart; the text follows straight underneath. A sub-heading (`<h3>`) is
+text-sized, in medium weight. For a label inside a
 line, such as "Email:", use `<b>`. Each page starts with its title,
 `<h1 class="page-title">`: it's hidden where the index sits beside the page
 (the index already shows where you are), and handwritten at the top of the
@@ -337,17 +339,19 @@ Still to fill in:
 
 **References.** [anthonyeslick.com](https://anthonyeslick.com/) and the sites
 collected on [Dead Simple Sites](https://deadsimplesites.com/): no decoration,
-one size of type, hierarchy from spacing and grey versus black.
+one size of type, hierarchy from spacing and grey versus black. (Section
+headings are the one step up in size, so long pages are easy to scan.)
 
 | | |
 | --- | --- |
 | Page | white |
 | Text | `#0a0a0a`, Instrument Sans, 17px on a 1.42 line, everywhere |
-| Headings and labels | the same size, in Instrument Sans Medium (500) |
+| Section headings | 20px Instrument Sans Medium (500), a faint `#e4e4e4` line above |
+| Sub-headings and labels | text-sized, Instrument Sans Medium (500) |
 | Links | grey `#737373`; black and underlined when you point at them |
 | Current page | black (and its section, on project pages) |
 | Signature | your name in Reenie Beanie, top left |
-| Placeholders | washed-out red notes `#a85555`, grey boxes `#f2f2f2`, small handwritten notes |
+| Placeholders | hidden from visitors; with `?placeholders`, washed-out red notes `#a85555` and grey boxes `#f2f2f2` |
 | Columns (wide screens) | index 16rem, 2rem gap, text 35rem, 2rem gap, images 15rem |
 
 **Responsive.** Wide screens (1100px and up) get index | text | images.

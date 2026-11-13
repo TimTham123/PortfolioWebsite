@@ -60,6 +60,7 @@
   --on-faint: #616161;  /* text on placeholder boxes (5.5:1) */
   --draft: #a85555;     /* washed-out red: "placeholder" notes, for now */
   --track: #cfcfcf;
+  --rule: #e4e4e4;      /* the faint line above each section */
   --pencil: #949494;    /* the Sounds Of map's coastline (3:1 on white) */
 
   --font: "Instrument Sans", "Inter", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
@@ -467,6 +468,24 @@ a:hover {
   margin-top: 0;
 }
 
+/* Sections: each one starts with its heading, a size up from the text,
+   with a faint line and some room above it, so it's clear where one
+   section ends and the next begins. (Sub-headings, h3, stay text-sized.) */
+.content > h2,
+.content > .ph > h2 {
+  margin-top: 2.25rem;
+  margin-bottom: 0.45rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--rule);
+  font-size: 1.25rem;
+  line-height: 1.3;
+}
+
+.content > h1 + h2,
+.content > .standfirst + h2 {
+  margin-top: 0.5rem;
+}
+
 .content p,
 .content ul,
 .content ol,
@@ -720,6 +739,58 @@ caption {
   }
 }
 
+/* A label down the side (gear, project details) stays on one line when
+   there's room, so the labels line up */
+@container (min-width: 420px) {
+  tbody th[scope="row"] {
+    white-space: nowrap;
+  }
+}
+
+/* A wide table (Qualifications' credits) runs on into the empty column
+   where other pages have their pictures */
+@media (min-width: 1100px) {
+  .main:not(:has(> .figures)) .table-wide {
+    width: calc(100% + var(--col-gap) + var(--fig-w));
+  }
+}
+
+/* A long list folded away (<details class="more">), opened with a click,
+   with a + or – like the index's */
+.more {
+  margin-bottom: var(--gap);
+}
+
+.more > summary {
+  display: inline-block;
+  color: var(--muted);
+  cursor: pointer;
+  list-style: none;
+}
+
+.more > summary::-webkit-details-marker {
+  display: none;
+}
+
+.more > summary::after {
+  content: "+";
+  display: inline-block;
+  width: 1em;
+  margin-left: 0.6em;
+}
+
+.more[open] > summary::after {
+  content: "\2013";
+}
+
+.more > summary:hover {
+  color: var(--fg);
+}
+
+.more[open] > summary {
+  margin-bottom: 0.6em;
+}
+
 /* Release lists (Music): the same columns in every table, so they line up */
 .releases {
   width: 100%;
@@ -876,6 +947,8 @@ figcaption {
   justify-content: space-between;
   gap: 0.25em 2em;
   margin-top: calc(var(--gap) * 2);
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--rule);
 }
 
 
