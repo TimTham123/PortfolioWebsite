@@ -1,72 +1,95 @@
 ---
 layout: layouts/project.njk
 title: A Little Bit of Gore
-description: Sound design and foley for A Little Bit of Gore.
-updated: 2026-11-11
-placeholder: true
+description: Sound design, adaptive music and FMOD implementation for Little Bit of Gore, a first-person survival horror game where you track monsters by ear.
+updated: 2026-11-13
 figures:
-  - alt: "A Little Bit of Gore key art"
-    caption: "(A Little Bit of Gore key art)"
-    ratio: "3/4"
-  - alt: "Foley session with vegetables and a cleaver"
-    caption: "(foley: no cabbages survived)"
-    ratio: "1/1"
+  - src: media/sound-design/little-bit-of-gore/red-mushrooms.jpg
+    alt: "Red mushrooms in the dark under a blood-red sky, lit by a single beam of light"
+    caption: "The world you wake up in. (Screenshot: Matthew Ganther)"
+  - src: media/sound-design/little-bit-of-gore/glowing-mushroom.jpg
+    alt: "A glowing white mushroom in long grass at night"
+    caption: "One of the five glowing mushrooms. (Screenshot: Matthew Ganther)"
+  - src: media/sound-design/little-bit-of-gore/stalker-sketches.jpg
+    alt: "Pencil sketches of Stalker, a tall, thin figure"
+    caption: "Stalker, in the concept sketches."
+  - src: media/sound-design/little-bit-of-gore/infected-mushroom-sketches.png
+    alt: "Pencil sketches of the Infected Mushroom, a mushroom monster on legs"
+    caption: "The Infected Mushroom."
+  - src: media/sound-design/little-bit-of-gore/fmod-ambience.png
+    alt: "An FMOD Studio event with three tracks: Grass, Wind and Scattered Voices"
+    caption: "The ambience in FMOD: grass, wind and scattered voices."
+  - src: media/sound-design/little-bit-of-gore/reaper-session.png
+    alt: "A Reaper session full of sound effect takes"
+    caption: "My Reaper session, getting messy."
 ---
 <h1 class="visually-hidden">A Little Bit of Gore</h1>
-<p class="standfirst">Sound design &amp; foley <span class="ph">&middot; [2024] &middot; [team or studio name]</span></p>
+<p class="standfirst">Sound design, music &amp; implementation &middot; 2024 &middot; free on itch.io</p>
 
-<h2>Project overview</h2>
-<!-- PLACEHOLDER -->
-<div class="ph">
-  <p>A Little Bit of Gore is a fast, cartoonishly violent [arena action] game in which every enemy bursts into confetti-coloured giblets. It's gory, but mostly it's funny.</p>
-  <p>The brief was "disgusting, but in a way that makes you laugh", so the sound leans on exaggerated, rubbery foley rather than anything realistic.</p>
+<p>Little Bit of Gore is a short first-person survival horror game by Matthew Ganther. You're a tiny mushroom, newly sprouted into a world drowned in gore, and you have to find five glowing mushrooms while mutated bugs hunt you through the long grass.</p>
+<p>Hearing the monsters is how you stay alive, so the sound is a big part of how the game plays. I designed and implemented its sound effects, ambience and music in FMOD and Unreal Engine 5; fellow student Ryan did the sound for the intro animation.</p>
+
+{% video { youtube: "EI_Ai8QRa8k", title: "A Little Bit of Gore audio showcase", caption: "Audio showcase: the monsters, the music and the ambience in the game." } %}
+
+<h2>What I did</h2>
+<ul class="points">
+  <li>A sound for each monster that tells you where it is and what it's about to do</li>
+  <li>An adaptive score in four layers, and a three-layer ambience</li>
+  <li>Footsteps, the menus and the intro screen</li>
+  <li>Implementation in FMOD Studio and Unreal Engine 5.1, including an occlusion system</li>
+</ul>
+
+<h2>The monsters</h2>
+<ul class="points">
+  <li><b>Stalker</b> follows you and strikes when its time runs out, unless you turn and look at it. Its breathing is me bowing metal rulers on the Apprehension Engine (a horror-sound instrument at RMIT), layered with my own wails and a low hum. A tremolo speeds up as it gets ready to strike, so you can hear when to turn around. Its whispers are four reversed takes of me whispering "s", drowned in reverb and reverse delay.</li>
+  <li><b>The Bug Monstrosity</b> hunts you down like a Pac-Man ghost, so it's loud and repetitive: easy to track, and to avoid.</li>
+  <li><b>The Infected Mushroom</b> charges in bursts, then sleeps. Its footsteps are boosted hard in the sub-bass, with more reverb the further away it is, so you feel it coming.</li>
+  <li><b>The Ants</b> scuttle about and shriek when you get too close.</li>
+</ul>
+
+{% soundcloud { track: "1800618249", title: "Stalker following loop", caption: "Stalker following you." } %}
+{% soundcloud { track: "1800618234", title: "Stalker following loop with tremolo", caption: "The same, with the tremolo that speeds up as it gets ready to strike." } %}
+{% soundcloud { track: "1800618226", title: "Stalker whispers", caption: "Stalker's whispers." } %}
+
+<h2>Music and ambience</h2>
+<p>The score is an ambient horror piece in four layers, written with Kontakt in RMIT's 5.1 studio. The first three build as you collect mushrooms; the fourth comes in when the Infected Mushroom or the Bug Monstrosity gets close. Underneath, the ambience has three layers of its own: soft wind through the crops, a howling wind, and a distant, echoing voice every 30 to 90 seconds, a hint that something much bigger is out there.</p>
+
+{% soundcloud { track: "1820216838", title: "Little Bit of Gore score intensities", caption: "The score's four levels of intensity, one after another." } %}
+
+<h2>Implementation</h2>
+<p>In FMOD and Unreal Engine 5.1 I built an occlusion system that muffles and quietens any monster behind a wall or a row of crops, so you can tell where it really is, and an intensity system that raises the music and ambience as you collect mushrooms. The footsteps are me stepping in a bucket of soil, cut into a seamless loop.</p>
+
+{% video { youtube: "6uZszkqPYvs", title: "A Little Bit of Gore systems breakdown", caption: "The occlusion and intensity systems, explained.", thumb: "maxres3" } %}
+<div class="media-grid">
+  {% video { youtube: "XlGIT1-iayo", title: "A Little Bit of Gore enemies", caption: "The monsters in the engine." } %}
+  {% video { youtube: "vKw8gzmcEpI", title: "A Little Bit of Gore menu", caption: "The menu and intro screen." } %}
 </div>
 
-<h2>My role</h2>
-<!-- PLACEHOLDER -->
-<div class="ph">
-  <ul>
-    <li>Sound designer: impacts, gore, weapons and UI</li>
-    <li>Foley recording and editing</li>
-    <li>Creature vocals, performed and processed by me</li>
-    <li>Implementation in [FMOD Studio and Unity] and the final mix</li>
-  </ul>
+<h2>Behind the scenes</h2>
+<div class="media-grid">
+  {% video { youtube: "FhD7wP9znoA", title: "The Apprehension Engine", caption: "Playing the Apprehension Engine, where Stalker's breathing came from." } %}
+  {% video { youtube: "TlowvgaDqh4", title: "A Little Bit of Gore Reaper session breakdown", caption: "How I made the Stalker and Ant sounds, in Reaper." } %}
 </div>
-
-<h2>Technical approach</h2>
-<!-- PLACEHOLDER -->
-<div class="ph">
-  <p>Most of the gore came from one afternoon of foley: celery and carrots for bones, a wet chamois and cabbage for squelches, and a lot of tinned spaghetti.</p>
-  <p>Each impact is built from three randomised layers (a body, a crunch and a wet tail), and a <i>combo</i> parameter adds extra layers and pitches everything up as the chaos escalates.</p>
-</div>
-
-<h2>Sound design examples</h2>
-{% audio { src: "", title: "Gore foley pack", caption: "squelches, crunches and splats" } %}
-{% audio { src: "", title: "Creature vocals", caption: "grunts, yelps and death rattles" } %}
-{% video { youtube: "", title: "A Little Bit of Gore: combat clip", caption: "Thirty seconds of chaos, with final audio." } %}
+{% video { youtube: "j0sC2IQvA4M", title: "A Little Bit of Gore Blueprint breakdown", caption: "The full Blueprint breakdown, uncut.", thumb: "maxres1" } %}
 
 <h2>Project details</h2>
-<!-- PLACEHOLDER -->
-<div class="ph">
-  <div class="table-scroll">
-    <table>
-      <tbody>
-        <tr><th scope="row">Engine</th><td>[Unity]</td></tr>
-        <tr><th scope="row">Audio middleware</th><td>[FMOD Studio]</td></tr>
-        <tr><th scope="row">DAW</th><td>Reaper</td></tr>
-        <tr><th scope="row">Platform</th><td>PC</td></tr>
-        <tr><th scope="row">Team</th><td>[8 people]</td></tr>
-        <tr><th scope="row">Timeframe</th><td>[6 weeks, 2024]</td></tr>
-      </tbody>
-    </table>
-  </div>
+<div class="table-scroll">
+  <table>
+    <tbody>
+      <tr><th scope="row">Game</th><td>First-person survival horror</td></tr>
+      <tr><th scope="row">Engine</th><td>Unreal Engine 5.1</td></tr>
+      <tr><th scope="row">Audio middleware</th><td>FMOD Studio</td></tr>
+      <tr><th scope="row">DAW</th><td>Reaper</td></tr>
+      <tr><th scope="row">Version control</th><td>Git</td></tr>
+      <tr><th scope="row">Team</th><td>Matthew Ganther (development); me (sound effects, music, implementation); Ryan (intro animation sound)</td></tr>
+      <tr><th scope="row">Timeframe</th><td>One semester at RMIT, March to June 2024</td></tr>
+      <tr><th scope="row">Platform</th><td>Windows, on itch.io</td></tr>
+    </tbody>
+  </table>
 </div>
 
 <h2>Links</h2>
-<!-- PLACEHOLDER: swap in the real store / trailer links -->
-<div class="ph">
-  <ul>
-    <li><a href="https://itch.io/">Play A Little Bit of Gore on itch.io</a></li>
-    <li><a href="https://www.youtube.com/">Watch the trailer</a></li>
-  </ul>
-</div>
+<ul>
+  <li><a href="https://shheen.itch.io/little-bit-of-gore">Play Little Bit of Gore on itch.io</a></li>
+  <li><a href="https://www.youtube.com/watch?v=CkiWhODcvgU">Watch the trailer</a></li>
+</ul>

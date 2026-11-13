@@ -1,71 +1,88 @@
 ---
 layout: layouts/project.njk
 title: Okiro
-description: Sound design and Wwise implementation for Okiro.
-updated: 2026-11-11
-placeholder: true
+description: Sound design, music and Unreal Engine implementation for OKIRO, a 3D puzzle adventure out on Steam.
+updated: 2026-11-13
 figures:
-  - alt: "Okiro key art"
-    caption: "(Okiro key art)"
-    ratio: "3/4"
-  - alt: "Field recording at dawn"
-    caption: "(recording the dawn chorus)"
-    ratio: "1/1"
+  - src: media/sound-design/okiro/mechanical-arm.jpg
+    alt: "Lulu, a small black fluffy sprite in a red spotted mushroom cap, on a metal walkway as a giant mechanical hand with a red eye reaches down towards her"
+    caption: "One of the mechanical arms, closing in. (Screenshot: the OKIRO team)"
+  - src: media/sound-design/okiro/soft-toy-foley.jpg
+    alt: "A fluffy pink soft toy held up in front of a keyboard"
+    caption: "Lulu's foley: a soft toy from when I was a kid, about her size."
+  - src: media/sound-design/okiro/crate.jpg
+    alt: "Lulu pushing a big green cardboard box along a wooden walkway"
+    caption: "Every kind of box has its own push. (Screenshot: the OKIRO team)"
+  - src: media/sound-design/okiro/tv-room.jpg
+    alt: "Lulu sitting in a terracotta pot in a cosy room full of jars, plants and an old glowing TV"
+    caption: "Climbing into a pot: one of more than 50 sounds I added in a single week. (Screenshot: the OKIRO team)"
+  - src: media/sound-design/okiro/audio-zones.png
+    alt: "Two hatched boxes, one yellow and one blue, marking audio zones over a doorway in the Unreal Engine editor"
+    caption: "Audio volumes change the reverb and ambience between indoors and out."
+  - src: media/sound-design/okiro/svn-log.png
+    alt: "A long list of version-control commits, most of them mine"
+    caption: "One week of commits."
 ---
 <h1 class="visually-hidden">Okiro</h1>
-<p class="standfirst">Sound design &amp; implementation <span class="ph">&middot; [2024] &middot; [team or studio name]</span></p>
+<p class="standfirst">Sound design, music &amp; implementation &middot; 2024 &middot; out now on Steam</p>
 
-<h2>Project overview</h2>
-<!-- PLACEHOLDER -->
-<div class="ph">
-  <p>Okiro is an atmospheric adventure set in the space between dreaming and waking. Players drift through shifting dreamscapes, each one pulling them a little closer to the surface.</p>
-  <p>The audio blurs the edges: sounds from the waking world leak into the dream, growing louder as the player nears the end.</p>
+<p>OKIRO is a 3D puzzle adventure set in a world swallowed by toxic fog. You play Lulu, a little plant sprite, exploring the ruins of a factory and collecting energy stones to grow seeds that clean the air. It came out on Steam in October 2024.</p>
+<p>Fellow RMIT sound designer Nick and I did all of its audio, splitting the music, sound design and implementation between us. Our idea was to make Lulu sound like the one soft, living thing in a world of machines. I wrote the music for the indoor areas, and designed and implemented much of the sound in Unreal Engine with Blueprints.</p>
+
+{% video { youtube: "rfTi4LxGYUo", title: "Okiro audio showcase", caption: "Audio showcase: Okiro's sound and music in the game." } %}
+
+<h2>What I did</h2>
+<ul class="points">
+  <li>Music: the theme for the indoor areas, in the same key as Nick's outdoor theme</li>
+  <li>Sound design: Lulu's movement and abilities, boxes, vans, moving platforms, pipes, fans, bells, a ship, and plants drying out and coming back to life</li>
+  <li>Implementation in Unreal Engine 4.27: Blueprints, sound cues, attenuation, concurrency and audio volumes</li>
+  <li>Sound for the opening and closing cutscenes</li>
+</ul>
+
+<h2>Sound</h2>
+<p>Lulu was the hardest sound to get right. The developers didn't want her to have a voice, so after trying little grunts, then my cat's meows, her jump became a band-pass filter swept over noise: cartoony, but not a voice. Her steps and landings are foley from a soft toy about her size.</p>
+<p>Most of the rest I recorded around the house: a milk crate dragged across concrete for the boxes, a mechanical clock for the clocks, and finger chimes, layered, pitched and washed in modulated reverb, for the magic bells. A library recording of a snake's hiss turned out to be the most convincing burn from the hot pipes.</p>
+
+{% soundcloud { track: "1800623653", title: "Okiro indoor theme (draft)", caption: "The indoor theme, an early draft." } %}
+{% soundcloud { track: "1800618343", title: "Okiro bell", caption: "The magic bell: layered finger chimes." } %}
+{% soundcloud { track: "1814930325", title: "Okiro hover van engine", caption: "The hovering van's engine loop." } %}
+
+<h2>Implementation</h2>
+<p>Getting all of that to behave took most of my time. Working in the developers' Blueprints, I:</p>
+<ul class="points">
+  <li>synced sounds to animation frames, and gave Lulu's landings a different sound for each surface (wood, metal grate, cardboard, milk crate and more) by checking the physics material under her as she lands</li>
+  <li>hooked sounds onto the developers' timelines, so vans rev up as they set off and moving platforms only hum while they're moving</li>
+  <li>used child Blueprints so each kind of box has its own push sound, fading with distance</li>
+  <li>added audio volumes so the reverb and ambience change between indoors and out</li>
+  <li>stopped sounds doubling up with concurrency rules and do-once gates</li>
+</ul>
+
+{% video { youtube: "hyFF5IgKoWw", title: "Okiro Blueprint breakdown", caption: "A short tour of some of the Blueprints behind the sound." } %}
+{% video { youtube: "zpJihLQnGNk", title: "Okiro demo run-through", caption: "A run through the game late in development." } %}
+
+<h2>Behind the scenes</h2>
+<div class="media-grid">
+  {% video { youtube: "NwFI9bfstCA", title: "Okiro Reaper session breakdown", caption: "How I made some of the sound effects, in Reaper." } %}
+  {% video { youtube: "jFsKeBc8OC8", title: "Okiro Blueprints, uncut", caption: "Every Blueprint, uncut (an hour and a half)." } %}
 </div>
-
-<h2>My role</h2>
-<!-- PLACEHOLDER -->
-<div class="ph">
-  <ul>
-    <li>Sound designer: ambiences, transitions and environmental sound</li>
-    <li>Audio implementation in Wwise and Unreal Engine</li>
-    <li>Field recording: [forests, trains, a ticking clock]</li>
-  </ul>
-</div>
-
-<h2>Technical approach</h2>
-<!-- PLACEHOLDER -->
-<div class="ph">
-  <p>Each dreamscape is a Wwise state with its own blend of ambience layers. A <i>wakefulness</i> RTPC drives filters and sends, so real-world sounds (an alarm clock, traffic, a voice calling the player's name) slowly cut through the dream mix.</p>
-  <p>Transitions between areas use spatialised one-shots and a shared reverb bus, so the player never hears a hard cut.</p>
-</div>
-
-<h2>Sound design examples</h2>
-{% audio { src: "", title: "Dreamscape ambience: the forest", caption: "loop" } %}
-{% audio { src: "", title: "Wake-up transition", caption: "dream to waking world" } %}
-{% video { youtube: "", title: "Okiro: gameplay walkthrough", caption: "The first dreamscape, with final audio." } %}
 
 <h2>Project details</h2>
-<!-- PLACEHOLDER -->
-<div class="ph">
-  <div class="table-scroll">
-    <table>
-      <tbody>
-        <tr><th scope="row">Engine</th><td>Unreal Engine 5</td></tr>
-        <tr><th scope="row">Audio middleware</th><td>Wwise</td></tr>
-        <tr><th scope="row">DAW</th><td>Reaper</td></tr>
-        <tr><th scope="row">Platform</th><td>PC</td></tr>
-        <tr><th scope="row">Team</th><td>[4 people]</td></tr>
-        <tr><th scope="row">Timeframe</th><td>[10 weeks, 2024]</td></tr>
-      </tbody>
-    </table>
-  </div>
+<div class="table-scroll">
+  <table>
+    <tbody>
+      <tr><th scope="row">Game</th><td>3D puzzle adventure</td></tr>
+      <tr><th scope="row">Engine</th><td>Unreal Engine 4.27 (Blueprints)</td></tr>
+      <tr><th scope="row">Audio</th><td>Unreal's own audio system: sound cues, attenuation, concurrency, audio volumes</td></tr>
+      <tr><th scope="row">DAW</th><td>Reaper</td></tr>
+      <tr><th scope="row">Version control</th><td>SVN</td></tr>
+      <tr><th scope="row">Team</th><td>Ziya Gao, Songya Xu, Zhenxi Zhang and Tina Yao (development); Nick and me (audio)</td></tr>
+      <tr><th scope="row">Timeframe</th><td>One semester at RMIT, March to June 2024</td></tr>
+      <tr><th scope="row">Released</th><td>October 2024, on Steam (PC)</td></tr>
+    </tbody>
+  </table>
 </div>
 
 <h2>Links</h2>
-<!-- PLACEHOLDER: swap in the real store / trailer links -->
-<div class="ph">
-  <ul>
-    <li><a href="https://itch.io/">Play Okiro on itch.io</a></li>
-    <li><a href="https://www.youtube.com/">Watch the trailer</a></li>
-  </ul>
-</div>
+<ul class="points">
+  <li><a href="https://store.steampowered.com/app/3150600/OKIRO/">OKIRO on Steam</a></li>
+</ul>

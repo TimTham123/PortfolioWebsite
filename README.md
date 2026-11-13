@@ -53,9 +53,9 @@ src/
 │   └── partials/          ← signature, nav, footer, page date, Sounds Of map
 ├── assets/
 │   ├── css/style.css      ← all the styling, with comments
-│   ├── js/site.js         ← dropdown toggles
+│   ├── js/site.js         ← dropdowns, picture popups, YouTube videos that load when played
 │   ├── js/sounds-of-map.js ← the map's markers, popup, timeline, route and zoom
-│   ├── js/travel.js       ← Travel: the photo popup, videos that play as you scroll
+│   ├── js/travel.js       ← Travel: videos that play as you scroll (the photo popup is site.js's)
 │   ├── fonts/             ← Instrument Sans + Reenie Beanie (open-licence fonts)
 │   └── img/               ← put your images here
 │                            Me
@@ -69,8 +69,9 @@ src/
 │                            Work
 ├── sounds-of.njk                                               /sounds-of/
 ├── sound-design/
-│   ├── index.njk          ← Sound Design overview              /sound-design/
+│   ├── index.njk          ← Sound Design overview (About Me links here) /sound-design/
 │   ├── reel.njk           ← Game Sound Design Reel             /sound-design/reel/
+│   ├── feedra.njk                                              /sound-design/feedra/
 │   ├── alchemeow.njk                                           /sound-design/alchemeow/
 │   ├── cyberpedia.njk                                          /sound-design/cyberpedia/
 │   ├── okiro.njk                                               /sound-design/okiro/
@@ -84,6 +85,7 @@ src/
 lib/                       ← media components, filters, CSV reader, map outline and projection,
                              and sounds-of.js (reads the trip from the CSV; where it ends)
 media/travel/              ← the Travel photos and videos
+media/sound-design/        ← pictures for the Sound Design pages, one folder per project
 ```
 
 ## Everyday edits
@@ -109,11 +111,10 @@ description: One-line summary for search engines.
 updated: 2026-11-10           # "Updated …" in the footer
 placeholder: true             # adds "placeholder content" to that line
 wide: true                    # (optional) run on past the right-hand margin, like Sounds Of and Travel
-figures:                      # images beside the text (optional)
-  - src: /assets/img/cyberpedia-key-art.jpg
-    alt: Cyberpedia key art
-    caption: (key art)
-    ratio: 3/4
+figures:                      # pictures beside the text (optional)
+  - src: media/sound-design/cyberpedia/bookworth.jpg
+    alt: Bookworth, a book with glasses and a bow tie
+    caption: Bookworth, your museum assistant.
 ---
 <h1 class="visually-hidden">Cyberpedia</h1>
 <p class="standfirst">The grey line at the top.</p>
@@ -132,7 +133,7 @@ in three levels:
 
 - **Sections** with no page of their own (`Me`, `Work`) show as black labels.
 - **Pages** sit under them. A page with `children` (Interests, Sound Design)
-  gets a `+` dropdown. With `"link": false` (Interests) its name isn't a link:
+  gets a `+` dropdown. With `"link": false` (Interests, Sound Design) its name isn't a link:
   clicking it opens and closes the list instead. Once a dropdown has been
   open, it stays open from page to page until it's closed.
 - **Sub-pages** sit under those, and get ← previous / next → links to each
@@ -148,6 +149,7 @@ here. Its address follows its file name and folder, so
 Use these anywhere in a page:
 
 ```njk
+{% image { src: "media/sound-design/okiro/crate.jpg", alt: "What's in the picture", caption: "(caption)" } %}
 {% image { src: "/assets/img/photo.jpg", alt: "What's in the photo", caption: "(caption)", ratio: "4/3" } %}
 
 {% video { youtube: "https://youtu.be/VIDEO_ID", title: "Sound Design Reel", caption: "…" } %}
@@ -156,14 +158,36 @@ Use these anywhere in a page:
 
 {% audio { src: "/assets/audio/ambience.mp3", title: "Hub ambience", caption: "loop, 1:30" } %}
 
+{% soundcloud { track: "1800618249", title: "Stalker loop", caption: "…" } %}
+{% soundcloud { track: "1926277409", secret: "s-1ooah7pqqAV", title: "Wonder", caption: "…" } %}
+
 {% embed { src: "https://bandcamp.com/EmbeddedPlayer/…", title: "Bandcamp player", height: 120 } %}
 ```
 
-With an empty `src`, `youtube` or `vimeo` (`""`), each one draws a plain grey
-placeholder box at the same size. When you fill it in, the placeholder becomes
-the real thing and nothing else on the page moves. Put your own files in
-`src/assets/` (for example `src/assets/audio/`). For the `embed`, paste the
-`src` from the player's "embed" code on Bandcamp, Spotify or SoundCloud.
+With an empty `src`, `youtube`, `vimeo` or `track` (`""`), each one draws a
+plain grey placeholder box at the same size. When you fill it in, the
+placeholder becomes the real thing and nothing else on the page moves.
+
+- **Pictures in `media/`** (like the Sound Design ones, in
+  `media/sound-design/<project>/`) are resized when the site is built (480,
+  960 and 1920 pixels wide, WebP and JPEG), so full-size screenshots are fine.
+  Clicking one opens it bigger in a popup (× or a click outside closes it).
+  Other files go in `src/assets/` and are used as they are.
+- **YouTube videos** start as the video's picture with a play button, and the
+  player loads (already playing) when it's pressed, so pages with lots of
+  videos stay quick. If a video's picture is a poor one, add
+  `thumb: "maxres1"` (or `"maxres2"`, `"maxres3"`) for a frame from a quarter,
+  half or three quarters of the way through; for a video with no big picture
+  (it shows as a small grey box), use `thumb: "sddefault"`.
+- **SoundCloud**: `track` is the number in the track's embed code
+  (`…/tracks/1800618249`); a private track also needs its `secret`, the `s-…`
+  part of its private link.
+- **Embeds**: paste the `src` from the player's "embed" code on Bandcamp or
+  Spotify.
+
+Two layouts help on busy pages: wrap videos in `<div class="media-grid">` to
+put them two across where there's room, and use `<ul class="points">` for a
+list of longer points (each gets a dash, and wrapped lines stay indented).
 
 ### The Sounds Of map
 
@@ -248,8 +272,9 @@ repeated to show the layout instead.
 
 ## Finding and replacing placeholder content
 
-All of the current text and media is placeholder. It's marked so you can find
-it on the page and in the code:
+Some text and media is still placeholder (the Game Sound Design Reel, parts of
+Feedra and Qualifications, and so on). It's marked so you can find it on the
+page and in the code:
 
 | On the page | In the code |
 | --- | --- |
@@ -263,7 +288,7 @@ When a section is finished, delete its `class="ph"` (or the wrapper `div`) and
 its comment. To preview the site without any markers, set
 `"showPlaceholderMarkers": false` in `src/_data/site.json`.
 
-Every external link (YouTube, Instagram, itch.io and so on) currently goes to the
+Some external links (Instagram, TikTok, Vimeo and so on) still go to the
 platform's home page, and the email address is `hello@example.com`. Swap in your own.
 
 ## How it's designed
@@ -290,12 +315,14 @@ column: signature, index, then the page.
 underneath; Qualifications and Additional Credits and Contact close the list.
 Each level steps in a little, like an outline.
 
-**The dropdowns.** "Interests" and "Sound Design" link to their own overview
-pages. The `+` next to each opens its sub-pages underneath, indented. It works
-by click, tap or keyboard (Enter/Space; Escape closes it), not on hover, so
+**The dropdowns.** "Interests" and "Sound Design" aren't pages in the index:
+clicking either name opens its sub-pages underneath, indented (the Sound
+Design overview page still exists, and About Me links to it). It works by
+click, tap or keyboard (Enter/Space; Escape closes it), not on hover, so
 nothing jumps around as the mouse passes. It's open automatically when you're
 on one of those pages, except on phones, where it starts closed to keep the
-page near the top. Without JavaScript the sub-pages are simply always listed.
+page near the top, and once opened it stays open from page to page. Without
+JavaScript the sub-pages are simply always listed.
 
 **Accessibility.** The site has a skip link, a labelled nav with
 `aria-current` on the current page, a real `<button>` with `aria-expanded` for

@@ -1,72 +1,88 @@
 ---
 layout: layouts/project.njk
 title: Alchemeow
-description: Sound design and implementation for Alchemeow.
-updated: 2026-11-11
-placeholder: true
+description: Sound design, music and Unity/FMOD audio programming for Alchemeow, a physics-based co-op game by Trashpanda Studio.
+updated: 2026-11-13
 figures:
-  - alt: "Alchemeow key art"
-    caption: "(Alchemeow key art)"
-    ratio: "3/4"
-  - alt: "Foley session with glass jars, water and a whisk"
-    caption: "(foley: jars, water and a whisk)"
-    ratio: "1/1"
+  - src: media/sound-design/alchemeow/cauldron.jpg
+    alt: "A bubbling green cauldron on a cluttered wooden workbench, seen from above"
+    caption: "The cauldron. (Screenshot: Trashpanda Studio)"
+  - src: media/sound-design/alchemeow/three-pillars.jpg
+    alt: "Three potion bottles labelled Magical Whimsy, Experimental Teamwork and Chaotic Playfulness"
+    caption: "The brief: the game's three pillars."
+  - src: media/sound-design/alchemeow/knife-foley.jpg
+    alt: "Me holding up a cleaver and a wooden chopping board"
+    caption: "Recording the knife."
+  - src: media/sound-design/alchemeow/mortar-faces.jpg
+    alt: "Sketches of a mortar with a cat's face, in idle, neutral, shocked and tickled moods"
+    caption: "Concept art for the mortar, which reacts to what you put in it."
+  - src: media/sound-design/alchemeow/impact-script.png
+    alt: "C# code for the impact sound script"
+    caption: "The first version of my impact script."
+  - src: media/sound-design/alchemeow/fmod-intro-transitions.png
+    alt: "An FMOD Studio event for the intro music, with loop regions and transition markers"
+    caption: "The intro music loops until the game starts, then moves on in time with the beat."
+  - src: media/sound-design/alchemeow/credits.jpg
+    alt: "Alchemeow's credits screen, listing the six people in Trashpanda Studio"
+    caption: "The credits. (Screenshot: Trashpanda Studio)"
 ---
 <h1 class="visually-hidden">Alchemeow</h1>
-<p class="standfirst">Sound design &amp; implementation <span class="ph">&middot; [2025] &middot; [team or studio name]</span></p>
+<p class="standfirst">Sound design lead &amp; composer &middot; 2024 &middot; Trashpanda Studio</p>
 
-<h2>Project overview</h2>
-<!-- PLACEHOLDER -->
-<div class="ph">
-  <p>Alchemeow is a cosy potion-brewing puzzle game about a cat who inherits an alchemist's workshop. Players combine ingredients, tend bubbling cauldrons and try very hard not to blow anything up.</p>
-  <p>The sound needed to be warm, tactile and a little bit silly: lots of glass, liquid and wood, and a cat with opinions.</p>
+<p>Alchemeow is a physics-based couch co-op game from Trashpanda Studio. Two players are two cats, each controlling one paw, brewing potions together from hints. Each player is also cursed so they can't touch certain things, so you have to help each other out.</p>
+<p>I was the sound design lead and composer: I wrote the music, designed the sound, and wrote the Unity scripts and FMOD events that make it all respond to the physics.</p>
+
+{% video { youtube: "BoqlfDL6nE4", title: "Alchemeow full playthrough", caption: "A full playthrough, with the final sound and music." } %}
+
+<h2>Music</h2>
+<p>The team gave me three pillars (magical whimsy, experimental teamwork and chaotic playfulness) and a pile of references. After a few demos (the first was "too toybox-y"), I wrote an intro theme and three five-minute tracks for the game: Comfort, Jubilance and Wonder. They build slowly, so nothing jumps out at you mid-potion, and after playtesting I pulled back the drums and left more space in the melodies so they don't fight the sound effects. In FMOD, the music moves from the splash screen into the game in time with the beat.</p>
+
+{% soundcloud { track: "1926277814", secret: "s-2U44e3ZUvMv", title: "Alchemeow: Comfort", caption: "Comfort." } %}
+{% soundcloud { track: "1926277433", secret: "s-osMECe7C4Qg", title: "Alchemeow: Jubilance", caption: "Jubilance." } %}
+{% soundcloud { track: "1926277409", secret: "s-1ooah7pqqAV", title: "Alchemeow: Wonder", caption: "Wonder." } %}
+
+<h2>Sound and scripting</h2>
+<p>Everything in the room can be grabbed, dropped, thrown, crushed or sliced, so rather than wiring sounds up one at a time, I wrote general-purpose scripts in Unity (C#):</p>
+<ul class="points">
+  <li><b>Impacts:</b> attach it to any object, choose its sound for each surface, and the harder it hits, the louder it is.</li>
+  <li><b>Dragging:</b> while two objects touch, a looping scrape follows how fast one moves across the other.</li>
+  <li><b>Dialogue:</b> Animal Crossing-style babble, a random syllable for each letter as the text types out.</li>
+  <li><b>Menus:</b> hover and click sounds (with a controller too), volume sliders, and a splash screen I animated and scored, which you can skip with a smooth transition.</li>
+</ul>
+<p>With those in place, giving each new ingredient its sounds was just a matter of dropping them in: bones, crystals, popping stars, flaming dragon scales, fish, roots, books, jars, and a slime ball whose whirr came from a failed experiment (measuring the force on its springs) that turned out funnier than what I was going for. The knife is a cleaver on my own chopping board.</p>
+
+<div class="media-grid">
+  {% video { youtube: "W4_7UcXP5Rg", title: "Alchemeow impact script test", caption: "First test of the impact script." } %}
+  {% video { youtube: "MP__TdD27Bg", title: "Alchemeow dragging script test", caption: "The dragging script on a test cube." } %}
+  {% video { youtube: "PwZ0O2aWIKA", title: "Alchemeow slime test", caption: "The slime ball's happy accident." } %}
+  {% video { youtube: "ezrB8ZG0ZxE", title: "Alchemeow dialogue test", caption: "The dialogue babble." } %}
 </div>
+{% video { youtube: "KdkcZYDK_nk", title: "Alchemeow splash screen test", caption: "The first version of the splash screen: animation and sound by me." } %}
 
-<h2>My role</h2>
-<!-- PLACEHOLDER -->
-<div class="ph">
-  <ul>
-    <li>Sound designer and audio implementer</li>
-    <li>Foley recording: glassware, liquids, dried herbs and wooden tools</li>
-    <li>Cat vocals, recorded and edited from [source]</li>
-    <li>Implementation in FMOD Studio and Unity, including adaptive music layers (music by [composer])</li>
-  </ul>
+<h2>Behind the scenes</h2>
+<div class="media-grid">
+  {% video { youtube: "UntehcP54to", title: "Alchemeow FMOD breakdown", caption: "My FMOD session and scripts, partway through.", thumb: "maxres1" } %}
+  {% video { youtube: "4HSnTX_pgqA", title: "Alchemeow full breakdown", caption: "The full breakdown: an hour and a half through my Unity, FMOD, Logic and Reaper sessions.", thumb: "maxres3" } %}
 </div>
-
-<h2>Technical approach</h2>
-<!-- PLACEHOLDER -->
-<div class="ph">
-  <p>Each ingredient has its own pour, plop and fizz. The cauldron is a parameter-driven loop that speeds up and rises in pitch as a potion gets closer to boiling over, so players can hear trouble coming.</p>
-  <p>Successful brews trigger short musical stingers written in the key of the current music cue, so every reward sits neatly with the score.</p>
-</div>
-
-<h2>Sound design examples</h2>
-{% audio { src: "", title: "Cauldron loop", caption: "calm to boiling over" } %}
-{% audio { src: "", title: "Cat vocal set", caption: "purrs, chirps and one very annoyed mrrp" } %}
-{% video { youtube: "", title: "Alchemeow: brewing gameplay", caption: "A full brew, start to finish." } %}
 
 <h2>Project details</h2>
-<!-- PLACEHOLDER -->
-<div class="ph">
-  <div class="table-scroll">
-    <table>
-      <tbody>
-        <tr><th scope="row">Engine</th><td>Unity</td></tr>
-        <tr><th scope="row">Audio middleware</th><td>FMOD Studio</td></tr>
-        <tr><th scope="row">DAW</th><td>Reaper</td></tr>
-        <tr><th scope="row">Platform</th><td>PC</td></tr>
-        <tr><th scope="row">Team</th><td>[5 people]</td></tr>
-        <tr><th scope="row">Timeframe</th><td>[8 weeks, 2025]</td></tr>
-      </tbody>
-    </table>
-  </div>
+<div class="table-scroll">
+  <table>
+    <tbody>
+      <tr><th scope="row">Game</th><td>Physics-based couch co-op, for two players with controllers</td></tr>
+      <tr><th scope="row">Engine</th><td>Unity (C#)</td></tr>
+      <tr><th scope="row">Audio middleware</th><td>FMOD Studio</td></tr>
+      <tr><th scope="row">DAWs</th><td>Logic Pro and Reaper</td></tr>
+      <tr><th scope="row">Version control</th><td>GitHub</td></tr>
+      <tr><th scope="row">Team</th><td>Trashpanda Studio: Tania Rasul, Max Jin, Elaizo Tan, Kim Scott, Gianluca Nazare and me</td></tr>
+      <tr><th scope="row">Timeframe</th><td>One semester at RMIT, August to October 2024</td></tr>
+      <tr><th scope="row">Platform</th><td>PC, on itch.io</td></tr>
+    </tbody>
+  </table>
 </div>
 
 <h2>Links</h2>
-<!-- PLACEHOLDER: swap in the real store / trailer links -->
-<div class="ph">
-  <ul>
-    <li><a href="https://itch.io/">Play Alchemeow on itch.io</a></li>
-    <li><a href="https://www.youtube.com/">Watch the trailer</a></li>
-  </ul>
-</div>
+<ul>
+  <li><a href="https://trashpanda-studio.itch.io/alchemeow">Play Alchemeow on itch.io</a></li>
+  <li><a href="https://www.youtube.com/watch?v=u3WhRK-SBO8">Watch the trailer</a></li>
+</ul>

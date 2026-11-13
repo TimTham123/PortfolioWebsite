@@ -30,9 +30,10 @@
       {%- if figures and figures.length %}
 
       <div class="figures">
-        {%- for figure in figures %}
+        {#- asyncEach, not for: {% image %} resizes pictures as it goes #}
+        {%- asyncEach figure in figures %}
         {% image figure %}
-        {%- endfor %}
+        {%- endeach %}
       </div>
       {%- endif %}
     </main>

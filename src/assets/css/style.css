@@ -470,6 +470,26 @@ a:hover {
   list-style: none;
 }
 
+/* A list of longer points (<ul class="points">): each starts with a dash,
+   and lines that wrap stay indented, so it's clear where each one begins */
+.content .points {
+  padding-left: 1.1em;
+}
+
+.content .points > li {
+  position: relative;
+}
+
+.content .points > li + li {
+  margin-top: 0.3em;
+}
+
+.content .points > li::before {
+  content: "\2013";
+  position: absolute;
+  left: -1.1em;
+}
+
 .content dd {
   margin-bottom: 0.6em;
 }
@@ -582,6 +602,13 @@ caption {
 .figure img {
   display: block;
   width: 100%;
+  height: auto;
+}
+
+/* A picture that opens bigger in a popup (see site.js) */
+.figure__zoom {
+  display: block;
+  cursor: zoom-in;
 }
 
 figcaption {
@@ -637,6 +664,56 @@ figcaption {
   grid-template-columns: repeat(auto-fill, minmax(8.5rem, 1fr));
   gap: 1.25rem 1rem;
   margin-bottom: var(--gap);
+}
+
+/* A YouTube video before it's played: its picture and a round play button
+   (site.js swaps in the player when it's pressed) */
+.yt {
+  position: absolute;
+  inset: 0;
+  display: block;
+  background: var(--fg);
+}
+
+.yt img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.yt__play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: grid;
+  place-items: center;
+  width: 62px;
+  height: 62px;
+  border: 1px solid var(--fg);
+  border-radius: 50%;
+  background: var(--bg);
+  color: var(--fg);
+  transform: translate(-50%, -50%);
+}
+
+.yt__play svg {
+  margin-left: 4px; /* a triangle looks centred a little right of centre */
+  fill: currentColor;
+}
+
+.yt:hover .yt__play,
+.yt:focus-visible .yt__play {
+  border-color: var(--bg);
+  background: var(--fg);
+  color: var(--bg);
+}
+
+/* Short clips two across, where there's room */
+.media-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  column-gap: 1rem;
 }
 
 

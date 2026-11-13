@@ -1,68 +1,52 @@
 ---
 layout: layouts/project.njk
 title: Hubworld
-description: Sound design and implementation for Hubworld.
-updated: 2026-11-11
-placeholder: true
+description: Sound design for Hubworld, an animated short by Bitcrush about the last day of an old virtual world.
+updated: 2026-11-13
 figures:
-  - alt: "Hubworld key art"
-    caption: "(Hubworld key art)"
-    ratio: "3/4"
-  - alt: "Screenshot of the hub"
-    caption: "(in game: the hub)"
-    ratio: "1/1"
+  - src: media/sound-design/hubworld/art-sheet.jpg
+    alt: "Hubworld's mood sheet: purple panels of notes beside pictures of beaches, chrome and blue skies, with words like Y2K, Frutiger Aero and vaporwave"
+    caption: "The brief: Chris's mood sheet for the film."
+  - src: media/sound-design/hubworld/logic-session.png
+    alt: "A tidy Logic Pro session with a few coloured regions"
+    caption: "My Logic session, early on&hellip;"
+  - src: media/sound-design/hubworld/logic-session-final.png
+    alt: "The same Logic Pro session, now crowded with regions"
+    caption: "&hellip;and a few weeks later."
 ---
 <h1 class="visually-hidden">Hubworld</h1>
-<p class="standfirst">Sound design &amp; implementation <span class="ph">&middot; [year] &middot; [team or studio name]</span></p>
+<p class="standfirst">Sound design &middot; 2024 &middot; a short film by Bitcrush</p>
 
-<h2>Project overview</h2>
-<!-- PLACEHOLDER -->
-<div class="ph">
-  <p>Hubworld is a [genre] game built around a central hub that connects a handful of very different worlds. [One or two sentences about the game.]</p>
-  <p>[What the sound needed to do: the brief, the mood, the challenge.]</p>
+<p>Hubworld is an animated short by Chris Erickson (Bitcrush). A faceless character wanders through an old virtual world on the day it shuts down: a calm, slightly wistful journey rather than a story with big turns. Oli Leverton wrote the score, and I did the sound design.</p>
+
+{% video { youtube: "o6zwMPDenAY", title: "Hubworld, a short film", caption: "Hubworld, with Oli Leverton's score and my sound design." } %}
+
+<h2>Sound</h2>
+<p>Almost all of it happens inside a virtual world, so I wanted the sound to feel a little fake, like an old web game: low sample rates and bit depths, and the same samples repeated on purpose. I made many of the effects from scratch in BFXR, a tiny retro sound-effect synth (the footsteps, birds, pickups and the orb), and its limits were the point: they're the ones old game sound designers worked within. The welcome character speaks in an AI voice, to set this world apart from the real one.</p>
+<p>The old chrome giant needed to feel ancient and falling apart, so it moves to the creak of a train track, recorded with a contact mic and layered for weight. I also let each new place in a little early: the seagulls start a moment before we cut to the beach, and the crows before the plains, so the scenes flow into each other.</p>
+
+{% soundcloud { track: "1820449326", title: "Hubworld BFXR sounds", caption: "A few of the sounds I made in BFXR." } %}
+
+<div class="media-grid">
+  {% video { youtube: "n3-l2fnHx1c", title: "Hubworld, sound design only", caption: "The film with just the sound design." } %}
+  {% video { youtube: "Gj9WLMUlhGM", title: "Hubworld first rough mock-up", caption: "My first rough mock-up over the animatic, to check the mood of each scene." } %}
 </div>
-
-<h2>My role</h2>
-<!-- PLACEHOLDER -->
-<div class="ph">
-  <ul>
-    <li>[Sound designer: ambiences, UI and environmental sound]</li>
-    <li>[Implementation in FMOD or Wwise, with Unity or Unreal]</li>
-    <li>[Anything else: music, dialogue, mixing]</li>
-  </ul>
-</div>
-
-<h2>Technical approach</h2>
-<!-- PLACEHOLDER -->
-<div class="ph">
-  <p>[How the audio was built: the systems, parameters and tricks that made it work.]</p>
-</div>
-
-<h2>Sound design examples</h2>
-{% audio { src: "", title: "Hub ambience", caption: "loop" } %}
-{% video { youtube: "", title: "Hubworld: gameplay with final audio", caption: "Gameplay capture with the final mix." } %}
 
 <h2>Project details</h2>
-<!-- PLACEHOLDER -->
-<div class="ph">
-  <div class="table-scroll">
-    <table>
-      <tbody>
-        <tr><th scope="row">Engine</th><td>[Unity / Unreal Engine]</td></tr>
-        <tr><th scope="row">Audio middleware</th><td>[FMOD Studio / Wwise]</td></tr>
-        <tr><th scope="row">Platform</th><td>[PC]</td></tr>
-        <tr><th scope="row">Team</th><td>[size]</td></tr>
-        <tr><th scope="row">Timeframe</th><td>[length, year]</td></tr>
-      </tbody>
-    </table>
-  </div>
+<div class="table-scroll">
+  <table>
+    <tbody>
+      <tr><th scope="row">Format</th><td>Animated short film</td></tr>
+      <tr><th scope="row">Director and animator</th><td>Chris Erickson (Bitcrush)</td></tr>
+      <tr><th scope="row">Score</th><td>Oli Leverton</td></tr>
+      <tr><th scope="row">Sound design</th><td>Me</td></tr>
+      <tr><th scope="row">Tools</th><td>Logic Pro, BFXR</td></tr>
+      <tr><th scope="row">Timeframe</th><td>One semester at RMIT, March to June 2024</td></tr>
+    </tbody>
+  </table>
 </div>
 
 <h2>Links</h2>
-<!-- PLACEHOLDER: swap in the real store / trailer links -->
-<div class="ph">
-  <ul>
-    <li><a href="https://itch.io/">Play Hubworld on itch.io</a></li>
-    <li><a href="https://www.youtube.com/">Watch the trailer</a></li>
-  </ul>
-</div>
+<ul>
+  <li><a href="https://www.youtube.com/watch?v=o6zwMPDenAY">Watch Hubworld on YouTube</a></li>
+</ul>

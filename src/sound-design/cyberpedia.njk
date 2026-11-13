@@ -1,72 +1,82 @@
 ---
 layout: layouts/project.njk
 title: Cyberpedia
-description: Sound design and FMOD implementation for Cyberpedia.
-updated: 2026-11-11
-placeholder: true
+description: Music and sound design for Cyberpedia, a point-and-click museum adventure by Bitcrush that sounds like a 90s CD-ROM.
+updated: 2026-11-13
 figures:
-  - alt: "Cyberpedia key art"
-    caption: "(Cyberpedia key art)"
-    ratio: "3/4"
-  - alt: "Screenshot of the Archive hub"
-    caption: "(in game: the Archive hub)"
-    ratio: "1/1"
+  - src: media/sound-design/cyberpedia/bookworth.jpg
+    alt: "Bookworth, a book with glasses, a moustache and a bow tie, beside a floating 90s computer over a purple sea"
+    caption: "Bookworth, your museum assistant. (Screenshot: Bitcrush)"
+  - src: media/sound-design/cyberpedia/corrupted-fossil.jpg
+    alt: "A T. rex skeleton glitched in red, with Bookworth saying the fossil's data is corrupted"
+    caption: "A corrupted exhibit. (Screenshot: Bitcrush)"
+  - src: media/sound-design/cyberpedia/museum-exhibit.jpg
+    alt: "An open book about Terpsichore, one of the Greek muses, in front of a statue"
+    caption: "An exhibit from Ancient Greece. (Screenshot: Bitcrush)"
+  - src: media/sound-design/cyberpedia/stage-sketches.jpg
+    alt: "Three rough sketches of museum rooms"
+    caption: "Early sketches of the three museum stages."
+  - src: media/sound-design/cyberpedia/hud-sketch.jpg
+    alt: "A sketch of the game's on-screen buttons, with notes on what each one does"
+    caption: "The plan for the HUD. Every part of it got a sound."
+  - src: media/sound-design/cyberpedia/vintagize.jpg
+    alt: "A plug-in window showing a row of old tape machines to choose from"
+    caption: "Universal Audio's Verve Analog: tape warble on everything."
+  - src: media/sound-design/cyberpedia/bookworth-dialogue-script.png
+    alt: "C# code for Bookworth's dialogue sounds"
+    caption: "Bookworth's voice: a random syllable for each letter."
 ---
 <h1 class="visually-hidden">Cyberpedia</h1>
-<p class="standfirst">Sound design &amp; implementation <span class="ph">&middot; [2025] &middot; [team or studio name]</span></p>
+<p class="standfirst">Music &amp; sound design &middot; 2024&ndash; &middot; Bitcrush</p>
 
-<h2>Project overview</h2>
-<!-- PLACEHOLDER -->
-<div class="ph">
-  <p>Cyberpedia is a narrative exploration game set inside a sprawling, half-corrupted online encyclopaedia. Players restore damaged articles to uncover what happened to the people who wrote them, moving between clean, orderly pages and glitching, broken ones.</p>
-  <p>The world needed to sound like the inside of a machine without feeling cold: part dial-up modem, part library, part half-remembered dream.</p>
+<p>Cyberpedia is a point-and-click puzzle game by Chris Erickson (Bitcrush), dressed up as a 90s educational CD-ROM: boot it up and, through the power of the internet, it builds a museum full of exhibits. Thirty years on, the links are broken, information has gone missing and a "generative" trend is spreading through the museum, so you and your assistant, Bookworth, set about putting it right.</p>
+<p>I made all of its music and sound effects over a semester at RMIT in 2024, and stayed on as the game kept growing. An early demo is now on itch.io, with sound effects by me and music by Max Kearney and me, and in 2025 the game was backed by Screen Australia's Emerging Gamemakers Fund.</p>
+
+{% video { youtube: "sNgPT3m4pEo", title: "Cyberpedia full playthrough", caption: "A full playthrough from the end of 2024, with all my music and sound." } %}
+
+<h2>Sounding like 1996</h2>
+<p>To get the sound of a 90s kids' game, I listened to a lot of them (Treasure MathStorm!, Kid Pix, the Bill Nye theme) and noticed the same things: warbly tape saturation and sampled 80s drums. So everything went through tape emulation, the drums came from a VHS-era sample pack, the synths are deliberately cheap, and it was all exported at 11 kHz and 8-bit, like the CD-ROM games it's imitating.</p>
+<p>The music: two title themes (Chris liked both enough to use them in different places), a funky tutorial theme, a jingle for the made-up publisher PlaySmart Interactive, and a track for each museum stage: Ancient Greece, Egypt and the Aztecs. The stage tracks share a tempo, key and length, so the music can move smoothly from one to the next, and the HUD sounds are tuned to the same key.</p>
+
+{% soundcloud { track: "1912943888", secret: "s-h6TDe9NfiRN", title: "Cyberpedia main theme", caption: "A title theme." } %}
+{% soundcloud { track: "1912943666", secret: "s-C2qFGRjFWWl", title: "Cyberpedia main theme, the other one", caption: "The other title theme, with funny voices." } %}
+{% soundcloud { track: "1922484608", title: "Cyberpedia: Ancient Greece", caption: "Ancient Greece." } %}
+{% soundcloud { track: "1922484389", title: "Cyberpedia: Egypt", caption: "Egypt." } %}
+{% soundcloud { track: "1922484473", title: "Cyberpedia: Aztec", caption: "The Aztecs." } %}
+{% soundcloud { track: "1926297143", secret: "s-s64rtY59jOy", title: "Cyberpedia tutorial theme", caption: "The tutorial theme." } %}
+
+<h2>Sound effects</h2>
+<p>The sound effects are just as 90s: menu buttons and books on the shelf that play little musical notes, a nerdy babble for Bookworth (my own voice, chopped into syllables and pitched down, one per letter), a printer whirr when you fix an exhibit (it started out as a dial-up modem, which would have got annoying fast), a different sound when a fix fails, curtains that open and close between scenes, and some silly dinosaur noises in the tutorial.</p>
+<p>Chris built the game with Adventure Creator, a visual scripting kit for Unity that handles most sounds (on click, on hover) without code. Where it didn't, I wrote C# scripts: the dialogue babble, the cursor sounds and the music changes between stages. For the final mix, Unity couldn't adjust each clip's volume, so I brought everything in peaking at &minus;6&nbsp;dB and re-bounced anything that sat wrong from Reaper.</p>
+
+<div class="media-grid">
+  {% video { youtube: "kUfHofRGstI", title: "Cyberpedia HUD sounds", caption: "The HUD sounds and Bookworth's voice, early on." } %}
+  {% video { youtube: "rsAPzWTGN-I", title: "PlaySmart Interactive splash screen", caption: "The PlaySmart Interactive jingle." } %}
 </div>
 
-<h2>My role</h2>
-<!-- PLACEHOLDER -->
-<div class="ph">
-  <ul>
-    <li>Lead sound designer: all sound effects, UI and ambience ([120+] assets)</li>
-    <li>Audio implementation in FMOD Studio and Unity</li>
-    <li>Mixing and loudness for the final build</li>
-    <li>Music integration (music by [composer])</li>
-  </ul>
+<h2>Behind the scenes</h2>
+{% video { youtube: "wuKtNwq_lL4", title: "Cyberpedia Unity breakdown", caption: "How the music and sounds are set up in Unity, partway through." } %}
+<div class="media-grid">
+  {% video { youtube: "0Ui_v2Cev7Y", title: "Cyberpedia breakdown, part 1", caption: "My full breakdown, part 1." } %}
+  {% video { youtube: "0MPxDL-id9s", title: "Cyberpedia breakdown, part 2", caption: "Part 2." } %}
 </div>
-
-<h2>Technical approach</h2>
-<!-- PLACEHOLDER -->
-<div class="ph">
-  <p>Every ambience was built in two versions, clean and corrupted, and crossfaded in FMOD by a single <i>corruption</i> parameter driven by the game. As an article is restored the glitches thin out and the room tone settles, so the player hears their progress before they see it.</p>
-  <p>UI sounds use multi-instruments with randomised pitch and round-robin selection, so repeated typing never sounds mechanical, and mixer snapshots duck the world under dialogue and menus.</p>
-</div>
-
-<h2>Sound design examples</h2>
-{% audio { src: "", title: "Archive hub ambience", caption: "loop, clean to corrupted" } %}
-{% audio { src: "", title: "UI set", caption: "typing, page turns, restore and error sounds" } %}
-{% video { youtube: "", title: "Cyberpedia: gameplay with final audio", caption: "Gameplay capture with the final mix." } %}
 
 <h2>Project details</h2>
-<!-- PLACEHOLDER -->
-<div class="ph">
-  <div class="table-scroll">
-    <table>
-      <tbody>
-        <tr><th scope="row">Engine</th><td>Unity</td></tr>
-        <tr><th scope="row">Audio middleware</th><td>FMOD Studio</td></tr>
-        <tr><th scope="row">DAW</th><td>Reaper</td></tr>
-        <tr><th scope="row">Platform</th><td>PC</td></tr>
-        <tr><th scope="row">Team</th><td>[6 people]</td></tr>
-        <tr><th scope="row">Timeframe</th><td>[12 weeks, 2025]</td></tr>
-      </tbody>
-    </table>
-  </div>
+<div class="table-scroll">
+  <table>
+    <tbody>
+      <tr><th scope="row">Game</th><td>Point-and-click puzzle adventure</td></tr>
+      <tr><th scope="row">Engine</th><td>Unity, with Adventure Creator</td></tr>
+      <tr><th scope="row">Audio</th><td>Unity's own audio, with my own C# scripts</td></tr>
+      <tr><th scope="row">DAWs</th><td>Logic Pro and Reaper</td></tr>
+      <tr><th scope="row">Team</th><td>Chris Erickson (art, design and programming) and me (music and sound), joined later by Murphy Doyle (programming) and Max Kearney (music)</td></tr>
+      <tr><th scope="row">Timeframe</th><td>A semester at RMIT, August to October 2024, and still going</td></tr>
+    </tbody>
+  </table>
 </div>
 
 <h2>Links</h2>
-<!-- PLACEHOLDER: swap in the real store / trailer links -->
-<div class="ph">
-  <ul>
-    <li><a href="https://itch.io/">Play Cyberpedia on itch.io</a></li>
-    <li><a href="https://www.youtube.com/">Watch the trailer</a></li>
-  </ul>
-</div>
+<ul>
+  <li><a href="https://bitcrushstudio.itch.io/cyberpedia">Play the Cyberpedia demo on itch.io</a></li>
+  <li><a href="https://www.screenaustralia.gov.au/funding-approvals/cyberpedia/">Cyberpedia at Screen Australia</a></li>
+</ul>

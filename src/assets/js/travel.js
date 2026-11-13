@@ -228,88 +228,21 @@
     videos.forEach(function (video) { watcher.observe(video); });
   }
 
-  /* 2. The photo popup ------------------------------------------------------ */
+  /* 2. The photo popup (made by site.js, which loads first) ------------- */
 
-  var links = toArray(gallery.querySelectorAll("a.gallery__item"));
-  if (!links.length || typeof HTMLDialogElement !== "function") return;
-
-  var dialog = document.createElement("dialog");
-  dialog.className = "lightbox";
-  dialog.innerHTML =
-    '<picture><source type="image/webp"><img class="lightbox__img" alt=""></picture>' +
-    '<button class="lightbox__close" type="button" autofocus>' +
-    '<span class="visually-hidden">Close</span><span aria-hidden="true">&times;</span></button>';
-  document.body.appendChild(dialog);
-
-  var source = dialog.querySelector("source");
-  var image = dialog.querySelector("img");
-  var opener = null;
-  var ratio = 1.5;
+  // While a photo is open, the videos playing behind it pause, and carry on
+  // when it's closed.
   var resume = [];
-
-  // The photo as big as the window allows, keeping its shape.
-  function fit() {
-    var room = 2 * 24 + 2 * 11; // margin around the window, plus its frame
-    var width = Math.min(window.innerWidth - room, (window.innerHeight - room) * ratio);
-    width = Math.max(Math.floor(width), 40);
-    image.style.width = width + "px";
-    image.style.height = Math.round(width / ratio) + "px";
-    image.sizes = source.sizes = width + "px";
-  }
-
-  function open(link) {
-    var tile = link.querySelector("img");
-    var tileSource = link.querySelector("source");
-    opener = link;
-    ratio = Number(tile.getAttribute("width")) / Number(tile.getAttribute("height")) || 1.5;
-    image.alt = tile.alt;
-    dialog.setAttribute("aria-label", tile.alt);
-    // Show the small photo straight away while the big one loads over it.
-    image.style.backgroundImage = 'url("' + (tile.currentSrc || tile.src) + '")';
-    fit();
-    source.srcset = tileSource ? tileSource.srcset : "";
-    image.srcset = tile.srcset;
-    image.src = link.href;
-
-    resume = videos.filter(function (video) { return !video.paused && !video.stopping; });
-    resume.forEach(autoPause);
-    document.documentElement.classList.add("has-lightbox");
-    dialog.showModal();
-  }
-
-  dialog.addEventListener("close", function () {
-    document.documentElement.classList.remove("has-lightbox");
-    image.removeAttribute("srcset");
-    image.removeAttribute("src");
-    source.removeAttribute("srcset");
-    resume.forEach(function (video) { if (onScreen(video) > 0) autoPlay(video); });
-    resume = [];
-    if (opener) opener.focus();
-  });
-
-  links.forEach(function (link) {
-    link.addEventListener("click", function (event) {
-      // Let ⌘/Ctrl/Shift-click open the photo in a new tab as usual.
-      if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-      event.preventDefault();
-      open(link);
+  if (window.Site) {
+    window.Site.lightbox(gallery.querySelectorAll("a.gallery__item"), {
+      open: function () {
+        resume = videos.filter(function (video) { return !video.paused && !video.stopping; });
+        resume.forEach(autoPause);
+      },
+      close: function () {
+        resume.forEach(function (video) { if (onScreen(video) > 0) autoPlay(video); });
+        resume = [];
+      },
     });
-  });
-
-  dialog.querySelector(".lightbox__close").addEventListener("click", function () {
-    dialog.close();
-  });
-
-  // A click outside the window (on the faded page around it) closes it.
-  dialog.addEventListener("click", function (event) {
-    if (event.target !== dialog) return;
-    var box = dialog.getBoundingClientRect();
-    var inside = event.clientX >= box.left && event.clientX <= box.right &&
-      event.clientY >= box.top && event.clientY <= box.bottom;
-    if (!inside) dialog.close();
-  });
-
-  window.addEventListener("resize", function () {
-    if (dialog.open) fit();
-  });
+  }
 })();

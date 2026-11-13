@@ -23,8 +23,10 @@
       {
         "title": "Sound Design",
         "url": "/sound-design/",
+        "link": false,
         "children": [
           { "title": "Game Sound Design Reel", "url": "/sound-design/reel/" },
+          { "title": "Feedra", "url": "/sound-design/feedra/" },
           { "title": "Alchemeow", "url": "/sound-design/alchemeow/" },
           { "title": "Cyberpedia", "url": "/sound-design/cyberpedia/" },
           { "title": "Okiro", "url": "/sound-design/okiro/" },
