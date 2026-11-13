@@ -239,6 +239,11 @@ a:hover {
   padding-bottom: 14px;
 }
 
+/* The Menu button: phones only (section 11) */
+.menu-toggle {
+  display: none;
+}
+
 /* The signature: the one handwritten mark */
 .signature {
   font-family: var(--font-hand);
@@ -428,16 +433,22 @@ a:hover {
 /* 6. Content
    --------------------------------------------------------------------------
    Everything is one size. A heading is a bold line with a blank line above
-   it; the text follows straight underneath. Page titles are hidden (the
-   index shows where you are); they're still there for screen readers.
+   it; the text follows straight underneath. Page titles are hidden where
+   the index is beside the page (it shows where you are), but still there
+   for screen readers; on phones they're handwritten at the top (section 11).
    ========================================================================== */
 
-.content h1:not(.visually-hidden) {
-  margin-bottom: var(--gap);
-}
-
-.content h1:not(.visually-hidden) + .standfirst {
-  margin-top: calc(-1 * var(--gap));
+.page-title {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
 }
 
 .standfirst {
@@ -1509,15 +1520,37 @@ div.ph {
   }
 }
 
-/* Phones: the popup covers the map, and lines are drawn a little heavier */
+/* Phones: the map runs edge to edge, the episode's card sits under the
+   timeline instead of over the map (sounds-of-map.js moves it there), so you
+   can see where you are while you watch, and lines are drawn a little
+   heavier */
 @media (max-width: 599.98px) {
+  .sm {
+    margin-right: calc(var(--pad) * -1);
+    margin-left: calc(var(--pad) * -1);
+  }
+
+  .sm__timeline,
+  .sm__status {
+    padding: 0 var(--pad);
+  }
+
+  /* The ends of the timeline fade, so it's clear there's more to scroll */
+  .sm__track {
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 8px, #000 calc(100% - 8px), transparent);
+    mask-image: linear-gradient(to right, transparent, #000 8px, #000 calc(100% - 8px), transparent);
+  }
+
   .sm__popup,
   .sm__popup.is-left {
-    left: 6px;
-    right: 6px;
-    top: 6px;
+    position: relative;
+    top: auto;
+    right: auto;
+    left: auto;
     width: auto;
-    max-height: calc(100% - 12px);
+    max-height: none;
+    margin: 2px var(--pad) 12px;
+    overflow: visible;
   }
 
   .sm__route-faint path {
@@ -1708,6 +1741,34 @@ div.ph {
   cursor: pointer;
 }
 
+/* ← → to the previous and next picture, halfway down each side */
+.lightbox__step {
+  position: absolute;
+  top: 50%;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid var(--fg);
+  background: var(--bg);
+  color: var(--fg);
+  font: inherit;
+  font-size: 1.125rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.lightbox__step[data-step="-1"] {
+  left: 0;
+  transform: translate(-50%, -50%);
+}
+
+.lightbox__step[data-step="1"] {
+  right: 0;
+  transform: translate(50%, -50%);
+}
+
 /* The page stays put behind the popup */
 html.has-lightbox {
   overflow: hidden;
@@ -1817,25 +1878,104 @@ html.has-lightbox {
 
 
 /* 11. Mobile: one column
+   --------------------------------------------------------------------------
+   [ signature           Menu ]  ← tucks away as you scroll down the page
+   [ Page title, handwritten  ]
+   [ the grey opening line    ]
+   [ pictures: a strip to swipe → ]
+   [ the page…                ]
+   The index opens over the whole page from the Menu button (site.js).
+   Without JavaScript it's listed between the signature and the page.
    ========================================================================== */
 
 @media (max-width: 759.98px) {
   :root {
     --pad: 20px;
+    --header-h: 58px;
+    /* links to a spot on the page land below the header */
+    scroll-padding-top: calc(var(--header-h) + 12px);
   }
 
   .page {
     display: block;
-    padding: 22px var(--pad) 24px;
+    padding: 0 var(--pad) 24px;
   }
 
   .site-header {
-    padding-bottom: 18px;
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: var(--header-h);
+    margin: 0 calc(var(--pad) * -1) 16px;
+    padding: 0 var(--pad);
+    background: var(--bg);
+    transition: transform 0.25s ease;
   }
 
+  .site-header.is-tucked {
+    transform: translateY(-100%);
+  }
+
+  .signature {
+    font-size: 2.125rem;
+  }
+
+  .js .menu-toggle {
+    display: inline-flex;
+    align-items: center;
+    height: 44px;
+    margin-right: -12px;
+    padding: 0 12px;
+    border: 0;
+    background: none;
+    color: var(--fg);
+    font: inherit;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .menu-toggle__close,
+  .menu-toggle[aria-expanded="true"] .menu-toggle__open {
+    display: none;
+  }
+
+  .menu-toggle[aria-expanded="true"] .menu-toggle__close {
+    display: inline;
+  }
+
+  /* Without JavaScript, the index sits between the signature and the page */
   .site-nav {
     position: static;
     margin-bottom: calc(var(--gap) * 2);
+  }
+
+  /* With it, the index waits behind the Menu button and opens over the page,
+     a little bigger, for thumbs */
+  .js .site-nav {
+    display: none;
+  }
+
+  .js.has-menu {
+    overflow: hidden;
+  }
+
+  .js.has-menu .site-nav {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 20;
+    align-self: stretch; /* (not the wider screens' "start": fill the screen, and scroll) */
+    margin: 0;
+    padding: calc(var(--header-h) + 18px) var(--pad) 48px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    background: var(--bg);
+    font-size: 1.375rem;
+    line-height: 1.5;
+    animation: menu-in 0.2s ease-out;
   }
 
   /* Bigger tap targets without spreading the list out */
@@ -1857,16 +1997,84 @@ html.has-lightbox {
     padding: 3px 0;
   }
 
+  /* The page's title, handwritten (the index isn't there to say where you are) */
+  .page-title {
+    position: static;
+    width: auto;
+    height: auto;
+    margin: 0 0 0.3em;
+    overflow: visible;
+    clip: auto;
+    clip-path: none;
+    white-space: normal;
+    font-family: var(--font-hand);
+    font-size: 3rem;
+    line-height: 0.9;
+    letter-spacing: 0;
+  }
+
   .main {
     display: block;
   }
 
+  /* The pictures: a strip under the opening line, to swipe through, the
+     next one peeking in from the side. Each is at most --strip-h tall and
+     most of the screen wide, whatever its shape (--ratio, its width over
+     its height, comes from the image shortcode) */
   .figures {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1.25rem 0.875rem;
+    --strip-h: min(64vw, 340px);
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 12px;
+    margin: 0 calc(var(--pad) * -1) var(--gap);
+    padding: 0 var(--pad);
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--pad);
+    scrollbar-width: none;
+  }
+
+  .figures::-webkit-scrollbar {
+    display: none;
+  }
+
+  .figures > .figure {
+    flex: 0 0 auto;
+    width: min(78%, calc(var(--strip-h) * var(--ratio, 1.333)));
+    scroll-snap-align: start;
+  }
+
+  /* One picture on its own (the portrait on About Me) can be bigger */
+  .figures > .figure:only-child {
+    --strip-h: min(100vw, 420px);
+    width: min(100%, calc(var(--strip-h) * var(--ratio, 1.333)));
+  }
+
+  /* ← previous / next →: easy to hit with a thumb */
+  .pager a {
+    padding: 10px 0;
   }
 
   .site-footer {
     padding-top: 3em;
+  }
+}
+
+@keyframes menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
+@media (max-width: 759.98px) and (prefers-reduced-motion: reduce) {
+  .site-header {
+    transition: none;
+  }
+
+  .js.has-menu .site-nav {
+    animation: none;
   }
 }

@@ -35,6 +35,23 @@
         {% image figure %}
         {%- endeach %}
       </div>
+      <script>
+        /* On phones the pictures move up under the page's opening line, as a
+           strip to swipe through, instead of waiting below the text. Runs
+           here, as the page is drawn, so nothing jumps. */
+        (function () {
+          var figures = document.currentScript.previousElementSibling;
+          var content = figures.parentNode.querySelector(".content");
+          var after = content.querySelector(":scope > .standfirst") || content.querySelector(":scope > h1");
+          var phone = window.matchMedia("(max-width: 759.98px)");
+          function place() {
+            if (phone.matches && after) after.after(figures);
+            else content.after(figures);
+          }
+          place();
+          phone.addEventListener("change", place);
+        })();
+      </script>
       {%- endif %}
       {%- if signoff %}
 

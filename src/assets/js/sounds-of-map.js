@@ -363,6 +363,18 @@
     root.classList.remove("is-open");
   }
 
+  // On a phone the popup is a card under the timeline, so the map stays in
+  // view above it; on anything wider it sits over the map, beside the stop.
+  var phone = window.matchMedia("(max-width: 599.98px)");
+  var timeline = $(".sm__timeline");
+  var zoomBox = $(".sm__zoom");
+  function placePopup() {
+    if (phone.matches) timeline.after(popup);
+    else stage.insertBefore(popup, zoomBox);
+  }
+  placePopup();
+  phone.addEventListener("change", placePopup);
+
   /* Choosing an episode -------------------------------------------------- */
 
   function select(index) {

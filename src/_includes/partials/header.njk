@@ -1,4 +1,7 @@
-{#- Your name, signed by hand: the one handwritten mark on the page. #}
+{#- Your name, signed by hand: the one handwritten mark on the page. On phones
+    the header also holds the Menu button, which opens the index over the
+    page (see site.js); without JavaScript the index is simply listed. #}
 <header class="site-header">
   <p class="signature"><a href="/">{{ site.name }}</a></p>
+  <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span class="menu-toggle__open">Menu</span><span class="menu-toggle__close">Close</span></button>
 </header>

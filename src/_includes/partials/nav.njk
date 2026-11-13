@@ -36,7 +36,7 @@
   {%- endif %}
 {%- endmacro %}
 
-<nav class="site-nav" aria-label="Main">
+<nav class="site-nav" id="site-nav" aria-label="Main">
   <ul class="nav-list">
     {%- for section in navigation %}
     {%- set sectionIndex = loop.index %}
@@ -56,23 +56,24 @@
   </ul>
 </nav>
 <script>
-  /* Which dropdowns (Interests, Sound Design) start open. Once one has been
-     open, it stays open from page to page until it's closed with its button
+  /* Which dropdowns (Interests, Sound Design) start open. The one for the
+     section you're in is open. On wider screens, once one has been open it
+     stays open from page to page until it's closed with its button
      (remembered for the visit, in the browser's session storage; see also
-     site.js). Otherwise the one for the section you're in is open, except on
-     small screens, which start with them closed so the page itself stays
-     near the top. Runs here, before the rest of the page is drawn, so
+     site.js). On phones, where the index opens over the page from the Menu
+     button, only the section you're in starts open, so the whole list fits
+     on the screen. Runs here, before the rest of the page is drawn, so
      nothing jumps. */
   (function () {
     var open = [];
     try { open = JSON.parse(sessionStorage.getItem("nav-open")) || []; } catch (e) {}
-    var small = window.matchMedia("(max-width: 759.98px)").matches;
+    var phone = window.matchMedia("(max-width: 759.98px)").matches;
     document.querySelectorAll(".nav-group").forEach(function (group) {
       var key = group.getAttribute("data-key");
-      var isOpen = open.indexOf(key) !== -1 || (!small && group.getAttribute("data-open") === "true");
+      var isOpen = group.getAttribute("data-open") === "true" || (!phone && open.indexOf(key) !== -1);
       group.setAttribute("data-open", isOpen ? "true" : "false");
       group.querySelector(".nav-toggle").setAttribute("aria-expanded", isOpen ? "true" : "false");
-      if (isOpen && open.indexOf(key) === -1) open.push(key);
+      if (isOpen && !phone && open.indexOf(key) === -1) open.push(key);
     });
     try { sessionStorage.setItem("nav-open", JSON.stringify(open)); } catch (e) {}
   })();

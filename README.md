@@ -53,7 +53,7 @@ src/
 │   └── partials/          ← signature, nav, footer, page date, Sounds Of map
 ├── assets/
 │   ├── css/style.css      ← all the styling, with comments
-│   ├── js/site.js         ← dropdowns, picture popups, YouTube videos that load when played
+│   ├── js/site.js         ← phone menu, dropdowns, picture popups, YouTube videos that load when played
 │   ├── js/sounds-of-map.js ← the map's markers, popup, timeline, route and zoom
 │   ├── js/travel.js       ← Travel: videos that play as you scroll (the photo popup is site.js's)
 │   ├── fonts/             ← Instrument Sans + Reenie Beanie (open-licence fonts)
@@ -117,16 +117,18 @@ figures:                      # pictures beside the text (optional)
     alt: Bookworth, a book with glasses and a bow tie
     caption: Bookworth, your museum assistant.
 ---
-<h1 class="visually-hidden">Cyberpedia</h1>
+<h1 class="page-title">Cyberpedia</h1>
 <p class="standfirst">The grey line at the top.</p>
 …
 ```
 
 Everything is the same size. A heading (`<h2>`) is a bold line with a blank
 line above it, and the text follows straight underneath. For a label inside a
-line, such as "Email:", use `<b>`. Page titles aren't shown
-(the index already shows where you are), but each page keeps one, hidden with
-`class="visually-hidden"`, for screen readers and search engines.
+line, such as "Email:", use `<b>`. Each page starts with its title,
+`<h1 class="page-title">`: it's hidden where the index sits beside the page
+(the index already shows where you are), and handwritten at the top of the
+page on phones. It's always there for screen readers and search engines.
+(About Me's stays hidden everywhere: "Hi, I'm Callum" does the job.)
 
 ### The index (navigation)
 
@@ -173,7 +175,8 @@ placeholder becomes the real thing and nothing else on the page moves.
 - **Pictures in `media/`** (like the Sound Design ones, in
   `media/sound-design/<project>/`) are resized when the site is built (480,
   960 and 1920 pixels wide, WebP and JPEG), so full-size screenshots are fine.
-  Clicking one opens it bigger in a popup (× or a click outside closes it).
+  Clicking one opens it bigger in a popup (× or a click outside closes it;
+  the arrows, the arrow keys or a swipe go to the page's other pictures).
   Other files go in `src/assets/` and are used as they are.
 - **YouTube videos** start as the video's picture with a play button, and the
   player loads (already playing) when it's pressed, so pages with lots of
@@ -268,7 +271,8 @@ put your files in `media/travel/`:
 The grid is four photos across (three or two on smaller screens) and runs on
 past the usual right-hand margin. Each photo is a 3:2 tile, cropped to fit;
 clicking it opens the whole photo in a popup, closed with the × in its corner
-or a click anywhere else. Portrait photos take two tiles, one above the
+or a click anywhere else, with arrows (or the arrow keys, or a swipe on a
+phone) to go through the rest. Portrait photos take two tiles, one above the
 other, and each video takes four, two across and two down. Videos play by
 themselves, with the sound on, as they come onto the screen, and pause once
 they've gone off it, carrying on from the same point when you come back. The
@@ -325,10 +329,26 @@ one size of type, hierarchy from spacing and grey versus black.
 | Columns (wide screens) | index 16rem, 2rem gap, text 35rem, 2rem gap, images 15rem |
 
 **Responsive.** Wide screens (1100px and up) get index | text | images.
-Between 760px and 1100px the images move below the text. Below 760px it's one
-column: signature, index, then the page. Where the credits tables (Music,
-Qualifications) don't have room for their four columns, each credit stacks up
-beside its year instead.
+Between 760px and 1100px the images move below the text. Where the credits
+tables (Music, Qualifications) don't have room for their four columns, each
+credit stacks up beside its year instead.
+
+**Phones (below 760px)** get their own layout rather than a squashed one:
+
+- The header is the signature and a **Menu** button. The index opens over the
+  whole page, a little bigger for thumbs, with the section you're in already
+  open; Close, Escape or picking a page shuts it. The header tucks itself
+  away as you scroll down a page and comes back as soon as you scroll up.
+- Each page starts with its title, handwritten, then the grey opening line.
+- The page's pictures come next, as a strip you swipe through sideways (the
+  next one peeks in from the edge), instead of waiting at the bottom. They
+  all fit the same height, whatever their shape.
+- The Sounds Of map runs edge to edge, and an episode opens as a card under
+  the timeline, so the map stays in view while you watch.
+- Photo popups swipe from one picture to the next.
+
+Without JavaScript the index is simply listed under the signature and the
+pictures follow the text.
 
 **The index.** Me and Work are black labels with their pages indented
 underneath; Qualifications and Additional Credits and Contact close the list.
@@ -339,14 +359,16 @@ clicking either name opens its sub-pages underneath, indented (the Sound
 Design overview page still exists, and About Me links to it). It works by
 click, tap or keyboard (Enter/Space; Escape closes it), not on hover, so
 nothing jumps around as the mouse passes. It's open automatically when you're
-on one of those pages, except on phones, where it starts closed to keep the
-page near the top, and once opened it stays open from page to page. Without
-JavaScript the sub-pages are simply always listed.
+on one of those pages, and on wider screens, once opened, it stays open from
+page to page. On phones only the section you're in starts open, so the whole
+index fits on the screen. Without JavaScript the sub-pages are simply always
+listed.
 
 **Accessibility.** The site has a skip link, a labelled nav with
-`aria-current` on the current page, a real `<button>` with `aria-expanded` for
-the dropdown, visible focus outlines, colour contrast at WCAG AA or better,
-links spaced at least 24px apart, and alt text on every image.
+`aria-current` on the current page, real `<button>`s with `aria-expanded` for
+the dropdowns and the phone Menu (the page behind is out of reach while the
+index is open over it), visible focus outlines, colour contrast at WCAG AA or
+better, links spaced at least 24px apart, and alt text on every image.
 
 ## Putting it online
 
