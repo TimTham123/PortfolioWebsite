@@ -75,32 +75,27 @@ export default function () {
       : [ep.name, ep.location, ep.dateLong].filter(Boolean).join(", ");
   }
 
-  // Markers that would sit on top of each other (stops in the same place, or
-  // close by, like Melbourne and the Big Dance Festival) are nudged apart,
-  // a little at a time, until each one can still be clicked, staying as
-  // close to its real place as it can. Stops in exactly the same place start
-  // fanned out in a small circle, so they spread out evenly.
-  const MIN = 21; // map units between markers (a marker is about 17 across on a laptop)
-  const same = new Map();
+  // Stops in the same place (four in Melbourne, two at the Big Dance
+  // Festival…) are drawn as a neat pile, each one a little up and to the
+  // right of the one before, the latest on top; choose one and it comes to
+  // the front, and Earlier / Later step through the rest. Places that are
+  // close enough to touch (Melbourne and Phillip Island, Bellingen and the
+  // Coffs Coast) are nudged apart, a little at a time, so each can still be
+  // clicked, staying as near their real spot as they can.
+  const MIN = 30; // map units between places (about 23px on a laptop; a marker is 11px)
+  const STEP = 5; // map units between the markers in a pile, across and up
+  const places = [];
   for (const ep of episodes) {
-    const key = `${ep.x.toFixed(1)},${ep.y.toFixed(1)}`;
-    if (!same.has(key)) same.set(key, []);
-    same.get(key).push(ep);
-  }
-  for (const group of same.values()) {
-    if (group.length < 2) continue;
-    group.forEach((ep, k) => {
-      const angle = (k / group.length) * Math.PI * 2 - Math.PI / 2;
-      ep.x += Math.cos(angle) * 6;
-      ep.y += Math.sin(angle) * 6;
-    });
+    const place = places.find((p) => Math.abs(p.x - ep.x) < 0.5 && Math.abs(p.y - ep.y) < 0.5);
+    if (place) place.stops.push(ep);
+    else places.push({ x: ep.x, y: ep.y, stops: [ep] });
   }
   for (let pass = 0; pass < 400; pass++) {
     let moved = false;
-    for (let i = 0; i < episodes.length; i++) {
-      for (let j = i + 1; j < episodes.length; j++) {
-        const a = episodes[i];
-        const b = episodes[j];
+    for (let i = 0; i < places.length; i++) {
+      for (let j = i + 1; j < places.length; j++) {
+        const a = places[i];
+        const b = places[j];
         const dx = b.x - a.x;
         const dy = b.y - a.y;
         const d = Math.hypot(dx, dy);
@@ -114,6 +109,14 @@ export default function () {
       }
     }
     if (!moved) break;
+  }
+  for (const place of places) {
+    place.stops.forEach((ep, k) => {
+      const offset = k - (place.stops.length - 1) / 2; // the pile sits centred on the place
+      ep.x = place.x + offset * STEP;
+      ep.y = place.y - offset * STEP;
+      ep.pile = place.stops.length;
+    });
   }
 
   // Positions as percentages of the map, for the marker buttons.
