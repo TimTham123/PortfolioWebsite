@@ -552,6 +552,76 @@ a:hover {
   margin-bottom: 1em;
 }
 
+/* Sound Design's projects: a small picture beside each name, its year and
+   a line about it. Names in black, faintly underlined, as in .index */
+.content .projects {
+  margin-bottom: var(--gap);
+}
+
+.projects > li {
+  display: grid;
+  grid-template-columns: 9rem minmax(0, 1fr);
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.projects > li + li {
+  margin-top: 1.5rem;
+}
+
+.projects__pic {
+  display: block;
+}
+
+.projects__pic img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  background: var(--faint);
+  transition: opacity 0.15s ease;
+}
+
+.projects__pic:hover img {
+  opacity: 0.85;
+}
+
+.content .projects__name {
+  margin: -0.15em 0 0.15em;
+  font-size: inherit;
+  font-weight: 500;
+}
+
+.projects__name a {
+  color: var(--fg);
+  text-decoration: underline;
+  text-decoration-color: var(--track);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.22em;
+}
+
+.projects__name a:hover {
+  text-decoration-color: currentColor;
+}
+
+.projects__year {
+  margin-left: 0.6em;
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.content .projects p {
+  margin: 0;
+}
+
+@media (max-width: 759.98px) {
+  .projects > li {
+    grid-template-columns: 6.5rem minmax(0, 1fr);
+    gap: 1rem;
+  }
+}
+
 /* About Me's greeting, handwritten, as the page's title */
 .content .greeting {
   margin: -0.1em 0 0.35em;
