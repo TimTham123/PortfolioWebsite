@@ -54,6 +54,7 @@ export default function () {
       // What the stop is called on the map and in the timeline.
       title: row.name || place,
       location: row.location,
+      state,
       place,
       description: row.description,
       date: when ? when.toISOString().slice(0, 10) : "",
@@ -76,14 +77,13 @@ export default function () {
   }
 
   // Stops in the same place (four in Melbourne, two at the Big Dance
-  // Festival…) are drawn as a neat pile, each one a little up and to the
-  // right of the one before, the latest on top; choose one and it comes to
-  // the front, and Earlier / Later step through the rest. Places that are
+  // Festival…) are drawn as a short line of dots, each a little up and to
+  // the right of the one before (the spacing is in style.css, so it's the
+  // same at every zoom), and each can be clicked. Places that are
   // close enough to touch (Melbourne and Phillip Island, Bellingen and the
   // Coffs Coast) are nudged apart, a little at a time, so each can still be
   // clicked, staying as near their real spot as they can.
   const MIN = 30; // map units between places (about 23px on a laptop; a marker is 11px)
-  const STEP = 5; // map units between the markers in a pile, across and up
   const places = [];
   for (const ep of episodes) {
     const place = places.find((p) => Math.abs(p.x - ep.x) < 0.5 && Math.abs(p.y - ep.y) < 0.5);
@@ -112,10 +112,11 @@ export default function () {
   }
   for (const place of places) {
     place.stops.forEach((ep, k) => {
-      const offset = k - (place.stops.length - 1) / 2; // the pile sits centred on the place
-      ep.x = place.x + offset * STEP;
-      ep.y = place.y - offset * STEP;
+      ep.x = place.x;
+      ep.y = place.y;
       ep.pile = place.stops.length;
+      // where it sits in its pile: 0 in the middle, -1.5 … 1.5 for a pile of four
+      ep.pk = k - (place.stops.length - 1) / 2;
     });
   }
 
@@ -161,6 +162,19 @@ export default function () {
   const segments = episodes.slice(1).map((ep, i) => ({ d: leg(episodes[i], ep) }));
   if (home && episodes.length) segments.push({ d: leg(episodes[episodes.length - 1], home), home: true });
 
+  // Faint state borders, as rough lines of [latitude, longitude]: enough for
+  // a hand-drawn map, not a survey.
+  const BORDERS = [
+    [[-14.9, 129], [-31.7, 129]], // WA | NT and SA
+    [[-26, 129], [-26, 138]], // NT | SA
+    [[-26, 138], [-16.5, 138]], // NT | QLD, up to the Gulf
+    [[-26, 138], [-26, 141], [-29, 141]], // SA | QLD
+    [[-29, 141], [-29, 148.95], [-28.85, 149.6], [-28.55, 150.4], [-28.75, 151.1], [-28.6, 151.6], [-28.35, 152.1], [-28.25, 152.6], [-28.17, 153.55]], // QLD | NSW
+    [[-29, 141], [-38.06, 141]], // SA | NSW and VIC
+    [[-34.03, 141], [-34.6, 142.75], [-35.35, 143.55], [-36.12, 144.75], [-35.85, 145.6], [-36, 146.4], [-36.08, 146.92], [-36.2, 147.5], [-36.79, 148.2], [-37.5, 149.98]], // NSW | VIC: the Murray, then to Cape Howe
+  ];
+  const borders = BORDERS.map((line) => "M" + line.map(([lat, lng]) => toMap(lat, lng).map((n) => round(n, 1)).join(" ")).join("L")).join("");
+
   // Hand-lettered sea names, kept inside the map (sized for the biggest the
   // lettering gets, on phones).
   const LETTER = 44 * 0.42; // average letter width, in map units
@@ -183,17 +197,13 @@ export default function () {
     };
   });
 
-  // Month labels for the timeline: shown where the month changes.
-  let previous = null;
+  // Labels for the timeline: the state, where the road crosses into a new one.
+  let previousState = null;
   for (const ep of episodes) {
-    ep.timelineLabel = "";
-    if (!ep.month) continue;
-    if (!previous || previous.month !== ep.month || previous.year !== ep.year) {
-      ep.timelineLabel = !previous || previous.year !== ep.year ? `${ep.month} ${ep.year}` : ep.month;
-    }
-    previous = ep;
+    ep.timelineLabel = ep.state !== previousState ? ep.state : "";
+    previousState = ep.state;
   }
 
   const episodeCount = episodes.filter((ep) => !ep.empty).length;
-  return { viewBox, outline, echo, episodes, episodeCount, segments, home, labels };
+  return { viewBox, outline, echo, borders, episodes, episodeCount, segments, home, labels };
 }

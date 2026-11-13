@@ -122,8 +122,9 @@ figures:                      # pictures beside the text (optional)
 …
 ```
 
-Everything is the same size. A heading is just a black line with a blank line
-above it, and the text follows straight underneath. Page titles aren't shown
+Everything is the same size. A heading (`<h2>`) is a bold line with a blank
+line above it, and the text follows straight underneath. For a label inside a
+line, such as "Email:", use `<b>`. Page titles aren't shown
 (the index already shows where you are), but each page keeps one, hidden with
 `class="visually-hidden"`, for screen readers and search engines.
 
@@ -222,11 +223,25 @@ npm run routes
 
 Until you do, a new leg is drawn as a gentle curve. The whole route shows as
 a faint dotted line, and inks itself in solid black as you move through the
-stops; the coast is drawn in pencil grey so the two don't get mixed up.
+stops; the coast is drawn in pencil grey so the two don't get mixed up. The
+state borders are fainter pencil lines, and the timeline under the map names
+the state each time the road crosses into a new one.
+
+The map puts being easy to read ahead of being exact:
+
+- Stops with the same latitude and longitude (the four Melbourne episodes,
+  the two at the Big Dance Festival) are drawn as a short diagonal line of
+  dots, and each dot can be clicked. The gap between them is `--pile-step`
+  in `style.css`.
+- Places close enough to touch are nudged apart until each can be clicked,
+  staying as near their real spot as they can (`MIN` in
+  `src/_data/soundsOf.js`). To move a place further, change its latitude
+  and longitude in the CSV.
 
 The current file was built from the videos on the Sounds Of YouTube channel:
 names, dates and the first lines of each description, with approximate
-coordinates. The Big Dance Festival and Gippsland locations are guesses. The
+coordinates. The Big Dance Festival stop sits north of Melbourne, and Des
+Sheridan's east of Phillip Island, so neither crowds Melbourne. The
 empty stops (Brisbane, Mount Isa, Uluru, Kalgoorlie and two in Adelaide) have
 no dates yet; Uluru is placed between Alice Springs and Darwin.
 
@@ -302,6 +317,7 @@ one size of type, hierarchy from spacing and grey versus black.
 | --- | --- |
 | Page | white |
 | Text | `#0a0a0a`, Instrument Sans, 17px on a 1.42 line, everywhere |
+| Headings and labels | the same size, in Instrument Sans Medium (500) |
 | Links | grey `#737373`; black and underlined when you point at them |
 | Current page | black (and its section, on project pages) |
 | Signature | your name in Reenie Beanie, top left |
@@ -310,7 +326,9 @@ one size of type, hierarchy from spacing and grey versus black.
 
 **Responsive.** Wide screens (1100px and up) get index | text | images.
 Between 760px and 1100px the images move below the text. Below 760px it's one
-column: signature, index, then the page.
+column: signature, index, then the page. Where the credits tables (Music,
+Qualifications) don't have room for their four columns, each credit stacks up
+beside its year instead.
 
 **The index.** Me and Work are black labels with their pages indented
 underneath; Qualifications and Additional Credits and Contact close the list.

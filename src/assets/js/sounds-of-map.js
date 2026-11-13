@@ -288,6 +288,9 @@
       path.style.transitionDuration = each + "ms";
       path.style.transitionDelay = k * each + "ms";
       path.style.strokeDashoffset = forward ? 0 : path.dataset.length;
+      // (a leg between two stops in the same place has no length, so the
+      // class, not the dash, says whether it's drawn)
+      path.classList.toggle("is-inked", forward);
     }
     inked = target;
     if (homeDot) {
@@ -384,6 +387,8 @@
     keepTickInView(index);
 
     place.textContent = ep.place;
+    // Past the end of a line of dots (style.css spaces them --pile-step apart).
+    place.style.setProperty("--reach", ((ep.pile || 1) - 1) / 2);
     render();
     bringIntoView(ep);
 

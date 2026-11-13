@@ -28,7 +28,7 @@ placeholder: true
     </thead>
     <tbody>
       <tr><th colspan="4" scope="rowgroup">Sound design</th></tr>
-      <tr><td><span class="ph">[2025]</span></td><td><a href="/sound-design/feedra/">Feedra Prototype</a></td><td><span class="ph">[Role]</span></td><td>RMIT</td></tr>
+      <tr><td>2025</td><td><a href="/sound-design/feedra/">Feedra Prototype</a></td><td><span class="ph">[Role]</span></td><td>RMIT</td></tr>
       <tr><td>2024&ndash;</td><td><a href="/sound-design/cyberpedia/">Cyberpedia</a></td><td>Composer, sound designer</td><td>Bitcrush (Chris Erickson)</td></tr>
       <tr><td>2024</td><td><a href="/sound-design/alchemeow/">Alchemeow</a></td><td>Sound design lead, composer</td><td>Trashpanda Studio</td></tr>
       <tr><td>2024</td><td>Hypnagogia, a multisensory installation</td><td>Co-creator: binaural beats, haptics and light</td><td>RMIT, with Jez</td></tr>
@@ -45,12 +45,12 @@ placeholder: true
       <tr><td>2025</td><td><a href="https://open.spotify.com/album/0DQfkubc1woLbHbBIlz22e">Ferry Ride</a> (single)</td><td>Writing, recording, production, performance</td><td>Callum Tam (solo)</td></tr>
       <tr><td>2025</td><td><a href="https://open.spotify.com/album/4u09OZwBGqtopDWM1nRmor">Is It a New Year Already?</a> (EP)</td><td>Writing, recording, production, performance</td><td>Callum Tam (solo)</td></tr>
       <tr><td>2025</td><td><a href="https://open.spotify.com/album/0yCBbwqkaMH7QkKCYvyED9">Boogie with You</a> (single)</td><td>Frontman</td><td>Melonade</td></tr>
-      <tr><td>2025</td><td>Multiple tracks</td><td>Writing, production, recording, performance (guitar, bass, vocals), mixing</td><td>Runway Four</td></tr>
-      <tr><td>2024&ndash;26</td><td>Multiple tracks</td><td>Production, recording, mixing, performance</td><td>Wes Couer</td></tr>
+      <tr><td>2025</td><td><a href="https://open.spotify.com/album/2oQKYT1Aevq9KIHuXIJsot">Multiple tracks</a></td><td>Writing, production, recording, performance (guitar, bass, vocals), mixing</td><td>Runway Four</td></tr>
+      <tr><td>2024&ndash;26</td><td>Multiple tracks</td><td>Production, recording, mixing, performance</td><td><a href="https://open.spotify.com/artist/4zjTgLNIPksuxMXCKClne9">Wes Coeur</a></td></tr>
       <tr><td>2024</td><td><a href="https://open.spotify.com/album/6Khzbg1RmVABLIc8Mb1vNm">Time Moves Too Fast for My Liking</a> (EP)</td><td>Writing, recording, production, performance</td><td>Callum Tam (solo)</td></tr>
       <tr><td>2023</td><td><a href="https://open.spotify.com/album/4Zo8r69BQ3PX2gppWozYee">Wings</a> (single)</td><td>Frontman</td><td>Melonade</td></tr>
-      <tr><td>2023</td><td>Free Ride On The Bus</td><td><span class="ph">[Role]</span></td><td>Jarrod Smitt</td></tr>
-      <tr><td>2023</td><td><span class="ph">[Title]</span> demos (EP)</td><td><span class="ph">[Role]</span></td><td>Operation Karma</td></tr>
+      <tr><td>2023</td><td><a href="https://drive.google.com/file/d/1k3g9M5OLabPbkHD3JeCclQOjftE8jlt4/view?usp=sharing">Free Ride On The Bus</a></td><td>Production, mixing, mastering</td><td>Jarrod Smitt</td></tr>
+      <tr><td>2023</td><td><span class="ph">[Title]</span> demos (EP)</td><td>Production, mixing, mastering</td><td>Operation Karma</td></tr>
       <tr><td>2022</td><td><a href="https://open.spotify.com/album/2wFiofr6Xx3Z9b0xlYGta6">Kids Trilogy</a> (EP)</td><td>Frontman</td><td>Melonade</td></tr>
     </tbody>
     <tbody>
@@ -58,7 +58,7 @@ placeholder: true
       <tr><td>2026</td><td><a href="/sounds-of/">Sounds Of</a>, the series ({{ soundsOf.episodeCount }} episodes)</td><td>Creator, producer, filming, recording, mixing; YouTube and social channels</td><td>Independent</td></tr>
       {%- for ep in soundsOf.episodes | reverse %}
       {%- if not ep.empty %}
-      <tr><td>{{ ep.year or ep.dateLong }}</td><td>{% if ep.video %}<a href="{{ ep.video.watch }}">{{ ep.name }}</a>{% else %}{{ ep.name }}{% endif %}, {{ ep.location }}</td><td>Producer, filming, recording, mixing</td><td>Sounds Of</td></tr>
+      <tr><td{% if not ep.year %} class="is-word"{% endif %}>{{ ep.year or ep.dateLong }}</td><td>{% if ep.video %}<a href="{{ ep.video.watch }}">{{ ep.name }}</a>{% else %}{{ ep.name }}{% endif %}, {{ ep.location }}</td><td>Producer, filming, recording, mixing</td><td>Sounds Of</td></tr>
       {%- endif %}
       {%- endfor %}
     </tbody>

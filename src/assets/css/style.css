@@ -427,7 +427,7 @@ a:hover {
 
 /* 6. Content
    --------------------------------------------------------------------------
-   Everything is one size. A heading is a black line with a blank line above
+   Everything is one size. A heading is a bold line with a blank line above
    it; the text follows straight underneath. Page titles are hidden (the
    index shows where you are); they're still there for screen readers.
    ========================================================================== */
@@ -448,6 +448,7 @@ a:hover {
 .content h2,
 .content h3 {
   margin-top: var(--gap);
+  font-weight: 500;
 }
 
 .content h1 + h2,
@@ -548,6 +549,7 @@ blockquote {
 
 .table-scroll {
   overflow-x: auto;
+  container-type: inline-size;
 }
 
 table {
@@ -575,9 +577,15 @@ caption {
   text-align: left;
 }
 
-/* Credits (Music): full width; the year never breaks, the rest wraps */
+/* Credits (Music): year, artist, song, role. Full width; the year never
+   breaks, the rest wraps. A note under a song (where it was played) is grey */
 .credits {
   width: 100%;
+}
+
+.credits th,
+.credits td {
+  padding-right: 1em;
 }
 
 .credits td {
@@ -588,10 +596,19 @@ caption {
   white-space: nowrap;
 }
 
+.credits th:nth-child(2) {
+  width: 20%;
+}
+
 .credits th:last-child,
 .credits td:last-child {
-  width: 45%;
+  width: 30%;
   padding-right: 0;
+}
+
+.credits__note {
+  display: block;
+  color: var(--muted);
 }
 
 /* All credits (Qualifications): grouped, each group under a black heading
@@ -616,10 +633,80 @@ caption {
 .credit-list tbody th {
   padding: var(--gap) 0 0.25em;
   color: var(--fg);
+  font-weight: 500;
 }
 
 .credit-list tbody:first-of-type th {
   padding-top: 0.5em;
+}
+
+/* Where four columns won't fit (phones, narrow windows), each credit stacks
+   up beside its year. Music: the artist in bold, then the song and the role.
+   Qualifications: the project, the role, then the studio or client in grey */
+@container (max-width: 519px) {
+  .credits,
+  .credits tbody,
+  .credits tr,
+  .credits td,
+  .credit-list,
+  .credit-list tbody,
+  .credit-list tr,
+  .credit-list td,
+  .credit-list tbody th {
+    display: block;
+  }
+
+  .credits thead,
+  .credit-list thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .credits tr,
+  .credit-list tr {
+    position: relative;
+    padding-bottom: 0.6em;
+  }
+
+  .credit-list tbody tr:first-child {
+    padding-bottom: 0;
+  }
+
+  .credits td,
+  .credits td:last-child,
+  .credit-list td,
+  .credit-list td:last-child {
+    width: auto;
+    padding: 0 0 0 5em;
+  }
+
+  .credits td:first-child,
+  .credit-list td:first-child {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 0;
+  }
+
+  .credits td:nth-child(2) {
+    font-weight: 500;
+  }
+
+  .credit-list td:last-child {
+    color: var(--muted);
+  }
+
+  /* a word in place of a year ("unreleased") is too wide for the year's
+     column, so it goes above the project instead, in grey */
+  .credit-list td.is-word {
+    position: static;
+    padding-left: 5em;
+    color: var(--muted);
+  }
 }
 
 /* Release lists (Music): the same columns in every table, so they line up */
@@ -936,6 +1023,17 @@ div.ph {
   stroke-opacity: 0.45;
 }
 
+/* State borders: faint, so they sit behind everything else */
+.sm__borders {
+  fill: none;
+  stroke: var(--pencil);
+  stroke-width: 0.8;
+  stroke-opacity: 0.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
 /* Sizes divide by --zoom so labels and lines stay the same size on screen */
 .sm__labels text {
   fill: #8c8c8c;
@@ -1014,6 +1112,21 @@ div.ph {
   z-index: 1;
 }
 
+/* Stops in the same place: a short line of dots, each a little up and to the
+   right of the one before. The step is on screen, so it's the same at every
+   zoom; each dot gets a smaller target so it can be clicked on its own (the
+   timeline has a full-size button for every episode too). */
+.sm {
+  --pile-step: 8px;
+}
+
+.sm__marker.in-pile {
+  width: 18px;
+  height: 18px;
+  margin: -9px 0 0 -9px;
+  transform: translate(calc(var(--pk) * var(--pile-step)), calc(var(--pk) * var(--pile-step) * -1));
+}
+
 .sm__marker.is-current .sm__dot {
   box-shadow: 0 0 0 2px var(--bg), 0 0 0 3.5px var(--fg);
   transform: scale(1.3);
@@ -1040,7 +1153,8 @@ div.ph {
 .sm__place {
   position: absolute;
   margin: 0;
-  transform: translate(14px, -55%);
+  /* clear of the marker, and of the end of a line of dots (--reach) */
+  transform: translate(calc(14px + var(--reach, 0) * var(--pile-step)), -55%);
   font-family: var(--font-hand);
   font-size: 1.75rem;
   line-height: 1;
@@ -1050,7 +1164,7 @@ div.ph {
 }
 
 .sm__place.is-left {
-  transform: translate(calc(-100% - 14px), -55%);
+  transform: translate(calc(-100% - 14px - var(--reach, 0) * var(--pile-step)), -55%);
 }
 
 .sm__place:empty {
@@ -1107,6 +1221,7 @@ div.ph {
 .sm__popup .sm__name {
   margin: 0 2rem 0 0;
   font-family: var(--font-hand);
+  font-weight: 400;
   font-size: 2rem;
   line-height: 1;
   letter-spacing: 0;
@@ -1358,8 +1473,8 @@ div.ph {
   transform: scale(1.3);
 }
 
-/* Month names, handwritten, where the month changes */
-.sm__month {
+/* The state, handwritten, where the road enters it */
+.sm__state {
   position: absolute;
   top: 26px;
   left: 50%;
@@ -1419,6 +1534,10 @@ div.ph {
 
   .sm__place {
     font-size: 1.5rem;
+  }
+
+  .sm {
+    --pile-step: 4.5px;
   }
 
   /* Just the arrows (the words stay for screen readers) */
