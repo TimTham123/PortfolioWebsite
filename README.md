@@ -375,9 +375,12 @@ page's title, its description and a picture: the page's first picture from
 ## Finding and replacing placeholder content
 
 Some text and media is still placeholder: things to fill in, marked in the
-code. **Visitors never see placeholders**, so the live site always looks
-finished. To see them (with a small handwritten *placeholder* note in
-washed-out red beside each), add `?placeholders` to any address, for example
+code. **Photos still to come show to everyone**, as grey boxes saying what
+each will be, with "photo to come" pencilled on them, so the pages keep
+their final shape. **Visitors never see placeholder text** (or a player
+still to add), so what they read always looks finished. To see everything
+(with a small handwritten *placeholder* note in washed-out red beside each),
+add `?placeholders` to any address, for example
 `https://timtham123.github.io/PortfolioWebsite/?placeholders`. Your browser
 remembers until you visit an address ending in `?placeholders=off`. (Setting
 `"showPlaceholders": true` in `src/_data/site.json` shows them to everyone.)
@@ -386,7 +389,8 @@ remembers until you visit an address ending in `?placeholders=off`. (Setting
 | --- | --- |
 | `<div class="ph">`, `<tr class="ph">` (with a `<!-- PLACEHOLDER -->` comment) | text still to write |
 | `<span class="ph">[…]</span>` | a fact to fill in, such as `[Role]` or `[2025]` |
-| `{% image %}`, `{% video %}`, `{% audio %}` or `{% embed %}` with no file/URL | a picture or player still to add |
+| `{% image %}` with no file (or a picture in `figures:` with no `src`) | a photo still to come: a grey box, shown to everyone |
+| `{% video %}`, `{% audio %}` or `{% embed %}` with no URL | a player still to add |
 | `placeholder: true` at the top of a page | "placeholder content" in its footer, when previewing |
 
 When something's finished, delete its `class="ph"` (or the wrapper `div`) and
@@ -401,9 +405,12 @@ Still to fill in:
 - **Feedra Prototype:** your role, a sentence on what you did, the team and
   the tools.
 - **Music and Qualifications:** the Operation Karma EP's title; a CV PDF.
-- **Photos:** a portrait (About Me), at the mixing desk (Contact), playing
-  live (Music), climbing (Climbing), Luna (Cat), and two for Social Media
-  Marketing.
+- **Photos** (the grey boxes; each says what it's for, and its shape is in
+  `ratio:`, such as `3/4` for portrait): a portrait (About Me), at the mixing
+  desk (Contact), playing live (Music), two climbing (Climbing), two of Luna
+  (Cat), and two for Social Media Marketing (plus three Reel covers in its
+  case study, hidden with the rest of it for now). To add one, put the file
+  in `media/` and give its entry a `src:`, like the Sound Design pictures.
 
 ## How it's designed
 

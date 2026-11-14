@@ -892,7 +892,7 @@ caption {
    column on the right when there are no pictures in it */
 @media (min-width: 1100px) {
   .main:not(:has(> .figures)) .table-wide,
-  html:not(.show-ph) .main:not(:has(> .figures > :not(.is-ph))) .table-wide {
+  html:not(.show-ph) .main:not(:has(> .figures > :not(.is-ph), > .figures > .is-ph-image)) .table-wide {
     width: calc(100% + var(--col-gap) + var(--fig-w));
   }
 }
@@ -1230,22 +1230,37 @@ html:not(.js) .media__frame > iframe[data-src] {
 /* 9. Placeholders
    --------------------------------------------------------------------------
    Things still to fill in: text marked class="ph", and pictures, videos and
-   players with no file yet (class="is-ph", from the shortcodes). Visitors
-   don't see them. Previewing with ?placeholders (or `showPlaceholders` in
-   src/_data/site.json) shows them, with a small pencil note, "placeholder",
-   in washed-out red; media placeholders are grey boxes.
+   players with no file yet (class="is-ph", from the shortcodes). Pictures
+   still to come show to everyone, as grey boxes saying what they'll be,
+   with "photo to come" pencilled on them; visitors don't see the rest.
+   Previewing with ?placeholders (or `showPlaceholders` in
+   src/_data/site.json) shows everything, with a small pencil note,
+   "placeholder", in washed-out red; media placeholders are grey boxes.
    ========================================================================== */
 
 html:not(.show-ph) .ph,
-html:not(.show-ph) .is-ph,
+html:not(.show-ph) .is-ph:not(.is-ph-image),
 html:not(.show-ph) .ph-note {
   display: none !important;
 }
 
-/* ...nor a strip or row of pictures that are all placeholders */
-html:not(.show-ph) .figures:not(:has(> :not(.is-ph))),
-html:not(.show-ph) .thumbs:not(:has(> :not(.is-ph))),
-html:not(.show-ph) .media-grid:not(:has(> :not(.is-ph))) {
+/* ...nor a strip or row of pictures that are all hidden placeholders */
+html:not(.show-ph) .figures:not(:has(> :not(.is-ph), > .is-ph-image)),
+html:not(.show-ph) .thumbs:not(:has(> :not(.is-ph), > .is-ph-image)),
+html:not(.show-ph) .media-grid:not(:has(> :not(.is-ph), > .is-ph-image)) {
+  display: none;
+}
+
+/* "photo to come", pencilled on a picture still to come (the red note
+   instead, when previewing) */
+.ph-soon {
+  font-family: var(--font-note);
+  font-size: 1.25rem;
+  line-height: 1;
+  letter-spacing: 0;
+}
+
+.show-ph .ph-soon {
   display: none;
 }
 
