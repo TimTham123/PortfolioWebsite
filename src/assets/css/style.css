@@ -945,6 +945,13 @@ caption {
   padding-right: 0;
 }
 
+/* where there's room, a place stays on one line */
+@container (min-width: 460px) {
+  .episodes td:last-child {
+    white-space: nowrap;
+  }
+}
+
 @container (max-width: 459px) {
   .episodes,
   .episodes tbody,
