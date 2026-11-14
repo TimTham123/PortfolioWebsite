@@ -199,6 +199,18 @@ Two layouts help on busy pages: wrap videos in `<div class="media-grid">` to
 put them two across where there's room, and use `<ul class="points">` for a
 list of longer points (each gets a dash, and wrapped lines stay indented).
 
+Lists of pages with pictures:
+
+- **Music's releases** are a grid of covers (`<ul class="covers">`), four
+  across (two on phones). The covers are in `media/music/`, from Spotify; for
+  a new release, add its cover there and copy one of the `<li>`s.
+- **Sound Design's projects** (`<ul class="projects">`) show a picture from
+  each project's page beside its name, year and a line about it.
+- **Interests** (`<dl class="index">`) lists each interest with a line about
+  it.
+- A long list can be folded away under a "+" with `<details class="more">`
+  and a `<summary>` (as Qualifications does with every Sounds Of episode).
+
 ### The Sounds Of map
 
 The map on the Sounds Of page is drawn from `src/_data/sounds-of.csv`. It's a
@@ -332,9 +344,9 @@ Still to fill in:
 - **Feedra Prototype:** your role, a sentence on what you did, the team and
   the tools.
 - **Music and Qualifications:** the Operation Karma EP's title; a CV PDF.
-- **Photos:** a portrait (About Me), at the mixing desk (Contact), live and
-  cover art (Music), climbing (Climbing), Luna (Cat), and two for Social
-  Media Marketing.
+- **Photos:** a portrait (About Me), at the mixing desk (Contact), playing
+  live (Music), climbing (Climbing), Luna (Cat), and two for Social Media
+  Marketing.
 
 ## How it's designed
 

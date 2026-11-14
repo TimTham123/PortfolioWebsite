@@ -8,9 +8,6 @@ figures:
   - alt: "Live photo: playing on stage"
     caption: "(live at [venue])"
     ratio: "3/4"
-  - alt: "Cover art for The Happy Songs"
-    caption: "(The Happy Songs cover art)"
-    ratio: "1/1"
 ---
 <h1 class="page-title">Music</h1>
 <p class="standfirst">My first love.</p>
@@ -20,37 +17,45 @@ figures:
 <p>I write, record and produce my own music as Callum Tam, creating folktronica.</p>
 
 <h2>Solo releases</h2>
-<div class="table-scroll">
-  <table class="releases">
-    <thead>
-      <tr><th scope="col">Year</th><th scope="col">Title</th><th scope="col">Format</th></tr>
-    </thead>
-    <tbody>
-      <tr><td>2026</td><td><a href="https://open.spotify.com/album/4e8Jq6QhxuSqA88AVPlV0w">The Happy Songs</a></td><td>EP</td></tr>
-      <tr><td>2025</td><td><a href="https://open.spotify.com/album/0DQfkubc1woLbHbBIlz22e">Ferry Ride</a></td><td>Single</td></tr>
-      <tr><td>2025</td><td><a href="https://open.spotify.com/album/4u09OZwBGqtopDWM1nRmor">Is It a New Year Already?</a></td><td>EP</td></tr>
-      <tr><td>2024</td><td><a href="https://open.spotify.com/album/6Khzbg1RmVABLIc8Mb1vNm">Time Moves Too Fast for My Liking</a></td><td>EP</td></tr>
-    </tbody>
-  </table>
-</div>
+{#- Cover art from Spotify, in media/music/. Each links to the release. #}
+<ul class="covers">
+  <li>
+    <a href="https://open.spotify.com/album/4e8Jq6QhxuSqA88AVPlV0w">{% image { src: "media/music/the-happy-songs.jpg", alt: "", bare: true, sizes: "(max-width: 759.98px) 40vw, 8rem" } %}<span class="covers__title">The Happy Songs</span></a>
+    <span class="covers__meta">2026 &middot; EP</span>
+  </li>
+  <li>
+    <a href="https://open.spotify.com/album/0DQfkubc1woLbHbBIlz22e">{% image { src: "media/music/ferry-ride.jpg", alt: "", bare: true, sizes: "(max-width: 759.98px) 40vw, 8rem" } %}<span class="covers__title">Ferry Ride</span></a>
+    <span class="covers__meta">2025 &middot; Single</span>
+  </li>
+  <li>
+    <a href="https://open.spotify.com/album/4u09OZwBGqtopDWM1nRmor">{% image { src: "media/music/is-it-a-new-year-already.jpg", alt: "", bare: true, sizes: "(max-width: 759.98px) 40vw, 8rem" } %}<span class="covers__title">Is It a New Year Already?</span></a>
+    <span class="covers__meta">2025 &middot; EP</span>
+  </li>
+  <li>
+    <a href="https://open.spotify.com/album/6Khzbg1RmVABLIc8Mb1vNm">{% image { src: "media/music/time-moves-too-fast.jpg", alt: "", bare: true, sizes: "(max-width: 759.98px) 40vw, 8rem" } %}<span class="covers__title">Time Moves Too Fast for My Liking</span></a>
+    <span class="covers__meta">2024 &middot; EP</span>
+  </li>
+</ul>
 
 {% embed { src: "https://open.spotify.com/embed/track/3YxGO9y0aQC2UiQBv0GogU", title: "Darcy Said, by Callum Tam (Spotify player)", height: 152 } %}
 
 <p>I’m also the frontman of a band called Melonade, and help other artists with production and mixing.</p>
 
 <h2>Band releases</h2>
-<div class="table-scroll">
-  <table class="releases">
-    <thead>
-      <tr><th scope="col">Year</th><th scope="col">Title</th><th scope="col">Format</th></tr>
-    </thead>
-    <tbody>
-      <tr><td>2025</td><td><a href="https://open.spotify.com/album/0yCBbwqkaMH7QkKCYvyED9">Boogie with You</a></td><td>Single</td></tr>
-      <tr><td>2023</td><td><a href="https://open.spotify.com/album/4Zo8r69BQ3PX2gppWozYee">Wings</a></td><td>Single</td></tr>
-      <tr><td>2022</td><td><a href="https://open.spotify.com/album/2wFiofr6Xx3Z9b0xlYGta6">Kids Trilogy</a></td><td>EP</td></tr>
-    </tbody>
-  </table>
-</div>
+<ul class="covers">
+  <li>
+    <a href="https://open.spotify.com/album/0yCBbwqkaMH7QkKCYvyED9">{% image { src: "media/music/boogie-with-you.jpg", alt: "", bare: true, sizes: "(max-width: 759.98px) 40vw, 8rem" } %}<span class="covers__title">Boogie with You</span></a>
+    <span class="covers__meta">2025 &middot; Single</span>
+  </li>
+  <li>
+    <a href="https://open.spotify.com/album/4Zo8r69BQ3PX2gppWozYee">{% image { src: "media/music/wings.jpg", alt: "", bare: true, sizes: "(max-width: 759.98px) 40vw, 8rem" } %}<span class="covers__title">Wings</span></a>
+    <span class="covers__meta">2023 &middot; Single</span>
+  </li>
+  <li>
+    <a href="https://open.spotify.com/album/2wFiofr6Xx3Z9b0xlYGta6">{% image { src: "media/music/kids-trilogy.jpg", alt: "", bare: true, sizes: "(max-width: 759.98px) 40vw, 8rem" } %}<span class="covers__title">Kids Trilogy</span></a>
+    <span class="covers__meta">2022 &middot; EP</span>
+  </li>
+</ul>
 
 {% embed { src: "https://open.spotify.com/embed/track/30wD52sZxKJog6qLMUGl7X", title: "Boogie with You, by Melonade (Spotify player)", height: 152 } %}
 
