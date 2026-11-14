@@ -2032,6 +2032,13 @@ div.ph {
     font-size: 1.3125rem;
   }
 
+  /* The zoom buttons side by side, low in the Southern Ocean, clear of the
+     south-west corner of WA */
+  .sm__zoom {
+    flex-direction: row;
+    align-items: center;
+  }
+
   /* Just the arrows (the words stay for screen readers) */
   .sm__step,
   .sm__step[aria-disabled="true"] {
