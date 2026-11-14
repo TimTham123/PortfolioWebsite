@@ -463,6 +463,21 @@ a:hover {
   font-weight: 500;
 }
 
+/* No word left on its own at the end of a paragraph, and headings split
+   evenly over their lines (in browsers that can) */
+.content p,
+.content li,
+.content dd,
+figcaption {
+  text-wrap: pretty;
+}
+
+.content h1,
+.content h2,
+.content h3 {
+  text-wrap: balance;
+}
+
 .content h1 + h2,
 .content .standfirst + h2 {
   margin-top: 0;
