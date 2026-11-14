@@ -279,4 +279,28 @@
       frame.focus();
     });
   });
+
+  /*
+    5. Players from other sites (Spotify, Bandcamp, SoundCloud) load as they
+    come near the screen, rather than all at once with the page: each one is
+    a few megabytes, and a page can have several (see the embed shortcode in
+    lib/shortcodes.js).
+  */
+  var waiting = document.querySelectorAll("iframe[data-src]");
+  function load(frame) {
+    frame.src = frame.getAttribute("data-src");
+    frame.removeAttribute("data-src");
+  }
+  if ("IntersectionObserver" in window) {
+    var near = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        load(entry.target);
+        near.unobserve(entry.target);
+      });
+    }, { rootMargin: "300px 0px" });
+    Array.prototype.forEach.call(waiting, function (frame) { near.observe(frame); });
+  } else {
+    Array.prototype.forEach.call(waiting, load);
+  }
 })();

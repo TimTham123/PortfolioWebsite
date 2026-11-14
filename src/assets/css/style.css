@@ -1087,6 +1087,11 @@ figcaption {
   background: none;
 }
 
+/* (without JavaScript the <noscript> copy of a player is used instead) */
+html:not(.js) .media__frame > iframe[data-src] {
+  display: none;
+}
+
 .media__frame > iframe,
 .media__frame > video {
   position: absolute;

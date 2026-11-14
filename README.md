@@ -193,7 +193,9 @@ placeholder becomes the real thing and nothing else on the page moves.
   (`…/tracks/1800618249`); a private track also needs its `secret`, the `s-…`
   part of its private link.
 - **Embeds**: paste the `src` from the player's "embed" code on Bandcamp or
-  Spotify.
+  Spotify. Players from other sites (these and SoundCloud) load as they come
+  near the screen rather than all at once with the page, since each is a few
+  megabytes.
 
 Two layouts help on busy pages: wrap videos in `<div class="media-grid">` to
 put them two across where there's room, and use `<ul class="points">` for a
