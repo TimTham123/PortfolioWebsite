@@ -316,6 +316,41 @@ their camera details stripped out (the site never shows them bigger than
 1800px). If the folder is ever empty, any files named `placeholder-…` are
 repeated to show the layout instead.
 
+### Even video volume
+
+Every video should sit at the same loud level: **-14 LUFS** (integrated),
+with true peaks under **-1 dBTP**. That's what YouTube and Spotify play at,
+so nothing on the site is quieter than it would be there.
+
+- **The Travel videos** are the site's own files, and all three measure
+  -14.1 LUFS, within 0.1 dB of each other. Before adding a new one, run it
+  through `scripts/normalize-loudness.sh` (below).
+- **The YouTube videos** (the Sound Design projects and the Sounds Of
+  episodes) can't be evened out by the site: a page can only turn a YouTube
+  player down, never past 100%, and Apple's phones and iPads ignore even
+  that. YouTube itself turns videos louder than -14 LUFS down to that level,
+  but leaves quieter ones as they are, so **a quiet video has to be made
+  louder and uploaded again**. Then put its new link in the page (or the
+  CSV, for an episode).
+
+To find the quiet ones, open youtube.com in Chrome, press F12, choose
+Console, type `allow pasting` if it asks, then paste the whole of
+`scripts/youtube-loudness.js` and press Enter. It reads the loudness YouTube
+works out for every video on the site (the "content loudness" in Stats for
+nerds) and lists them, quietest first, with how many dB each needs turning
+up. It only reads; nothing is changed.
+
+To fix a video, either export it again from your editor at -14 LUFS (peaks
+under -1 dBTP), or run the file through the script, which turns the sound up
+or down by one steady amount without touching the picture (it needs
+[ffmpeg](https://ffmpeg.org/)):
+
+```bash
+scripts/normalize-loudness.sh my-video.mp4
+```
+
+It writes `my-video-14lufs.mp4` next to it, ready to upload.
+
 ### Link previews
 
 When a page's link is shared (messages, social media, LinkedIn), it shows the
