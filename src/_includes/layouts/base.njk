@@ -6,8 +6,9 @@
   <title>{% if page.url != "/" %}{{ title }} &ndash; {{ site.name }}{% else %}{{ site.name }} &ndash; {{ site.tagline }}{% endif %}</title>
   <meta name="description" content="{{ description or site.description }}">
   {#- How the page looks when its link is shared (messages, social media):
-      its title and description, and a picture of the signature. The
-      addresses have to be complete, so they start with site.origin. #}
+      its title, description and a picture (shareImage, worked out in
+      src/_data/eleventyComputed.js). The addresses have to be complete, so
+      they start with site.origin. #}
   {%- set pageTitle %}{% if page.url != "/" %}{{ title }} – {{ site.name }}{% else %}{{ site.name }} – {{ site.tagline }}{% endif %}{% endset %}
   {%- if page.url != "/404.html" %}
   <link rel="canonical" href="{{ site.origin }}{{ page.url | url }}">
@@ -17,10 +18,11 @@
   <meta property="og:site_name" content="{{ site.name }}">
   <meta property="og:title" content="{{ pageTitle }}">
   <meta property="og:description" content="{{ description or site.description }}">
-  <meta property="og:image" content="{{ site.origin }}{{ '/assets/img/share.png' | url }}">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="Callum Tham, handwritten: video creator, sound designer and producer, Melbourne, Australia">
+  {%- set share = shareImage or { url: "/assets/img/share.png", width: 1200, height: 630, alt: "Callum Tham, handwritten: video creator, sound designer and producer, Melbourne, Australia" } %}
+  <meta property="og:image" content="{{ site.origin }}{{ share.url | url }}">
+  <meta property="og:image:width" content="{{ share.width }}">
+  <meta property="og:image:height" content="{{ share.height }}">
+  <meta property="og:image:alt" content="{{ share.alt }}">
   <meta property="og:locale" content="en_AU">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="theme-color" content="#ffffff">

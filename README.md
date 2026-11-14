@@ -314,6 +314,15 @@ their camera details stripped out (the site never shows them bigger than
 1800px). If the folder is ever empty, any files named `placeholder-…` are
 repeated to show the layout instead.
 
+### Link previews
+
+When a page's link is shared (messages, social media, LinkedIn), it shows the
+page's title, its description and a picture: the page's first picture from
+`media/` if it has one (the Sound Design projects), or one chosen with
+`share:` at the top of the page (Sounds Of uses a snapshot of its map,
+`src/assets/img/share-sounds-of.png`), or else a card with the signature
+(`src/assets/img/share.png`). See `src/_data/eleventyComputed.js`.
+
 ## Finding and replacing placeholder content
 
 Some text and media is still placeholder: things to fill in, marked in the
