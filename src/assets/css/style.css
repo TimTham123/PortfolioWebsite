@@ -1099,6 +1099,11 @@ html:not(.js) .media__frame > iframe[data-src] {
   display: none;
 }
 
+/* A faint grey where a player will be, until it loads */
+.js .media__frame--embed:has(> iframe[data-src]) {
+  background: var(--faint);
+}
+
 .media__frame > iframe,
 .media__frame > noscript > iframe,
 .media__frame > video {

@@ -287,9 +287,11 @@
     lib/shortcodes.js).
   */
   var waiting = document.querySelectorAll("iframe[data-src]");
+  // (data-src stays until the player has loaded, so the faint grey behind
+  // it, in style.css, shows until then)
   function load(frame) {
+    frame.addEventListener("load", function () { frame.removeAttribute("data-src"); }, { once: true });
     frame.src = frame.getAttribute("data-src");
-    frame.removeAttribute("data-src");
   }
   if ("IntersectionObserver" in window) {
     var near = new IntersectionObserver(function (entries) {
