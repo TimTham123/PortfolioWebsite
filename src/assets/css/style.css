@@ -48,6 +48,17 @@
   font-display: swap;
 }
 
+/* A second hand, very like Reenie Beanie, for notes: the labels on the
+   Sounds Of map and the quote on About Me (so not everything is written in
+   the same hand) */
+@font-face {
+  font-family: "Zeyada";
+  src: url("../fonts/zeyada-latin-400-normal.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 
 /* 2. Tokens
    ========================================================================== */
@@ -65,6 +76,7 @@
 
   --font: "Instrument Sans", "Inter", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
   --font-hand: "Reenie Beanie", "Bradley Hand", "Segoe Print", cursive;
+  --font-note: "Zeyada", "Reenie Beanie", "Bradley Hand", "Segoe Print", cursive;
   --size: 1.0625rem;    /* 17px, everywhere */
   --line: 1.42;         /* lines of links stay 24px apart, easy to tap */
   --gap: 1.42em;        /* one blank line */
@@ -680,7 +692,7 @@ blockquote {
 .quote--hand {
   max-width: 30rem;
   margin-top: calc(var(--gap) * 2);
-  font-family: var(--font-hand);
+  font-family: var(--font-note);
   font-size: 1.5rem;
   line-height: 1.15;
   letter-spacing: 0;
@@ -1397,7 +1409,7 @@ div.ph {
 /* Sizes divide by --zoom so labels and lines stay the same size on screen */
 .sm__labels text {
   fill: #8c8c8c;
-  font-family: var(--font-hand);
+  font-family: var(--font-note);
   font-size: calc(30px / var(--zoom));
   letter-spacing: 0.04em;
 }
@@ -1521,7 +1533,7 @@ div.ph {
   margin: 0;
   /* clear of the marker, and of the end of a line of dots (--reach) */
   transform: translate(calc(14px + var(--reach, 0) * var(--pile-step)), -55%);
-  font-family: var(--font-hand);
+  font-family: var(--font-note);
   font-size: 1.75rem;
   line-height: 1;
   letter-spacing: 0;
@@ -1586,7 +1598,7 @@ div.ph {
 
 .sm__popup .sm__name {
   margin: 0 2rem 0 0;
-  font-family: var(--font-hand);
+  font-family: var(--font-note);
   font-weight: 400;
   font-size: 2rem;
   line-height: 1;
@@ -1842,7 +1854,7 @@ div.ph {
   left: 50%;
   max-width: 3.2em;
   color: var(--fg);
-  font-family: var(--font-hand);
+  font-family: var(--font-note);
   font-size: 1.25rem;
   line-height: 0.95;
   text-align: center;

@@ -56,7 +56,7 @@ src/
 │   ├── js/site.js         ← phone menu, dropdowns, picture popups, YouTube videos that load when played
 │   ├── js/sounds-of-map.js ← the map's markers, popup, timeline, route and zoom
 │   ├── js/travel.js       ← Travel: videos that play as you scroll (the photo popup is site.js's)
-│   ├── fonts/             ← Instrument Sans + Reenie Beanie (open-licence fonts)
+│   ├── fonts/             ← Instrument Sans, Reenie Beanie and Zeyada (open-licence fonts)
 │   └── img/               ← put your images here
 │                            Me
 ├── index.njk              ← About Me (the home page)            /
@@ -409,7 +409,8 @@ headings are the one step up in size, so long pages are easy to scan.)
 | Sub-headings and labels | text-sized, Instrument Sans Medium (500) |
 | Links | grey `#737373`; black and underlined when you point at them |
 | Current page | black (and its section, on project pages) |
-| Signature | your name in Reenie Beanie, top left |
+| Signature | your name in Reenie Beanie, top left (also the greeting, the map's title and page titles on phones) |
+| Handwritten notes | Zeyada, a lighter hand, so Reenie Beanie isn't everywhere: the names on the map (places, seas, states, the episode on its card) and handwritten quotes |
 | Placeholders | hidden from visitors; with `?placeholders`, washed-out red notes `#a85555` and grey boxes `#f2f2f2` |
 | Columns (wide screens) | index 16rem, 2rem gap, text 35rem, 2rem gap, images 15rem |
 
