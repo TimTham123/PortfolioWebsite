@@ -2351,3 +2351,70 @@ html.has-lightbox {
     animation: none;
   }
 }
+
+
+/* 12. Printing
+   --------------------------------------------------------------------------
+   Just the page: no index, menu or footer, in black, so a printed page
+   (Qualifications, say) works as a CV. Players, videos and the map are left
+   out.
+   ========================================================================== */
+
+@media print {
+  .skip-link,
+  .site-header .menu-toggle,
+  .site-nav,
+  .site-footer,
+  .pager,
+  .figures,
+  .media,
+  .sm,
+  .more > summary::after {
+    display: none !important;
+  }
+
+  .page,
+  .main {
+    display: block;
+    padding: 0;
+  }
+
+  .content,
+  .page--wide .content > :not(.wide) {
+    max-width: none;
+  }
+
+  body {
+    color: #000;
+    font-size: 11pt;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .content > h2 {
+    break-after: avoid;
+  }
+
+  tr,
+  dd,
+  li {
+    break-inside: avoid;
+  }
+
+  .page-title {
+    position: static;
+    width: auto;
+    height: auto;
+    margin: 0 0 0.5em;
+    overflow: visible;
+    clip: auto;
+    clip-path: none;
+    white-space: normal;
+    font-family: var(--font-hand);
+    font-size: 2.25rem;
+    line-height: 1;
+  }
+}

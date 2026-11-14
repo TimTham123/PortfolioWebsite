@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% if page.url != "/" %}{{ title }} &ndash; {% endif %}{{ site.name }}</title>
+  <title>{% if page.url != "/" %}{{ title }} &ndash; {{ site.name }}{% else %}{{ site.name }} &ndash; {{ site.tagline }}{% endif %}</title>
   <meta name="description" content="{{ description or site.description }}">
   {#- How the page looks when its link is shared (messages, social media):
       its title and description, and a picture of the signature. The
       addresses have to be complete, so they start with site.origin. #}
-  {%- set pageTitle %}{% if page.url != "/" %}{{ title }} – {% endif %}{{ site.name }}{% endset %}
+  {%- set pageTitle %}{% if page.url != "/" %}{{ title }} – {{ site.name }}{% else %}{{ site.name }} – {{ site.tagline }}{% endif %}{% endset %}
   {%- if page.url != "/404.html" %}
   <link rel="canonical" href="{{ site.origin }}{{ page.url | url }}">
   <meta property="og:url" content="{{ site.origin }}{{ page.url | url }}">
