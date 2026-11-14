@@ -118,6 +118,7 @@ figures:                      # pictures beside the text (optional)
   - src: media/sound-design/cyberpedia/bookworth.jpg
     alt: Bookworth, a book with glasses and a bow tie
     caption: Bookworth, your museum assistant.
+figuresLast: true             # (optional) on phones, the pictures follow the text instead of leading it, like Contact
 ---
 <h1 class="page-title">Cyberpedia</h1>
 <p class="standfirst">The grey line at the top.</p>
@@ -408,9 +409,10 @@ Still to fill in:
 - **Photos** (the grey boxes; each says what it's for, and its shape is in
   `ratio:`, such as `3/4` for portrait): a portrait (About Me), at the mixing
   desk (Contact), playing live (Music), two climbing (Climbing), two of Luna
-  (Cat), and two for Social Media Marketing (plus three Reel covers in its
-  case study, hidden with the rest of it for now). To add one, put the file
-  in `media/` and give its entry a `src:`, like the Sound Design pictures.
+  (Cat), one from the road for Sounds Of ("How it's made"), and two for Social
+  Media Marketing (plus three Reel covers in its case study, hidden with the
+  rest of it for now). To add one, put the file in `media/` and give its
+  entry a `src:`, like the Sound Design pictures.
 
 ## How it's designed
 
@@ -446,7 +448,8 @@ credit stacks up beside its year instead.
 - Each page starts with its title, handwritten, then the grey opening line.
 - The page's pictures come next, as a strip you swipe through sideways (the
   next one peeks in from the edge), instead of waiting at the bottom. They
-  all fit the same height, whatever their shape.
+  all fit the same height, whatever their shape. (On Contact they come after
+  the text, so the email is on the first screen: `figuresLast: true`.)
 - The Sounds Of map runs edge to edge, and an episode opens as a card under
   the timeline, so the map stays in view while you watch.
 - Photo popups swipe from one picture to the next.

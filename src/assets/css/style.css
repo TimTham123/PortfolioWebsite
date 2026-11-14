@@ -519,7 +519,8 @@ figcaption {
 .content ol,
 .content dl,
 .content .table-scroll,
-.content blockquote {
+.content blockquote,
+.content > .figure {
   margin-bottom: var(--gap);
 }
 
@@ -748,6 +749,19 @@ caption {
   text-align: left;
 }
 
+/* A table with its labels down the side (gear, project details): a little
+   room between rows, so a value that runs onto a second line still reads
+   as one row */
+tbody th[scope="row"],
+tbody th[scope="row"] ~ td {
+  padding-bottom: 0.3em;
+}
+
+/* A name that shouldn't break at its hyphen (NV-GS180) */
+.nowrap {
+  white-space: nowrap;
+}
+
 /* Credits (Music): year, artist, song, role. Full width; the year never
    breaks, the rest wraps. A note under a song (where it was played) is grey */
 .credits {
@@ -889,10 +903,12 @@ caption {
 }
 
 /* A wide table (the credits on Qualifications and Music) runs on into the
-   column on the right when there are no pictures in it */
+   column on the right when there are no pictures in it, or (.is-clear,
+   from site.js) when it starts below them */
 @media (min-width: 1100px) {
   .main:not(:has(> .figures)) .table-wide,
-  html:not(.show-ph) .main:not(:has(> .figures > :not(.is-ph), > .figures > .is-ph-image)) .table-wide {
+  html:not(.show-ph) .main:not(:has(> .figures > :not(.is-ph), > .figures > .is-ph-image)) .table-wide,
+  .table-wide.is-clear {
     width: calc(100% + var(--col-gap) + var(--fig-w));
   }
 }
@@ -1826,12 +1842,18 @@ div.ph {
   cursor: default;
 }
 
+/* The ends fade, so a stop or a state's name cut off at the edge fades
+   away rather than ending in half a letter, and it's clear there's more to
+   scroll; the first and last stops sit clear of the fades */
 .sm__track {
   flex: 1;
   min-width: 0;
   overflow-x: auto;
   scrollbar-width: none;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 18px, #000 calc(100% - 18px), transparent);
+  mask-image: linear-gradient(to right, transparent, #000 18px, #000 calc(100% - 18px), transparent);
 }
+
 
 .sm__track::-webkit-scrollbar {
   display: none;
@@ -1844,11 +1866,15 @@ div.ph {
   list-style: none;
 }
 
-/* Room below for the month names (two lines for a new year). The extra
-   .sm beats the general list spacing in .content */
+/* Room below for the states' names, and at the ends to sit clear of the
+   fades. As wide as its stops (or the track, if that's wider), so the
+   room at the far end scrolls into view too. The extra .sm beats the
+   general list spacing in .content */
 .sm .sm__ticks {
+  width: max-content;
+  min-width: 100%;
   margin: 0;
-  padding: 0 0 2.4rem;
+  padding: 0 16px 2.4rem;
 }
 
 /* the line: faint end to end, black up to where you are */
@@ -1976,12 +2002,6 @@ div.ph {
   .sm__timeline,
   .sm__status {
     padding: 0 var(--pad);
-  }
-
-  /* The ends of the timeline fade, so it's clear there's more to scroll */
-  .sm__track {
-    -webkit-mask-image: linear-gradient(to right, transparent, #000 8px, #000 calc(100% - 8px), transparent);
-    mask-image: linear-gradient(to right, transparent, #000 8px, #000 calc(100% - 8px), transparent);
   }
 
   .sm__popup,

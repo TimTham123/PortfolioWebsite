@@ -126,6 +126,27 @@
   window.addEventListener("resize", updateScrollBoxes);
   phone.addEventListener("change", updateScrollBoxes); // the pictures move (base.njk)
 
+  // A wide table (the credits on Music) that starts below the pictures
+  // beside it runs on into their column, which is empty by then
+  // (style.css: .is-clear).
+  var besidePictures = window.matchMedia("(min-width: 1100px)");
+  function clearTables() {
+    each(".table-wide", function (table) {
+      var main = table.closest(".main");
+      var figures = main && main.querySelector(":scope > .figures");
+      var clear = !!figures && besidePictures.matches &&
+        table.getBoundingClientRect().top > figures.getBoundingClientRect().bottom + 24;
+      table.classList.toggle("is-clear", clear);
+    });
+    updateScrollBoxes();
+  }
+  if (document.querySelector(".table-wide")) {
+    clearTables();
+    window.addEventListener("resize", clearTables);
+    window.addEventListener("load", clearTables);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(clearTables);
+  }
+
   /*
     3. Picture popups. A picture that links to a bigger version of itself
     opens it in a popup instead, closed with the × in its corner, a click
