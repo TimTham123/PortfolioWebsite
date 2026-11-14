@@ -1485,26 +1485,56 @@ div.ph {
   z-index: 1;
 }
 
-/* Stops in the same place share one marker. Where it holds more than one
-   recording it's bigger, with the number on it (Melbourne's 4); pressing it
-   again moves through them, and the card lists the others. With
-   JavaScript, sounds-of-map.js spaces the markers so that none touch at any
-   size. */
-.sm__marker.is-group .sm__dot {
-  display: grid;
-  place-items: center;
-  width: 17px;
-  height: 17px;
-  color: var(--fg);
-  font-size: 0.6875rem;
-  font-weight: 500;
-  line-height: 1;
-  font-variant-numeric: tabular-nums;
-}
-
 .sm__marker.is-current .sm__dot {
   box-shadow: 0 0 0 2px var(--bg), 0 0 0 3.5px var(--fg);
   transform: scale(1.3);
+}
+
+/* A place with more than one recording has a dot for each, in a little
+   bunch: --dx and --dy say where, in steps of --huddle (two side by side,
+   four in a square). The dots touch, so the bunch reads as one place, while
+   different places never do. The marker is the size of its bunch (and
+   never less than 26px, so it's easy to press); pressing it opens the
+   episode whose dot is nearest, and that dot stands out as you point at it
+   (sounds-of-map.js). The bunch opens up a little round the chosen
+   episode, making room for its ring. */
+.sm__markers {
+  --huddle: 11.5px;
+}
+
+.sm__marker.is-bunch {
+  width: max(26px, calc(var(--across) * var(--huddle) + 19px));
+  height: max(26px, calc(var(--down) * var(--huddle) + 19px));
+  margin: 0;
+  border-radius: 999px;
+  transform: translate(-50%, -50%);
+}
+
+.sm__marker.is-bunch.is-open {
+  --huddle: 15px; /* HUDDLE_OPEN in sounds-of-map.js */
+}
+
+.sm__marker.is-bunch .sm__dot {
+  position: absolute;
+  top: calc(50% + var(--dy) * var(--huddle));
+  left: calc(50% + var(--dx) * var(--huddle));
+  margin: -5.5px 0 0 -5.5px;
+  box-shadow: 0 0 0 1px rgba(10, 10, 10, 0.35);
+  transform: none;
+  transition: transform 0.15s ease, top 0.2s ease, left 0.2s ease;
+}
+
+.sm__marker.is-bunch .sm__dot.is-pointed {
+  z-index: 2;
+  transform: scale(1.15);
+}
+
+/* The chosen one is ringed without growing, so the ring just clears the
+   dots beside it */
+.sm__marker.is-bunch .sm__dot.is-chosen {
+  z-index: 1;
+  box-shadow: 0 0 0 2px var(--bg), 0 0 0 3.5px var(--fg);
+  transform: none;
 }
 
 /* A stop with no episode yet: an empty marker */
@@ -1890,7 +1920,8 @@ div.ph {
 
 @media (prefers-reduced-motion: reduce) {
   .sm__route-ink path,
-  .sm__ticks::after {
+  .sm__ticks::after,
+  .sm__marker.is-bunch .sm__dot {
     transition: none !important;
   }
 }

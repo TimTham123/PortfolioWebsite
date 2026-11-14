@@ -35,6 +35,21 @@ const MONTHS = ["January", "February", "March", "April", "May", "June", "July", 
 const round = (n, places = 2) => +n.toFixed(places);
 const clamp = (n, min, max) => Math.min(Math.max(n, min), max);
 
+// Where each dot goes in a bunch of `n`, in steps of the space between two
+// dots, from the middle: two side by side, four in a square, three (or five
+// or more) in a ring. Left to right and top to bottom, in the order the
+// episodes came out.
+function bunchLayout(n) {
+  if (n === 1) return [[0, 0]];
+  if (n === 2) return [[-0.5, 0], [0.5, 0]];
+  if (n === 4) return [[-0.5, -0.5], [0.5, -0.5], [-0.5, 0.5], [0.5, 0.5]];
+  const r = 1 / (2 * Math.sin(Math.PI / n));
+  return Array.from({ length: n }, (_, k) => {
+    const turn = -Math.PI / 2 + (2 * Math.PI * k) / n;
+    return [round(r * Math.cos(turn), 3), round(r * Math.sin(turn), 3)];
+  });
+}
+
 export default function () {
   const toMap = makeToMap(fit);
   const rows = readStops(fs.readFileSync(CSV, "utf8"));
@@ -83,20 +98,35 @@ export default function () {
       : [ep.name, ep.location, ep.dateLong].filter(Boolean).join(", ");
   }
 
-  // Stops in the same place (four in Melbourne, two at the Big Dance
-  // Festival…) share one marker, with the number of recordings on it; the
-  // first stop's marker is the one shown (`first`), and the timeline still
-  // has every stop. With JavaScript, sounds-of-map.js spaces the markers out
-  // for the size the map is drawn at (see "Spacing the markers" there).
-  // Without it, places close enough to touch (Melbourne and Kongwak,
-  // Bellingen and the Coffs Coast) are nudged apart here, a little at a
-  // time, staying as near their real spot as they can.
-  const MIN = 30; // map units between places (about 23px on a laptop; a marker is 11px)
+  // Stops in the same place share a marker, with a dot for each recording
+  // there, in a little bunch: two side by side (the Big Dance Festival,
+  // Darwin, Geraldton, Perth), four in a square (Melbourne), three in a
+  // triangle and more in a ring. So you can count them at a glance, and
+  // pressing a dot opens its episode. A visit with no episode yet gets no
+  // dot where the place has a recording (Mount Isa, Kalgoorlie; it's still
+  // in the timeline), and a place with no recordings at all has one empty
+  // dot (`shown` says which stops have a dot).
+  //
+  // With JavaScript, sounds-of-map.js spaces the places out for the size the
+  // map is drawn at (see "Spacing the markers" there). Without it, places
+  // close enough to touch (Melbourne and Kongwak, Bellingen and the Coffs
+  // Coast) are nudged apart here, a little at a time, staying as near their
+  // real spot as they can.
+  const MIN = 30; // map units between two single dots (about 22px on a laptop; a dot is 13px)
+  const HUDDLE = 11.5; // px between the middles of two dots in a bunch (--huddle in style.css)
+  const LAPTOP = 0.72; // px per map unit on a laptop, roughly
   const places = [];
   for (const ep of episodes) {
     const place = places.find((p) => Math.abs(p.x - ep.x) < 0.5 && Math.abs(p.y - ep.y) < 0.5);
     if (place) place.stops.push(ep);
     else places.push({ x: ep.x, y: ep.y, stops: [ep] });
+  }
+  for (const place of places) {
+    const recordings = place.stops.filter((ep) => !ep.empty);
+    place.shown = recordings.length ? recordings : place.stops.slice(0, 1);
+    place.spots = bunchLayout(place.shown.length);
+    // how much further than a single dot the bunch reaches, in map units
+    place.reach = (Math.max(...place.spots.map(([dx, dy]) => Math.hypot(dx, dy))) * HUDDLE) / LAPTOP;
   }
   for (let pass = 0; pass < 400; pass++) {
     let moved = false;
@@ -107,8 +137,9 @@ export default function () {
         const dx = b.x - a.x;
         const dy = b.y - a.y;
         const d = Math.hypot(dx, dy);
-        if (d >= MIN || d === 0) continue;
-        const push = ((MIN - d) / 2) * 0.5;
+        const need = MIN + a.reach + b.reach;
+        if (d >= need || d === 0) continue;
+        const push = ((need - d) / 2) * 0.5;
         a.x -= (dx / d) * push;
         a.y -= (dy / d) * push;
         b.x += (dx / d) * push;
@@ -119,22 +150,31 @@ export default function () {
     if (!moved) break;
   }
   for (const place of places) {
-    const recordings = place.stops.filter((ep) => !ep.empty);
+    const recordings = place.shown.filter((ep) => !ep.empty);
     const others = place.stops.length - recordings.length;
-    place.stops.forEach((ep, k) => {
+    place.stops.forEach((ep, n) => {
+      const k = place.shown.indexOf(ep);
       ep.x = place.x;
       ep.y = place.y;
-      ep.group = place.stops.length; // stops sharing this place's marker
-      ep.recordings = recordings.length; // how many of them have an episode
-      ep.first = k === 0; // the stop whose marker is shown
+      ep.first = n === 0; // the place's marker goes with its first stop
+      ep.shown = k >= 0; // whether it has a dot of its own
+      // where its dot sits in the bunch, in steps of --huddle from the middle
+      ep.dx = k >= 0 ? place.spots[k][0] : 0;
+      ep.dy = k >= 0 ? place.spots[k][1] : 0;
     });
-    // What the shared marker says to a screen reader.
+    // The place's marker: a button with a dot for each recording (or one
+    // empty dot), as wide and tall as its bunch (in steps).
+    const first = place.stops[0];
+    first.hollow = !recordings.length;
+    first.dots = place.shown.map((ep) => ({ index: ep.index, dx: ep.dx, dy: ep.dy }));
+    first.across = Math.max(...first.dots.map((d) => d.dx)) - Math.min(...first.dots.map((d) => d.dx));
+    first.down = Math.max(...first.dots.map((d) => d.dy)) - Math.min(...first.dots.map((d) => d.dy));
+    // What a marker for more than one stop says to a screen reader.
     if (place.stops.length > 1) {
-      const where = place.stops[0].location;
-      place.stops[0].groupLabel = recordings.length
-        ? `${where}: ${recordings.map((ep) => ep.name).join("; ")}` +
+      first.groupLabel = recordings.length
+        ? `${first.location}: ${recordings.map((ep) => ep.name).join("; ")}` +
           (others ? ` (and ${others === 1 ? "a visit" : `${others} visits`} with no episode yet)` : "")
-        : `${where}: ${place.stops.length} visits, no episodes yet`;
+        : `${first.location}: ${place.stops.length} visits, no episodes yet`;
     }
   }
 
@@ -195,7 +235,7 @@ export default function () {
 
   // Hand-lettered sea names, kept inside the map (sized for the biggest the
   // lettering gets, on phones).
-  const LETTER = 44 * 0.42; // average letter width, in map units
+  const LETTER = 40 * 0.45; // average letter width, in map units (40px lettering)
   const labels = [
     { text: "Indian Ocean", lat: -26.5, lng: 109.5, rotate: -90 },
     { text: "Timor Sea", lat: -11.5, lng: 125.5, rotate: -8 },

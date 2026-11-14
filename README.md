@@ -226,7 +226,7 @@ the column headings (the order doesn't matter):
 | --- | --- | --- |
 | `date` | `2026-03-01` or `1/3/2026` | day/month/year is fine. A word such as `unreleased` shows instead of a date; leave it empty if you don't know it (the stop stays where it is in the list) |
 | `name` | `Grub` | the artist. Leave it empty for a stop with no episode yet (an empty marker) |
-| `location` | `Sale, VIC` | the state at the end picks the marker colour. Stops with the same latitude and longitude share a marker |
+| `location` | `Sale, VIC` | the state at the end picks the marker colour. Stops with the same latitude and longitude share a marker (a dot each, in a bunch) |
 | `latitude` | `-38.11` | in Google Maps, right-click the place and click the numbers to copy them |
 | `longitude` | `147.07` | |
 | `youtube` | `https://www.youtube.com/watch?v=qX9Ej2ddQ5k` | the full link or just the ID |
@@ -257,18 +257,23 @@ The map puts being easy to read ahead of being exact:
   zoom, so on a small map (a phone, or zoomed right out) places near each
   other would overlap. Whenever the map's size or zoom changes,
   `assets/js/sounds-of-map.js` spreads the markers out just enough to leave
-  5px between their edges (`GAP`), each as near its real spot as it can be,
+  6px between their edges (`GAP`), each as near its real spot as it can be,
   and redraws the route to meet them. Zooming in brings them back to where
   they really are.
-- Stops with the same latitude and longitude share one marker. Where it holds
-  more than one recording it's a little bigger, with the number on it
-  (Melbourne's 4; 2 at the Big Dance Festival, Darwin, Geraldton and Perth).
-  Pressing it opens the first; pressing it again moves on to the next one
-  there, and the card lists the others recorded in the same place, each a
-  link. The timeline under the map still has every stop. A visit with no
-  episode yet in a place that has one (Mount Isa, Kalgoorlie) doesn't add to
-  the number. To keep two stops apart, give them different coordinates (the
-  three Gippsland episodes each have their own town).
+- Stops with the same latitude and longitude share one marker, with a dot
+  for each recording there, the dots touching in a little bunch: four in a
+  square in Melbourne, two side by side at the Big Dance Festival, Darwin,
+  Geraldton and Perth (three would make a triangle). So you can count them
+  at a glance, and different places never touch, so a bunch always reads as
+  one place. Pressing a bunch opens the episode whose dot is nearest the
+  pointer, and the dot you're pointing at stands out; the chosen one gets
+  its ring, and the bunch opens up a little to make room for it. From the
+  keyboard, a bunch opens its episodes in turn. The card lists the others
+  recorded in the same place, each a link, and the timeline under the map
+  still has every stop. A visit with no episode yet in a place that has one
+  (Mount Isa, Kalgoorlie) gets no dot of its own. To keep two stops apart,
+  give them different coordinates (the three Gippsland episodes each have
+  their own town).
 - Without JavaScript, places close enough to touch are nudged apart when the
   site is built (`MIN` in `src/_data/soundsOf.js`).
 - To move a place, change its latitude and longitude in the CSV.

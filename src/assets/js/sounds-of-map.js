@@ -14,7 +14,9 @@
 
   Markers never touch: whenever the map's scale changes (a smaller screen,
   or zooming), dots that would be too close are spread apart, and the route
-  is redrawn to meet them (see "Spacing the markers").
+  is redrawn to meet them (see "Spacing the markers"). Stops in the same
+  place share a marker, with a dot for each recording there, in a little
+  bunch; pressing a dot opens its episode.
 */
 (function () {
   "use strict";
@@ -33,7 +35,6 @@
   var stage = $(".sm__stage");
   var svg = $(".sm__map");
   var displacement = svg.querySelector("feDisplacementMap");
-  var markers = $$(".sm__marker");
   var ticks = $$(".sm__tick");
   var segments = $$(".sm__route-ink path");
   var faintSegments = $$(".sm__route-faint path");
@@ -99,35 +100,62 @@
   // phone, or zoomed right out) markers in places near each other would
   // touch. Whenever the scale changes they're spread out, just enough to
   // leave a GAP between any two, each staying as near its real spot as it
-  // can; zooming in brings them back. Stops in the same place share one
-  // marker (bigger when it holds more than one recording, with the number on
-  // it), and the route's legs are redrawn to meet the markers where they end
-  // up (the roads between stay put).
-  var GAP = 5; // px between the edges of two markers
+  // can; zooming in brings them back. A place with more than one recording
+  // has a bunch of dots (style.css puts each in its spot: --dx and --dy, in
+  // steps of --huddle), which opens up a little round the episode that's
+  // chosen (HUDDLE_OPEN), so there's always room left for that. The route's
+  // legs are redrawn to meet the places where they end up (the roads
+  // between stay put).
+  var GAP = 6; // px between the edges of two markers
   var RADIUS = 6.5; // px: an 11px dot and its outline (style.css)
-  var GROUP_RADIUS = 9.5; // px: the 17px dot of a place with more than one recording
+  var HUDDLE_OPEN = 15; // px between the middles of two dots in an open bunch (style.css)
 
   var scale = 0; // screen px per map unit, at the map's current size and zoom
   var places = [];
   var spots = episodes.map(function (ep, i) {
     var p = places.filter(function (q) { return Math.abs(q.tx - ep.tx) < 0.5 && Math.abs(q.ty - ep.ty) < 0.5; })[0];
-    if (!p) places.push((p = { tx: ep.tx, ty: ep.ty, stops: [], recordings: 0, x: 0, y: 0 }));
+    if (!p) places.push((p = { tx: ep.tx, ty: ep.ty, stops: [], shown: [], x: 0, y: 0 }));
     p.stops.push(i);
-    if (!ep.empty) p.recordings += 1;
+    if (ep.shown) p.shown.push(i);
     return { place: p };
   });
   places.forEach(function (p) {
-    p.r = p.recordings > 1 ? GROUP_RADIUS : RADIUS;
+    // its marker (on its first stop) and the marker's dots
+    p.marker = root.querySelector('.sm__marker[data-index="' + p.stops[0] + '"]');
+    p.dotEls = Array.prototype.slice.call(p.marker.querySelectorAll(".sm__dot"));
+    // what pressing it moves through: its recordings, or (with none) its visits
+    p.choices = p.shown.length && !episodes[p.shown[0]].empty ? p.shown : p.stops;
+    // where its dots are, in px from the place, with the bunch open
+    p.dots = p.shown.map(function (i) { return [episodes[i].dx * HUDDLE_OPEN, episodes[i].dy * HUDDLE_OPEN]; });
+    p.far = 0; // the furthest any dot is from the place
+    p.wide = 0; // ...and the furthest to either side
+    p.dots.forEach(function (d) {
+      p.far = Math.max(p.far, Math.sqrt(d[0] * d[0] + d[1] * d[1]));
+      p.wide = Math.max(p.wide, Math.abs(d[0]));
+    });
   });
 
-  // The marker shown for stop `i`: its place's first stop's.
+  // How far a place's markers reach from it in the direction (ux, uy).
+  function reach(p, ux, uy) {
+    var most = 0;
+    p.dots.forEach(function (d) { most = Math.max(most, d[0] * ux + d[1] * uy); });
+    return most + RADIUS;
+  }
+
+  // The marker for stop `i`: its place's.
   function markerOf(i) {
-    return markers[spots[i].place.stops[0]];
+    return spots[i].place.marker;
+  }
+
+  // Stop `i`'s dot (for a visit with no dot of its own, its place's first).
+  function dotEl(i) {
+    var p = spots[i].place;
+    return p.dotEls[Math.max(0, p.shown.indexOf(i))];
   }
 
   // Every place starts at its real spot (in px, at the current scale); then
-  // any two markers that are too close are pushed apart (the place with more
-  // stops moving less), over and over until none are.
+  // any two places whose markers are too close are pushed apart (the place
+  // with more stops moving less), over and over until none are.
   function spreadMarkers() {
     places.forEach(function (p) {
       p.x = p.tx * scale;
@@ -139,13 +167,14 @@
         for (var j = i + 1; j < places.length; j++) {
           var p = places[i];
           var q = places[j];
-          var need = p.r + q.r + GAP;
+          var most = p.far + q.far + 2 * RADIUS + GAP;
           var dx = q.x - p.x;
           var dy = q.y - p.y;
-          if (Math.abs(dx) > need || Math.abs(dy) > need) continue;
+          if (Math.abs(dx) > most || Math.abs(dy) > most) continue;
           var d = Math.sqrt(dx * dx + dy * dy);
-          if (d >= need) continue;
           if (d < 0.001) { dx = d = 0.001; dy = 0; } // right on top of each other: push sideways
+          var need = reach(p, dx / d, dy / d) + reach(q, -dx / d, -dy / d) + GAP;
+          if (d >= need) continue;
           var push = need - d;
           var share = q.stops.length / (p.stops.length + q.stops.length);
           p.x -= (dx / d) * push * share;
@@ -272,24 +301,24 @@
   }
 
   // The handwritten name of the place you're at goes on whichever side of
-  // its line of dots covers fewer markers, and stays on the map (on the
-  // right if it's all the same, unless that's near the right-hand edge).
+  // its line of dots covers fewer markers, and stays on the map (if it's all
+  // the same, beside the chosen dot of a bunch, or else on the right unless
+  // that's near the right-hand edge).
   function nameGoesLeft(spot) {
     var width = stage.clientWidth;
     var height = stage.clientHeight;
     var x = (spot.left / 100) * width;
     var y = (spot.top / 100) * height;
-    var gap = 14 + (spots[current].place.r - RADIUS); // as in style.css (--reach)
+    var gap = 14 + spots[current].place.wide; // as in style.css (--reach)
     var w = place.offsetWidth;
     var h = place.offsetHeight;
     function covered(left) {
       var x0 = left ? x - gap - w : x + gap;
       var y0 = y - 0.55 * h;
       var count = x0 < 0 || x0 + w > width ? 100 : 0;
-      markers.forEach(function (marker, i) {
-        if (spots[i].place === spots[current].place) return;
-        var dot = dotOf(i);
-        var at = toStage(dot.x, dot.y);
+      places.forEach(function (p) {
+        if (p === spots[current].place) return;
+        var at = toStage(p.x / scale, p.y / scale);
         var mx = (at.left / 100) * width;
         var my = (at.top / 100) * height;
         if (mx > x0 - 7 && mx < x0 + w + 7 && my > y0 - 7 && my < y0 + h + 7) count++;
@@ -298,7 +327,10 @@
     }
     var right = covered(false);
     var left = covered(true);
-    return left < right || (left === right && spot.left > 62);
+    if (left !== right) return left < right;
+    // in a bunch, beside the chosen dot
+    var side = episodes[current].shown ? episodes[current].dx : 0;
+    return side ? side < 0 : spot.left > 62;
   }
 
   function render() {
@@ -316,13 +348,13 @@
       redrawRoute();
     }
 
-    markers.forEach(function (marker, i) {
-      var dot = dotOf(i);
+    places.forEach(function (p) {
+      var dot = dotOf(p.stops[0]);
       var at = toStage(dot.x, dot.y);
-      marker.style.left = at.left + "%";
-      marker.style.top = at.top + "%";
+      p.marker.style.left = at.left + "%";
+      p.marker.style.top = at.top + "%";
       // Off-screen markers can't be tabbed to.
-      marker.style.visibility = at.left < -2 || at.left > 102 || at.top < -2 || at.top > 102 ? "hidden" : "";
+      p.marker.style.visibility = at.left < -2 || at.left > 102 || at.top < -2 || at.top > 102 ? "hidden" : "";
     });
     if (current >= 0) {
       var line = dotOf(current);
@@ -565,8 +597,8 @@
     field.video.appendChild(frame);
   }
 
-  // The other recordings in the same place (they share a marker), each a
-  // button that opens it.
+  // The other recordings in the same place (the rest of its bunch), each
+  // a button that opens it.
   function showAlso(ep) {
     var others = spots[ep.index].place.stops.filter(function (i) { return i !== ep.index && !episodes[i].empty; });
     field.also.textContent = "";
@@ -632,11 +664,14 @@
     var ep = episodes[index];
     current = index;
 
-    var shown = markerOf(index);
-    markers.forEach(function (marker) {
-      marker.classList.toggle("is-current", marker === shown);
-      if (marker === shown) marker.setAttribute("aria-current", "true");
-      else marker.removeAttribute("aria-current");
+    var here = spots[index].place;
+    var chosen = dotEl(index);
+    places.forEach(function (p) {
+      p.marker.classList.toggle("is-current", p === here);
+      p.marker.classList.toggle("is-open", p === here);
+      if (p === here) p.marker.setAttribute("aria-current", "true");
+      else p.marker.removeAttribute("aria-current");
+      p.dotEls.forEach(function (dot) { dot.classList.toggle("is-chosen", dot === chosen); });
     });
     ticks.forEach(function (tick, i) {
       tick.classList.toggle("is-current", i === index);
@@ -650,8 +685,8 @@
     keepTickInView(index);
 
     place.textContent = ep.place;
-    // Clear of the marker, which is bigger where there's more than one recording.
-    place.style.setProperty("--reach", spots[index].place.r - RADIUS + "px");
+    // Clear of the bunch, where the place has more than one recording.
+    place.style.setProperty("--reach", here.wide + "px");
     render();
     bringIntoView(ep);
 
@@ -669,13 +704,35 @@
 
   /* Events --------------------------------------------------------------- */
 
-  // A marker opens its place's first stop; pressing it again while one of
-  // that place's stops is open moves on to the next one there.
-  markers.forEach(function (marker) {
-    marker.addEventListener("click", function () {
-      var stops = spots[Number(marker.dataset.index)].place.stops;
-      var at = current >= 0 ? stops.indexOf(current) : -1;
-      select(stops[(at + 1) % stops.length]);
+  // Pressing a bunch opens the episode whose dot is nearest the pointer, and
+  // the dot you're pointing at stands out. From the keyboard (or on a marker
+  // that stands for more than one visit with no episode yet, like
+  // Adelaide's) it opens the place's first, then the next each time.
+  function nearestDot(p, x, y) {
+    var best = 0;
+    var bestDistance = Infinity;
+    p.dotEls.forEach(function (dot, k) {
+      var r = dot.getBoundingClientRect();
+      var d = Math.pow(r.left + r.width / 2 - x, 2) + Math.pow(r.top + r.height / 2 - y, 2);
+      if (d < bestDistance) { bestDistance = d; best = k; }
+    });
+    return best;
+  }
+
+  places.forEach(function (p) {
+    var bunch = p.dotEls.length > 1;
+    p.marker.addEventListener("click", function (event) {
+      if (bunch && event.detail > 0) return select(p.shown[nearestDot(p, event.clientX, event.clientY)]);
+      var at = p.choices.indexOf(current);
+      select(p.choices[(at + 1) % p.choices.length]);
+    });
+    if (!bunch) return;
+    p.marker.addEventListener("pointermove", function (event) {
+      var k = nearestDot(p, event.clientX, event.clientY);
+      p.dotEls.forEach(function (dot, j) { dot.classList.toggle("is-pointed", j === k); });
+    });
+    p.marker.addEventListener("pointerleave", function () {
+      p.dotEls.forEach(function (dot) { dot.classList.toggle("is-pointed", false); });
     });
   });
   ticks.forEach(function (tick) {

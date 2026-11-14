@@ -2,9 +2,11 @@
   The Sounds Of map: a hand-drawn Australia with a marker per episode, a
   popup with the episode's video, and a timeline underneath. The route
   between stops is drawn as a faint dotted line, and inks itself in as you
-  go. Stops with no episode yet have empty (hollow) markers; stops in the
-  same place share one marker, with the number of recordings on it. Faint lines mark the state borders,
-  and the timeline is labelled with the state where the road enters it.
+  go. Stops with no episode yet have empty (hollow) markers. Stops in the
+  same place share a marker, with a dot for each recording, in a little
+  bunch (four in a square in Melbourne). Faint lines mark the state
+  borders, and the timeline is labelled with the state where the road
+  enters it.
 
   Data: src/_data/sounds-of.csv (see src/_data/soundsOf.js).
   Behaviour: src/assets/js/sounds-of-map.js. Without JavaScript the map
@@ -52,14 +54,20 @@
       </g>
     </svg>
 
-    {#- One marker per place: stops in the same place share the first one's
-        (the others are hidden), with the number of recordings on it. #}
+    {#- A marker per place, on its first stop (the others are hidden), with
+        a dot for each recording there: where there's more than one they
+        make a little bunch (--dx and --dy: where in it, in steps of the
+        space between two dots). #}
     <ol class="sm__markers">
       {%- for ep in map.episodes %}
       <li{% if not ep.first %} hidden{% endif %}>
-        <button class="sm__marker{% if ep.recordings == 0 %} is-empty{% endif %}{% if ep.recordings > 1 %} is-group{% endif %}" type="button" data-index="{{ ep.index }}" style="left: {{ ep.left }}%; top: {{ ep.top }}%; --c: {{ ep.colour }}" aria-label="{{ (ep.groupLabel or ep.label) | escape }}">
-          <span class="sm__dot" aria-hidden="true">{% if ep.recordings > 1 %}{{ ep.recordings }}{% endif %}</span>
+        {%- if ep.first %}
+        <button class="sm__marker{% if ep.hollow %} is-empty{% endif %}{% if ep.dots.length > 1 %} is-bunch{% endif %}" type="button" data-index="{{ ep.index }}" style="left: {{ ep.left }}%; top: {{ ep.top }}%; --c: {{ ep.colour }}{% if ep.dots.length > 1 %}; --across: {{ ep.across }}; --down: {{ ep.down }}{% endif %}" aria-label="{{ (ep.groupLabel or ep.label) | escape }}">
+          {%- for dot in ep.dots %}
+          <span class="sm__dot" data-index="{{ dot.index }}"{% if ep.dots.length > 1 %} style="--dx: {{ dot.dx }}; --dy: {{ dot.dy }}"{% endif %} aria-hidden="true"></span>
+          {%- endfor %}
         </button>
+        {%- endif %}
       </li>
       {%- endfor %}
     </ol>
