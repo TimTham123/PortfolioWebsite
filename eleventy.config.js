@@ -1,6 +1,7 @@
 import { HtmlBasePlugin } from "@11ty/eleventy";
 import * as filters from "./lib/filters.js";
 import * as shortcodes from "./lib/shortcodes.js";
+import { smartQuotes } from "./lib/typography.js";
 
 export default function (eleventyConfig) {
   // Lets the site live in a sub-folder (e.g. GitHub Pages) via --pathprefix.
@@ -24,6 +25,11 @@ export default function (eleventyConfig) {
   for (const [name, fn] of Object.entries(shortcodes)) {
     eleventyConfig.addShortcode(name, fn);
   }
+
+  // Curly quotes and apostrophes in every page's text (lib/typography.js).
+  eleventyConfig.addTransform("smart-quotes", function (content) {
+    return (this.page.outputPath || "").endsWith(".html") ? smartQuotes(content) : content;
+  });
 
   return {
     dir: {

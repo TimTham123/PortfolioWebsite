@@ -11,6 +11,7 @@ import { readStops, legKey, HOME } from "../../lib/sounds-of.js";
 import { makeToMap } from "../../lib/projection.js";
 import { viewBox, fit, outline, echo } from "../../lib/australia-map.js";
 import { youtubeId, embedUrl, watchUrl } from "../../lib/youtube.js";
+import { curl } from "../../lib/typography.js";
 
 const CSV = new URL("./sounds-of.csv", import.meta.url);
 // Road routes between stops, made by `npm run routes` (scripts/fetch-routes.mjs).
@@ -60,7 +61,7 @@ export default function () {
       location: row.location,
       state,
       place,
-      description: row.description,
+      description: curl(row.description || ""), // (shown by the map's script, so curled here)
       date: when ? when.toISOString().slice(0, 10) : "",
       // A word in the date column (e.g. "unreleased") shows in place of a date.
       dateLong: when ? `${when.getUTCDate()} ${MONTHS[when.getUTCMonth()]} ${when.getUTCFullYear()}` : (row.date || "").trim(),
