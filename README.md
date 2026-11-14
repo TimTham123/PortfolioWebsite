@@ -2,13 +2,14 @@
 
 Callum Tham's portfolio. A dead-simple site: a white page, one typeface at one
 size, black and grey. The index (the nav) sits in the left column and the page
-sits beside it. What you can click is grey and where you are is black. The one
-handwritten touch is the signature at the top.
+sits beside it. What you can click is grey and where you are is black. The
+handwritten touches, like pencil notes in a notebook, are the signature at the
+top, a few titles and the labels on the Sounds Of map.
 
 It's a traditional multi-page site: every page is its own HTML file. It's built
 with [Eleventy](https://www.11ty.dev/), which assembles the pages from a shared
 layout so the navigation and footer only have to be written once. The finished
-site is plain HTML and CSS plus one small script. Its two fonts are stored in
+site is plain HTML and CSS plus a few small scripts. Its fonts are stored in
 the site itself, and it uses no CDNs or trackers, so nothing can break when an
 outside service changes or goes away.
 
@@ -56,7 +57,7 @@ src/
 │   ├── js/site.js         ← phone menu, dropdowns, picture popups, YouTube videos that load when played
 │   ├── js/sounds-of-map.js ← the map's markers, popup, timeline, route and zoom
 │   ├── js/travel.js       ← Travel: videos that play as you scroll (the photo popup is site.js's)
-│   ├── fonts/             ← Instrument Sans, Reenie Beanie and Zeyada (open-licence fonts)
+│   ├── fonts/             ← Instrument Sans, Reenie Beanie and Waiting for the Sunrise (open-licence fonts)
 │   └── img/               ← put your images here
 │                            Me
 ├── index.njk              ← About Me (the home page)            /
@@ -415,7 +416,7 @@ headings are the one step up in size, so long pages are easy to scan.)
 | Links | grey `#737373`; black and underlined when you point at them |
 | Current page | black (and its section, on project pages) |
 | Signature | your name in Reenie Beanie, top left (also the greeting, the map's title and page titles on phones) |
-| Handwritten notes | Zeyada, a lighter hand, so Reenie Beanie isn't everywhere: the names on the map (places, seas, states, the episode on its card) and handwritten quotes |
+| Handwritten notes | Waiting for the Sunrise, a rounder hand that's easier to read, so Reenie Beanie isn't everywhere: the names on the map (places, seas, states, the episode on its card) and handwritten quotes |
 | Placeholders | hidden from visitors; with `?placeholders`, washed-out red notes `#a85555` and grey boxes `#f2f2f2` |
 | Columns (wide screens) | index 16rem, 2rem gap, text 35rem, 2rem gap, images 15rem |
 

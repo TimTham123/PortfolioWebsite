@@ -3,8 +3,9 @@
    --------------------------------------------------------------------------
    Dead simple: a white page, one typeface at one size, black and grey.
    What you can click is grey; where you are is black. Hierarchy comes from
-   spacing, never from size or decoration. The one handwritten mark is the
-   signature at the top (plus small pencil-style notes on placeholders).
+   spacing, never from size or decoration. The handwriting is kept to a few
+   notebook touches: the signature, a few titles (Reenie Beanie) and notes
+   such as the labels on the Sounds Of map (Waiting for the Sunrise).
 
     1. Fonts            5. Navigation         9. Placeholders
     2. Tokens           6. Content           10. Tablet (< 1100px)
@@ -48,12 +49,12 @@
   font-display: swap;
 }
 
-/* A second hand, very like Reenie Beanie, for notes: the labels on the
-   Sounds Of map and the quote on About Me (so not everything is written in
-   the same hand) */
+/* A second hand, a lot like Reenie Beanie but rounder and easier to read,
+   for notes: the labels on the Sounds Of map and the quote on About Me (so
+   not everything is written in the same hand) */
 @font-face {
-  font-family: "Zeyada";
-  src: url("../fonts/zeyada-latin-400-normal.woff2") format("woff2");
+  font-family: "Waiting for the Sunrise";
+  src: url("../fonts/waiting-for-the-sunrise-latin-400-normal.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -76,7 +77,7 @@
 
   --font: "Instrument Sans", "Inter", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
   --font-hand: "Reenie Beanie", "Bradley Hand", "Segoe Print", cursive;
-  --font-note: "Zeyada", "Reenie Beanie", "Bradley Hand", "Segoe Print", cursive;
+  --font-note: "Waiting for the Sunrise", "Reenie Beanie", "Bradley Hand", "Segoe Print", cursive;
   --size: 1.0625rem;    /* 17px, everywhere */
   --line: 1.42;         /* lines of links stay 24px apart, easy to tap */
   --gap: 1.42em;        /* one blank line */
@@ -693,8 +694,8 @@ blockquote {
   max-width: 30rem;
   margin-top: calc(var(--gap) * 2);
   font-family: var(--font-note);
-  font-size: 1.5rem;
-  line-height: 1.15;
+  font-size: 1.375rem;
+  line-height: 1.2;
   letter-spacing: 0;
 }
 
@@ -1410,7 +1411,7 @@ div.ph {
 .sm__labels text {
   fill: #8c8c8c;
   font-family: var(--font-note);
-  font-size: calc(30px / var(--zoom));
+  font-size: calc(27px / var(--zoom));
   letter-spacing: 0.04em;
 }
 
@@ -1531,7 +1532,7 @@ div.ph {
      recording (--reach) */
   transform: translate(calc(14px + var(--reach, 0px)), -55%);
   font-family: var(--font-note);
-  font-size: 1.75rem;
+  font-size: 1.5rem;
   line-height: 1;
   letter-spacing: 0;
   white-space: nowrap;
@@ -1597,7 +1598,7 @@ div.ph {
   margin: 0 2rem 0 0;
   font-family: var(--font-note);
   font-weight: 400;
-  font-size: 2rem;
+  font-size: 1.75rem;
   line-height: 1;
   letter-spacing: 0;
 }
@@ -1874,7 +1875,7 @@ div.ph {
   max-width: 3.2em;
   color: var(--fg);
   font-family: var(--font-note);
-  font-size: 1.25rem;
+  font-size: 1.125rem;
   line-height: 0.95;
   text-align: center;
   transform: translateX(-50%);
@@ -1958,11 +1959,11 @@ div.ph {
   }
 
   .sm__labels text {
-    font-size: calc(44px / var(--zoom));
+    font-size: calc(40px / var(--zoom));
   }
 
   .sm__place {
-    font-size: 1.5rem;
+    font-size: 1.3125rem;
   }
 
   /* Just the arrows (the words stay for screen readers) */
