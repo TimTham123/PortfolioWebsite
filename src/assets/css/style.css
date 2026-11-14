@@ -1100,6 +1100,7 @@ html:not(.js) .media__frame > iframe[data-src] {
 }
 
 .media__frame > iframe,
+.media__frame > noscript > iframe,
 .media__frame > video {
   position: absolute;
   inset: 0;
