@@ -1484,25 +1484,21 @@ div.ph {
   z-index: 1;
 }
 
-/* Stops in the same place: a short line of dots, each a little up and to the
-   right of the one before, 18px apart (12.75px across and up). The step is on
-   screen, so it's the same at every zoom; each dot gets a smaller target so
-   it can be clicked on its own (the timeline has a full-size button for
-   every episode too). With JavaScript, sounds-of-map.js places every dot
-   itself, spaced so that none touch at any size. */
-.sm {
-  --pile-step: 12.75px;
-}
-
-.sm__marker.in-pile {
-  width: 18px;
-  height: 18px;
-  margin: -9px 0 0 -9px;
-  transform: translate(calc(var(--pk) * var(--pile-step)), calc(var(--pk) * var(--pile-step) * -1));
-}
-
-.sm.is-ready .sm__marker.in-pile {
-  transform: none;
+/* Stops in the same place share one marker. Where it holds more than one
+   recording it's bigger, with the number on it (Melbourne's 4); pressing it
+   again moves through them, and the card lists the others. With
+   JavaScript, sounds-of-map.js spaces the markers so that none touch at any
+   size. */
+.sm__marker.is-group .sm__dot {
+  display: grid;
+  place-items: center;
+  width: 17px;
+  height: 17px;
+  color: var(--fg);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
 }
 
 .sm__marker.is-current .sm__dot {
@@ -1531,8 +1527,9 @@ div.ph {
 .sm__place {
   position: absolute;
   margin: 0;
-  /* clear of the marker, and of the end of a line of dots (--reach) */
-  transform: translate(calc(14px + var(--reach, 0) * var(--pile-step)), -55%);
+  /* clear of the marker, which is bigger where it holds more than one
+     recording (--reach) */
+  transform: translate(calc(14px + var(--reach, 0px)), -55%);
   font-family: var(--font-note);
   font-size: 1.75rem;
   line-height: 1;
@@ -1542,7 +1539,7 @@ div.ph {
 }
 
 .sm__place.is-left {
-  transform: translate(calc(-100% - 14px - var(--reach, 0) * var(--pile-step)), -55%);
+  transform: translate(calc(-100% - 14px - var(--reach, 0px)), -55%);
 }
 
 .sm__place:empty {
@@ -1611,6 +1608,28 @@ div.ph {
 
 .sm__popup .sm__location {
   margin: 0.2em 0 0.75em;
+}
+
+/* "Also recorded here: …", the other recordings that share the marker */
+.sm__popup .sm__also {
+  margin: -0.5em 0 0.75em;
+  color: var(--muted);
+}
+
+.sm__also-link {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--fg);
+  font: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--track);
+  text-underline-offset: 0.2em;
+  cursor: pointer;
+}
+
+.sm__also-link:hover {
+  text-decoration-color: currentColor;
 }
 
 /* "No episode here yet.", on a stop with no episode */

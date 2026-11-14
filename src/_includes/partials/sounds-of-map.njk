@@ -3,7 +3,7 @@
   popup with the episode's video, and a timeline underneath. The route
   between stops is drawn as a faint dotted line, and inks itself in as you
   go. Stops with no episode yet have empty (hollow) markers; stops in the
-  same place are a short line of dots. Faint lines mark the state borders,
+  same place share one marker, with the number of recordings on it. Faint lines mark the state borders,
   and the timeline is labelled with the state where the road enters it.
 
   Data: src/_data/sounds-of.csv (see src/_data/soundsOf.js).
@@ -52,11 +52,13 @@
       </g>
     </svg>
 
+    {#- One marker per place: stops in the same place share the first one's
+        (the others are hidden), with the number of recordings on it. #}
     <ol class="sm__markers">
       {%- for ep in map.episodes %}
-      <li>
-        <button class="sm__marker{% if ep.empty %} is-empty{% endif %}{% if ep.pile > 1 %} in-pile{% endif %}" type="button" data-index="{{ ep.index }}" style="left: {{ ep.left }}%; top: {{ ep.top }}%; --c: {{ ep.colour }}{% if ep.pile > 1 %}; --pk: {{ ep.pk }}{% endif %}" aria-label="{{ ep.label | escape }}">
-          <span class="sm__dot" aria-hidden="true"></span>
+      <li{% if not ep.first %} hidden{% endif %}>
+        <button class="sm__marker{% if ep.recordings == 0 %} is-empty{% endif %}{% if ep.recordings > 1 %} is-group{% endif %}" type="button" data-index="{{ ep.index }}" style="left: {{ ep.left }}%; top: {{ ep.top }}%; --c: {{ ep.colour }}" aria-label="{{ (ep.groupLabel or ep.label) | escape }}">
+          <span class="sm__dot" aria-hidden="true">{% if ep.recordings > 1 %}{{ ep.recordings }}{% endif %}</span>
         </button>
       </li>
       {%- endfor %}
@@ -69,6 +71,7 @@
       <p class="sm__date"></p>
       <h2 class="sm__name" id="sm-popup-name" tabindex="-1"></h2>
       <p class="sm__location"></p>
+      <p class="sm__also" hidden></p>
       <p class="sm__empty">No episode here yet.</p>
       <div class="sm__video"></div>
       <p class="sm__description"></p>

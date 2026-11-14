@@ -224,9 +224,9 @@ the column headings (the order doesn't matter):
 | --- | --- | --- |
 | `date` | `2026-03-01` or `1/3/2026` | day/month/year is fine. A word such as `unreleased` shows instead of a date; leave it empty if you don't know it (the stop stays where it is in the list) |
 | `name` | `Grub` | the artist. Leave it empty for a stop with no episode yet (an empty marker) |
-| `location` | `Gippsland, VIC` | the state at the end picks the marker colour |
-| `latitude` | `-38.20` | in Google Maps, right-click the place and click the numbers to copy them |
-| `longitude` | `146.54` | |
+| `location` | `Sale, VIC` | the state at the end picks the marker colour. Stops with the same latitude and longitude share a marker |
+| `latitude` | `-38.11` | in Google Maps, right-click the place and click the numbers to copy them |
+| `longitude` | `147.07` | |
 | `youtube` | `https://www.youtube.com/watch?v=qX9Ej2ddQ5k` | the full link or just the ID |
 | `description` | `Grub is a singer-songwriter…` | a sentence or two |
 | `via` | `Hughenden -20.84 144.2` | optional: towns the road goes through on the way to this stop (name, latitude, longitude; separate several with `;`) |
@@ -254,25 +254,30 @@ The map puts being easy to read ahead of being exact:
 - No two markers ever touch. Markers stay the same size on screen at every
   zoom, so on a small map (a phone, or zoomed right out) places near each
   other would overlap. Whenever the map's size or zoom changes,
-  `assets/js/sounds-of-map.js` spreads the dots out just enough to keep them
-  18px apart, centre to centre (`SPACE`), each as near its real spot as it
-  can be, and redraws the route to meet them. Zooming in brings them back
-  to where they really are.
-- Stops with the same latitude and longitude (the four Melbourne episodes,
-  the two at the Big Dance Festival) are drawn as a short diagonal line of
-  dots, and each dot can be clicked. The drive home ends on the first
-  Melbourne dot, where the trip began.
-- Without JavaScript, the dots in a line are `--pile-step` apart (in
-  `style.css`), and places close enough to touch are nudged apart when the
+  `assets/js/sounds-of-map.js` spreads the markers out just enough to leave
+  5px between their edges (`GAP`), each as near its real spot as it can be,
+  and redraws the route to meet them. Zooming in brings them back to where
+  they really are.
+- Stops with the same latitude and longitude share one marker. Where it holds
+  more than one recording it's a little bigger, with the number on it
+  (Melbourne's 4; 2 at the Big Dance Festival, Darwin, Geraldton and Perth).
+  Pressing it opens the first; pressing it again moves on to the next one
+  there, and the card lists the others recorded in the same place, each a
+  link. The timeline under the map still has every stop. A visit with no
+  episode yet in a place that has one (Mount Isa, Kalgoorlie) doesn't add to
+  the number. To keep two stops apart, give them different coordinates (the
+  three Gippsland episodes each have their own town).
+- Without JavaScript, places close enough to touch are nudged apart when the
   site is built (`MIN` in `src/_data/soundsOf.js`).
 - To move a place, change its latitude and longitude in the CSV.
 
 The current file was built from the videos on the Sounds Of YouTube channel:
 names, dates and the first lines of each description, with approximate
-coordinates. The Big Dance Festival stop sits north of Melbourne, and Des
-Sheridan's east of Phillip Island, so neither crowds Melbourne. The
-empty stops (Brisbane, Mount Isa, Uluru, Kalgoorlie and two in Adelaide) have
-no dates yet; Uluru is placed between Alice Springs and Darwin.
+coordinates. The Big Dance Festival was near Daylesford, and the Gippsland
+episodes are in their own towns: Des Sheridan in Kongwak, Trey in Lakes
+Entrance and Grub in Sale. The empty stops (Brisbane, Mount Isa, Uluru,
+Kalgoorlie and two in Adelaide) have no dates yet; Uluru is placed between
+Alice Springs and Darwin.
 
 The episode list under the map is made from the same file, so it always
 matches. The outline of Australia is generated from Natural Earth's public

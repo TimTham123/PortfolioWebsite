@@ -84,14 +84,13 @@ export default function () {
   }
 
   // Stops in the same place (four in Melbourne, two at the Big Dance
-  // Festival…) are drawn as a short line of dots, each a little up and to
-  // the right of the one before, and each can be clicked. With JavaScript,
-  // sounds-of-map.js spaces every dot out for the size the map is drawn at
-  // (see "Spacing the markers" there). Without it, the line's spacing is in
-  // style.css (--pile-step), and places that are close enough to touch
-  // (Melbourne and Gippsland, Bellingen and the Coffs Coast) are nudged
-  // apart here, a little at a time, staying as near their real spot as they
-  // can.
+  // Festival…) share one marker, with the number of recordings on it; the
+  // first stop's marker is the one shown (`first`), and the timeline still
+  // has every stop. With JavaScript, sounds-of-map.js spaces the markers out
+  // for the size the map is drawn at (see "Spacing the markers" there).
+  // Without it, places close enough to touch (Melbourne and Kongwak,
+  // Bellingen and the Coffs Coast) are nudged apart here, a little at a
+  // time, staying as near their real spot as they can.
   const MIN = 30; // map units between places (about 23px on a laptop; a marker is 11px)
   const places = [];
   for (const ep of episodes) {
@@ -120,13 +119,23 @@ export default function () {
     if (!moved) break;
   }
   for (const place of places) {
+    const recordings = place.stops.filter((ep) => !ep.empty);
+    const others = place.stops.length - recordings.length;
     place.stops.forEach((ep, k) => {
       ep.x = place.x;
       ep.y = place.y;
-      ep.pile = place.stops.length;
-      // where it sits in its pile: 0 in the middle, -1.5 … 1.5 for a pile of four
-      ep.pk = k - (place.stops.length - 1) / 2;
+      ep.group = place.stops.length; // stops sharing this place's marker
+      ep.recordings = recordings.length; // how many of them have an episode
+      ep.first = k === 0; // the stop whose marker is shown
     });
+    // What the shared marker says to a screen reader.
+    if (place.stops.length > 1) {
+      const where = place.stops[0].location;
+      place.stops[0].groupLabel = recordings.length
+        ? `${where}: ${recordings.map((ep) => ep.name).join("; ")}` +
+          (others ? ` (and ${others === 1 ? "a visit" : `${others} visits`} with no episode yet)` : "")
+        : `${where}: ${place.stops.length} visits, no episodes yet`;
+    }
   }
 
   // Positions as percentages of the map, for the marker buttons.

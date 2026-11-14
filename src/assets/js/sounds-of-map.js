@@ -53,6 +53,7 @@
     date: $(".sm__date"),
     name: $(".sm__name"),
     location: $(".sm__location"),
+    also: $(".sm__also"),
     empty: $(".sm__empty"),
     video: $(".sm__video"),
     description: $(".sm__description"),
@@ -95,33 +96,38 @@
   /* Spacing the markers -------------------------------------------------- */
 
   // Markers stay the same size on screen at every zoom, so on a small map (a
-  // phone, or zoomed right out) dots in places near each other would touch.
-  // Whenever the scale changes they're spread out, just enough that no two
-  // dots are closer than SPACE, centre to centre, each staying as near its
-  // real spot as it can; zooming in brings them back. Stops in the same place
-  // are a short line of dots, SPACE apart, each up and to the right of the
-  // one before. The route's legs are redrawn to meet the dots where they end
+  // phone, or zoomed right out) markers in places near each other would
+  // touch. Whenever the scale changes they're spread out, just enough to
+  // leave a GAP between any two, each staying as near its real spot as it
+  // can; zooming in brings them back. Stops in the same place share one
+  // marker (bigger when it holds more than one recording, with the number on
+  // it), and the route's legs are redrawn to meet the markers where they end
   // up (the roads between stay put).
-  var SPACE = 18; // px: an 11px dot and its outline, a clear gap, and room for the chosen one's ring
-  var STEP = SPACE / Math.SQRT2; // across and up, from one dot in a line to the next
-  root.style.setProperty("--pile-step", STEP + "px"); // so the place's name clears its line (style.css)
+  var GAP = 5; // px between the edges of two markers
+  var RADIUS = 6.5; // px: an 11px dot and its outline (style.css)
+  var GROUP_RADIUS = 9.5; // px: the 17px dot of a place with more than one recording
 
   var scale = 0; // screen px per map unit, at the map's current size and zoom
   var places = [];
-  var spots = episodes.map(function (ep) {
+  var spots = episodes.map(function (ep, i) {
     var p = places.filter(function (q) { return Math.abs(q.tx - ep.tx) < 0.5 && Math.abs(q.ty - ep.ty) < 0.5; })[0];
-    if (!p) places.push((p = { tx: ep.tx, ty: ep.ty, size: 0, x: 0, y: 0 }));
-    return { place: p, k: p.size++ };
+    if (!p) places.push((p = { tx: ep.tx, ty: ep.ty, stops: [], recordings: 0, x: 0, y: 0 }));
+    p.stops.push(i);
+    if (!ep.empty) p.recordings += 1;
+    return { place: p };
+  });
+  places.forEach(function (p) {
+    p.r = p.recordings > 1 ? GROUP_RADIUS : RADIUS;
   });
 
-  // How far along its place's line dot `k` is, from the line's middle.
-  function along(p, k) {
-    return (k - (p.size - 1) / 2) * STEP;
+  // The marker shown for stop `i`: its place's first stop's.
+  function markerOf(i) {
+    return markers[spots[i].place.stops[0]];
   }
 
   // Every place starts at its real spot (in px, at the current scale); then
-  // any two dots that are too close are pushed apart (the place with more
-  // dots moving less), over and over until none are.
+  // any two markers that are too close are pushed apart (the place with more
+  // stops moving less), over and over until none are.
   function spreadMarkers() {
     places.forEach(function (p) {
       p.x = p.tx * scale;
@@ -133,43 +139,29 @@
         for (var j = i + 1; j < places.length; j++) {
           var p = places[i];
           var q = places[j];
-          var reach = ((p.size + q.size) / 2) * SPACE;
-          if (Math.abs(q.x - p.x) > reach || Math.abs(q.y - p.y) > reach) continue;
-          for (var a = 0; a < p.size; a++) {
-            for (var b = 0; b < q.size; b++) {
-              var ta = along(p, a);
-              var tb = along(q, b);
-              var dx = q.x + tb - (p.x + ta);
-              var dy = q.y - tb - (p.y - ta);
-              var d = Math.sqrt(dx * dx + dy * dy);
-              if (d >= SPACE) continue;
-              if (d < 0.001) { dx = d = 0.001; dy = 0; } // right on top of each other: push sideways
-              var push = SPACE - d;
-              var share = q.size / (p.size + q.size);
-              p.x -= (dx / d) * push * share;
-              p.y -= (dy / d) * push * share;
-              q.x += (dx / d) * push * (1 - share);
-              q.y += (dy / d) * push * (1 - share);
-              worst = Math.max(worst, push);
-            }
-          }
+          var need = p.r + q.r + GAP;
+          var dx = q.x - p.x;
+          var dy = q.y - p.y;
+          if (Math.abs(dx) > need || Math.abs(dy) > need) continue;
+          var d = Math.sqrt(dx * dx + dy * dy);
+          if (d >= need) continue;
+          if (d < 0.001) { dx = d = 0.001; dy = 0; } // right on top of each other: push sideways
+          var push = need - d;
+          var share = q.stops.length / (p.stops.length + q.stops.length);
+          p.x -= (dx / d) * push * share;
+          p.y -= (dy / d) * push * share;
+          q.x += (dx / d) * push * (1 - share);
+          q.y += (dy / d) * push * (1 - share);
+          worst = Math.max(worst, push);
         }
       }
       if (worst < 0.05) break;
     }
   }
 
-  // Where stop `i`'s dot is, in map units (until the map has a size, where
-  // the page put its marker).
+  // Where stop `i`'s marker is, in map units (until the map has a size,
+  // where the page put it).
   function dotOf(i) {
-    if (!scale) return { x: episodes[i].x, y: episodes[i].y };
-    var spot = spots[i];
-    var t = along(spot.place, spot.k);
-    return { x: (spot.place.x + t) / scale, y: (spot.place.y - t) / scale };
-  }
-
-  // The middle of stop `i`'s line of dots, in map units.
-  function lineOf(i) {
     if (!scale) return { x: episodes[i].x, y: episodes[i].y };
     var p = spots[i].place;
     return { x: p.x / scale, y: p.y / scale };
@@ -287,7 +279,7 @@
     var height = stage.clientHeight;
     var x = (spot.left / 100) * width;
     var y = (spot.top / 100) * height;
-    var gap = 14 + ((spots[current].place.size - 1) / 2) * STEP; // as in style.css
+    var gap = 14 + (spots[current].place.r - RADIUS); // as in style.css (--reach)
     var w = place.offsetWidth;
     var h = place.offsetHeight;
     function covered(left) {
@@ -333,7 +325,7 @@
       marker.style.visibility = at.left < -2 || at.left > 102 || at.top < -2 || at.top > 102 ? "hidden" : "";
     });
     if (current >= 0) {
-      var line = lineOf(current);
+      var line = dotOf(current);
       var spot = toStage(line.x, line.y);
       place.style.left = spot.left + "%";
       place.style.top = spot.top + "%";
@@ -573,11 +565,34 @@
     field.video.appendChild(frame);
   }
 
+  // The other recordings in the same place (they share a marker), each a
+  // button that opens it.
+  function showAlso(ep) {
+    var others = spots[ep.index].place.stops.filter(function (i) { return i !== ep.index && !episodes[i].empty; });
+    field.also.textContent = "";
+    field.also.hidden = !others.length;
+    if (!others.length) return;
+    field.also.appendChild(document.createTextNode("Also recorded here: "));
+    others.forEach(function (i, k) {
+      var button = document.createElement("button");
+      button.type = "button";
+      button.className = "sm__also-link";
+      button.textContent = episodes[i].name;
+      button.addEventListener("click", function () {
+        select(i);
+        field.name.focus();
+      });
+      field.also.appendChild(button);
+      if (k < others.length - 1) field.also.appendChild(document.createTextNode(k === others.length - 2 ? " and " : ", "));
+    });
+  }
+
   function openPopup(ep) {
     field.date.textContent = ep.dateLong;
     field.date.hidden = !ep.dateLong;
     field.name.textContent = ep.title;
     field.location.textContent = ep.location;
+    showAlso(ep);
     field.empty.hidden = !ep.empty;
     field.description.textContent = ep.description || "";
     field.description.hidden = !ep.description;
@@ -617,9 +632,10 @@
     var ep = episodes[index];
     current = index;
 
-    markers.forEach(function (marker, i) {
-      marker.classList.toggle("is-current", i === index);
-      if (i === index) marker.setAttribute("aria-current", "true");
+    var shown = markerOf(index);
+    markers.forEach(function (marker) {
+      marker.classList.toggle("is-current", marker === shown);
+      if (marker === shown) marker.setAttribute("aria-current", "true");
       else marker.removeAttribute("aria-current");
     });
     ticks.forEach(function (tick, i) {
@@ -634,8 +650,8 @@
     keepTickInView(index);
 
     place.textContent = ep.place;
-    // Past the end of its line of dots (--pile-step apart, across and up).
-    place.style.setProperty("--reach", (spots[index].place.size - 1) / 2);
+    // Clear of the marker, which is bigger where there's more than one recording.
+    place.style.setProperty("--reach", spots[index].place.r - RADIUS + "px");
     render();
     bringIntoView(ep);
 
@@ -653,9 +669,18 @@
 
   /* Events --------------------------------------------------------------- */
 
-  markers.concat(ticks).forEach(function (button) {
-    button.addEventListener("click", function () {
-      select(Number(button.dataset.index));
+  // A marker opens its place's first stop; pressing it again while one of
+  // that place's stops is open moves on to the next one there.
+  markers.forEach(function (marker) {
+    marker.addEventListener("click", function () {
+      var stops = spots[Number(marker.dataset.index)].place.stops;
+      var at = current >= 0 ? stops.indexOf(current) : -1;
+      select(stops[(at + 1) % stops.length]);
+    });
+  });
+  ticks.forEach(function (tick) {
+    tick.addEventListener("click", function () {
+      select(Number(tick.dataset.index));
     });
   });
 
@@ -664,7 +689,7 @@
 
   $(".sm__close").addEventListener("click", function () {
     closePopup();
-    if (current >= 0) markers[current].focus();
+    if (current >= 0) markerOf(current).focus();
   });
 
   // A click on the map itself (not a marker or the popup, and not the end of
@@ -679,7 +704,7 @@
     if (event.key === "Escape") {
       var inPopup = popup.contains(document.activeElement);
       closePopup();
-      if (inPopup && current >= 0) markers[current].focus();
+      if (inPopup && current >= 0) markerOf(current).focus();
     } else if (event.key === "ArrowRight" || event.key === "ArrowLeft") {
       event.preventDefault();
       step(event.key === "ArrowRight" ? 1 : -1);
