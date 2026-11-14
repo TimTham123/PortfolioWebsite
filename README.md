@@ -430,8 +430,8 @@ headings are the one step up in size, so long pages are easy to scan.)
 | Links | grey `#737373`; black and underlined when you point at them |
 | Current page | black (and its section, on project pages) |
 | Signature | your name in Reenie Beanie, top left (also the greeting, the map's title and page titles on phones) |
-| Handwritten notes | Waiting for the Sunrise, a rounder hand that's easier to read, so Reenie Beanie isn't everywhere: the names on the map (places, seas, states, the episode on its card) and handwritten quotes |
-| Placeholders | hidden from visitors; with `?placeholders`, washed-out red notes `#a85555` and grey boxes `#f2f2f2` |
+| Handwritten notes | Waiting for the Sunrise, a rounder hand that's easier to read, so Reenie Beanie isn't everywhere: the names on the map (places, seas, states, the episode on its card), handwritten quotes, and "photo to come" on photos still to come |
+| Placeholders | photos still to come: grey boxes `#f2f2f2` for everyone; the rest hidden from visitors (with `?placeholders`, washed-out red notes `#a85555`) |
 | Columns (wide screens) | index 16rem, 2rem gap, text 35rem, 2rem gap, images 15rem |
 
 **Responsive.** Wide screens (1100px and up) get index | text | images.
