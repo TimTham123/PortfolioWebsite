@@ -622,6 +622,13 @@ a:hover {
   }
 }
 
+@media (max-width: 379.98px) {
+  .projects > li {
+    grid-template-columns: 5rem minmax(0, 1fr);
+    gap: 0.85rem;
+  }
+}
+
 /* About Me's greeting, handwritten, as the page's title */
 .content .greeting {
   margin: -0.1em 0 0.35em;
