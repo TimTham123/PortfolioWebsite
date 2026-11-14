@@ -16,7 +16,8 @@ figures:
     the lines about it are a placeholder, so visitors don't see them. #}
 {%- if site.email %}
 <p>For work, collaborations or just to say hello, email is best. I usually reply within a couple of days.</p>
-<p><b>Email:</b> <a href="mailto:{{ site.email }}">{{ site.email }}</a><br>
+{#- (written as character codes, so spam bots don't pick it up: see lib/filters.js) #}
+<p><b>Email:</b> <a href="mailto:{{ site.email | entities | safe }}">{{ site.email | entities | safe }}</a><br>
 <b>Based in:</b> Melbourne, Australia, and happy to work remotely</p>
 {%- else %}
 <!-- PLACEHOLDER: add your email address to src/_data/site.json -->

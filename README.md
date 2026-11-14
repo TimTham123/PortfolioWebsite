@@ -95,7 +95,8 @@ Edit `src/_data/site.json`:
 
 - `name`: the handwritten signature at the top of every page, and the browser
   tab.
-- `email`: used on the Contact page.
+- `email`: shown on the Contact page (written into the page as character
+  codes, so it works the same for visitors but simple spam bots miss it).
 
 ### Pages
 
@@ -387,9 +388,8 @@ its comment, and it appears for everyone.
 
 Still to fill in:
 
-- **Contact:** your email address (`"email"` in `src/_data/site.json`; until
-  it's set, Contact leads with Instagram, TikTok and YouTube), and links to
-  LinkedIn, Bandcamp and itch.io if you want them.
+- **Contact:** the photo, and links to LinkedIn, Bandcamp and itch.io if you
+  want them.
 - **Social Media Marketing:** the intro, what you do, a client case study,
   results and tools. Only the Sounds Of channels show for now.
 - **Feedra Prototype:** your role, a sentence on what you did, the team and
