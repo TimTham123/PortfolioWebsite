@@ -42,6 +42,7 @@ src/
 ├── _data/
 │   ├── site.json          ← your name, email, placeholder markers
 │   ├── navigation.json    ← the index (sections, pages, dropdown items)
+│   ├── redirects.json     ← old addresses of pages that have moved (see Pages)
 │   ├── sounds-of.csv      ← every Sounds Of stop on the road (drives the map)
 │   ├── sounds-of-routes.json ← the roads between stops (npm run routes)
 │   ├── soundsOf.js        ← places the stops and roads on the map
@@ -74,14 +75,15 @@ src/
 │   ├── alchemeow.njk                                           /sound-design/alchemeow/
 │   ├── cyberpedia.njk                                          /sound-design/cyberpedia/
 │   ├── okiro.njk                                               /sound-design/okiro/
-│   ├── a-little-bit-of-gore.njk                                /sound-design/a-little-bit-of-gore/
+│   ├── little-bit-of-gore.njk                                  /sound-design/little-bit-of-gore/
 │   ├── hubworld.njk                                            /sound-design/hubworld/
 │   └── feedra.njk         ← Feedra Prototype                   /sound-design/feedra/
 ├── social-media-marketing.njk                                  /social-media-marketing/
 │
 ├── qualifications.njk     ← Qualifications and Additional Credits  /qualifications/
 ├── contact.njk                                                 /contact/
-└── 404.njk                ← "Not Found" page
+├── 404.njk                ← "Not Found" page
+└── redirects.njk          ← sends old addresses on to the new ones (src/_data/redirects.json)
 lib/                       ← media components, filters, CSV reader, map outline and projection,
                              and sounds-of.js (reads the trip from the CSV; where it ends)
 media/travel/              ← the Travel photos and videos
@@ -137,6 +139,13 @@ page on phones. It's always there for screen readers and search engines.
 size: `<h1 class="greeting">`. Sounds
 Of's, "Sounds Of Australia", is handwritten and centred over the map at
 every size: `<h1 class="sm-heading wide">`.)
+
+A page's address comes from its file's name, so renaming the file moves
+the page, and old links to it (in a CV or an email, say) would stop
+working. To keep them working, add the old and new addresses to
+`src/_data/redirects.json`: the old one then sends visitors straight on
+to the new one. Little Bit of Gore moved like this, from
+`/sound-design/a-little-bit-of-gore/`.
 
 ### The index (navigation)
 
@@ -403,8 +412,8 @@ Still to fill in:
   want them.
 - **Social Media Marketing:** the intro, what you do, a client case study,
   results and tools. Only the Sounds Of channels show for now.
-- **Feedra Prototype:** your role, a sentence on what you did, the team and
-  the tools.
+- **Feedra Prototype:** who you made it with (if anyone), the tools, and
+  how long it took.
 - **Music and Qualifications:** the Operation Karma EP's title; a CV PDF.
 - **Photos** (the grey boxes; each says what it's for, and its shape is in
   `ratio:`, such as `3/4` for portrait): a portrait (About Me), at the mixing
