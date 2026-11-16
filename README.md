@@ -251,7 +251,7 @@ the column headings (the order doesn't matter):
 | `title` | `On 4ZZZ` | for a stop along the way: what its card is called (otherwise the place's name) |
 | `links` | `Photos (Instagram) \| https://…` | for a stop along the way: links on its card, as text \| address; separate several with `;` |
 | `audio` | `/assets/audio/interview.mp3` | for a stop along the way: a sound file on its card (put the file in `src/assets/audio/`); several, separated by `;`, show as parts 1, 2… |
-| `photo` | `media/sounds-of/uluru.jpg` | for a stop along the way: a photo on its card, from `media/`; or `to come` for a grey box until there is one |
+| `photo` | `media/sounds-of/uluru.jpg` | for a stop along the way: a photo on its card, from `media/`; or `to come` for a grey box until there is one; or a short `.mp4` video in `src/assets/video/` (with a `…-poster.jpg` picture beside it), like Ballina's |
 
 **Hollow markers** are the stops that aren't part of the series: interviews,
 visits and the like ("along the way": Ballina, Brisbane's 4ZZZ interview,
@@ -429,23 +429,16 @@ Still to fill in:
 
 - **Contact:** the photo, and links to LinkedIn, Bandcamp and itch.io if you
   want them.
-- **Music:** the secret under Boogie with You ("can you keep a secret?"):
-  the next album's cover and the demos ("photo to come" and "demos to come"
-  show in their place for now).
-- **Feedra Prototype:** the links to download the prototype and to the full
-  documentation (hidden from visitors until they're in).
-- **Sounds Of:** the two parts of the 4ZZZ interview (hidden until they're
-  in).
-- **Ongoing Works:** the sample song from a Trashpanda project (hidden from
+- **Feedra Prototype:** the link to download the prototype (hidden from
   visitors until it's in).
 - **Qualifications:** the Operation Karma EP's title.
 - **Photos** (the grey boxes; each says what it's for, and its shape is in
-  `ratio:`, such as `3/4` for portrait): at the mixing desk (Contact), playing live (Music), two climbing (Climbing), two of Luna
-  (Cat), one from the road for Sounds Of ("How it's made"), Ballina and
-  Uluru (on the map's cards: their `photo` in the CSV), the Trashpanda team
-  at ACMI (Alchemeow), and two for Social Media Production. To add one, put
-  the file in `media/` and give its entry a `src:`, like the Sound Design
-  pictures.
+  `ratio:`, such as `3/4` for portrait): at the mixing desk (Contact), Uluru
+  (on the map's card: its `photo` in the CSV), and two for Social Media
+  Production. To add one, put the file in `media/` and give its entry a
+  `src:`, like the Sound Design pictures. Strip a phone photo's location
+  before it goes in (the build doesn't copy it into the resized pictures,
+  but the original in `media/` is in the repository).
 
 ## How it's designed
 

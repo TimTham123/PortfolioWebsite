@@ -3,7 +3,6 @@ layout: layouts/base.njk
 title: Ongoing Works
 description: "What I'm working on now: Corpo Chess with Trashpanda Studio, and more Cyberpedia."
 updated: 2026-11-16
-placeholder: true
 ---
 <h1 class="page-title">Ongoing Works</h1>
 <p class="standfirst">What I'm working on now, on the side.</p>
@@ -18,11 +17,6 @@ placeholder: true
 <p class="standfirst">2026&ndash; &middot; Bitcrush</p>
 <p>More of <a href="/sound-design/cyberpedia/">Cyberpedia</a>: development carries on from the demo.</p>
 
-{#- Hidden from visitors until the song is in: put it in src/assets/audio/,
-    add its src, and take away the <div class="ph"> around it. -#}
-<!-- PLACEHOLDER: the sample song -->
-<div class="ph">
-  <h2>A sample</h2>
-  <p>A quick sample demo from a Trashpanda project:</p>
-  {% audio { title: "Sample demo", caption: "Trashpanda Studio" } %}
-</div>
+<h2>A sample</h2>
+<p>A quick sample demo from a Trashpanda project:</p>
+{% audio { src: "/assets/audio/trashpanda-demo.mp3", title: "Sample demo", caption: "Trashpanda Studio" } %}

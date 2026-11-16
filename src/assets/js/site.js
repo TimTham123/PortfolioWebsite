@@ -330,9 +330,9 @@
 
   /*
     6. The secret (Music): "can you keep a secret?", yes or no. No, and it
-    goes away; yes opens a popup with the next album's cover and a few
-    demos, closed with its ×, a click around it, or Escape. Without
-    JavaScript none of it shows.
+    thanks you for your honesty instead; yes opens a popup with the next
+    album's cover and a few demos, closed with its ×, a click around it, or
+    Escape. Without JavaScript none of it shows.
   */
   var secret = document.querySelector(".secret");
   var secretBox = document.querySelector(".secret-box");
@@ -340,7 +340,10 @@
     var yes = secret.querySelector('[data-secret="yes"]');
     secret.hidden = false;
     secret.querySelector('[data-secret="no"]').addEventListener("click", function () {
-      secret.hidden = true;
+      var thanks = document.createElement("p");
+      thanks.textContent = "thanks for your honesty!";
+      secret.textContent = "";
+      secret.appendChild(thanks);
     });
     yes.addEventListener("click", function () {
       secretBox.showModal();

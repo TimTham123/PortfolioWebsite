@@ -1306,6 +1306,25 @@ html:not(.js) .media__frame > iframe[data-src] {
   background: #fff;
 }
 
+/* A tall picture in the text that needn't be as wide as the text (also on
+   the wide pages, whose text otherwise keeps to the reading width) */
+.content .narrow,
+.page--wide .content > .narrow {
+  max-width: 24rem;
+}
+
+/* A player beside the text, in place of a picture (Music's Instagram
+   video): the width its player is made for */
+.figures > .media {
+  width: 240px;
+  max-width: 100%;
+  margin-bottom: 0;
+}
+
+.figures > .media .media__frame {
+  background: #fff;
+}
+
 /* An app, pictured on a phone (Climbing): the screen with rounded corners,
    linking to the app itself */
 .app-shot {
@@ -1940,8 +1959,26 @@ div.ph {
   display: none;
 }
 
+/* ...unless there's more than one (part 1, part 2) */
+.sm__extra:has(.audio + .audio) .audio figcaption {
+  display: block;
+  font-size: 0.875rem;
+}
+
 .sm__extra .figure {
   margin-bottom: 0.75em;
+}
+
+/* A short clip on a card (Ballina): upright, so not too tall */
+.sm__clip {
+  margin: 0 0 0.75em;
+}
+
+.sm__clip video {
+  display: block;
+  max-width: 100%;
+  max-height: 340px;
+  background: var(--faint);
 }
 
 .content .sm__extra ul {
@@ -2746,6 +2783,11 @@ html.has-lightbox {
   .figures > .figure {
     flex: 0 0 auto;
     width: min(78%, calc(var(--strip-h) * var(--ratio, 1.333)));
+    scroll-snap-align: start;
+  }
+
+  .figures > .media {
+    flex: 0 0 auto;
     scroll-snap-align: start;
   }
 

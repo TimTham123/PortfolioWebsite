@@ -3,16 +3,18 @@ layout: layouts/project.njk
 title: Music
 description: My own music as Callum Tam, my band Melonade, and production and mixing for other artists.
 updated: 2026-11-16
-placeholder: true
 figures:
-  - alt: "Live photo: playing on stage"
-    caption: "(live at [venue])"
-    ratio: "3/4"
+  # Melonade live, on Instagram (a player, not a picture: see base.njk)
+  - embed:
+      src: "https://www.instagram.com/tv/CdnIgHfJZII/embed/"
+      title: "Melonade live (Instagram player)"
+      caption: "Live with Melonade."
+      height: 392
 ---
 <h1 class="page-title">Music</h1>
 <p class="standfirst">My first love.</p>
 
-{% embed { src: "https://bandcamp.com/EmbeddedPlayer/album=2556234505/size=large/bgcol=ffffff/linkcol=333333/tracklist=false/artwork=small/transparent=true/", title: "Heed My Advice (Live), by The Goddamn Darlings (Bandcamp player)", height: 120 } %}
+{% embed { src: "https://bandcamp.com/EmbeddedPlayer/album=2556234505/size=large/bgcol=ffffff/linkcol=333333/tracklist=false/artwork=small/transparent=true/", title: "Heed My Advice (Live), by The Goddamn Darlings (Bandcamp player)", caption: "My proudest mix.", height: 120 } %}
 
 <p>I write, record and produce my own music as Callum Tam, creating folktronica.</p>
 
@@ -69,21 +71,20 @@ figures:
 {% embed { src: "https://open.spotify.com/embed/track/30wD52sZxKJog6qLMUGl7X", title: "Boogie with You, by Melonade (Spotify player)", height: 152 } %}
 
 {#- A secret under Boogie with You: "can you keep a secret?", yes or no.
-    No, and it goes away; yes opens a popup with the next album's cover and
+    No, and it says thanks for your honesty; yes opens a popup with the next album's cover and
     a few demos (site.js, "The secret"). Without JavaScript it isn't shown.
-    The cover and the demos are still to come: put the cover in media/ and
-    give the {% image %} its src, and put the demos in src/assets/audio/
-    and swap the "demos to come" line for an {% audio %} each. -#}
-<div class="secret" hidden>
+    The cover is in media/music/, the demos in src/assets/audio/. -#}
+<div class="secret" hidden aria-live="polite">
   <p>can you keep a secret?</p>
   <p><button type="button" data-secret="yes">yes</button> <span aria-hidden="true">/</span> <button type="button" data-secret="no">no</button></p>
 </div>
 <dialog class="secret-box" aria-labelledby="secret-title">
   <button class="secret-box__close" type="button"><span class="visually-hidden">Close</span><span aria-hidden="true">&times;</span></button>
-  {% image { alt: "The cover of my next album (a mock-up)", ratio: "1/1", zoom: false } %}
+  {% image { src: "media/music/next-album-cover.jpg", alt: "A mock-up of my next album's cover: a face half in shadow, hand to cheek, among swirls of dark ink", zoom: false, sizes: "22rem" } %}
   <p id="secret-title">I'm currently working on my next album. Here are a few demos so far:</p>
-  <!-- PLACEHOLDER: the demos -->
-  <p class="secret-box__soon">demos to come</p>
+  {% audio { src: "/assets/audio/demo-through-the-white-gates.mp3", title: "Through the White Gates", caption: "demo" } %}
+  {% audio { src: "/assets/audio/demo-dont-run-away.mp3", title: "Don't Run Away", caption: "demo" } %}
+  {% audio { src: "/assets/audio/demo-the-blue.mp3", title: "The Blue", caption: "demo" } %}
 </dialog>
 
 <h2>Select credits</h2>

@@ -21,17 +21,34 @@ share:
 {#- The map comes first, as big as the window allows. #}
 {% include "partials/sounds-of-map.njk" %}
 
-<p class="standfirst">A travelling live-music video series documenting emerging Australian artists.</p>
-
 <h2>About the series</h2>
 <p>Sounds Of took a portable recording rig on the road to film emerging Australian artists playing live in the places that shaped them: lounge rooms, community halls, beaches and back sheds.</p>
 <p>Every video is a single take, minimal edits, all on the go.</p>
 <p>I produced, filmed, recorded and mixed each episode, and managed the series' YouTube and social channels.</p>
 
+<h2>In the media</h2>
+{#- Also on the map, on the hollow markers (src/_data/sounds-of.csv) #}
+<h3>ABC North West Queensland</h3>
+<p>In Mount Isa, I was interviewed about the series on ABC North West Queensland's breakfast program (<a href="https://www.facebook.com/photo/?fbid=1638156014979713&amp;set=a.408194731309187">photo from the interview</a>).</p>
+{% audio { src: "/assets/audio/abc-north-west-queensland-interview.mp3", title: "Radio interview", caption: "ABC North West Queensland, Mount Isa" } %}
+
+<h3>Kalgoorlie Miner</h3>
+<p>Toby Cann from the Kalgoorlie Miner came along to my session with Yaz + The Universe in Kalgoorlie.</p>
+{% embed { src: "https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Freel%2F1647629713627632%2F&show_text=false&width=560", title: "The Kalgoorlie Miner's reel (Facebook player)", caption: "The Kalgoorlie Miner's reel, on <a href=\"https://www.facebook.com/reel/1647629713627632/\">Facebook</a>.", ratio: "16/9" } %}
+
+<h3>4ZZZ</h3>
+<p>In Brisbane, I talked about the series with Quentin Ellison on 4ZZZ, the city's community radio station (<a href="https://www.instagram.com/p/DXySbzoEhBm/">more photos from the interview</a>).</p>
+<div class="narrow">
+  {% image { src: "media/sounds-of/quentin-ellison-4zzz.jpg", alt: "Me with Quentin Ellison at 4ZZZ, in front of the station's wall of painted Zs", caption: "With Quentin Ellison at 4ZZZ.", sizes: "(max-width: 759.98px) 100vw, 20rem" } %}
+</div>
+{% audio { src: "/assets/audio/4zzz-interview-part-1.mp3", title: "Radio interview, part 1", caption: "4ZZZ, Brisbane" } %}
+{% audio { src: "/assets/audio/4zzz-interview-part-2.mp3", title: "Radio interview, part 2", caption: "4ZZZ, Brisbane" } %}
+
 <h2>How it's made</h2>
 <p>Everything fits in one car: two BMPCC 4Ks, a camcorder, a bag of microphones, a portable interface and a laptop. Songs were captured as multitracks on location, then mixed back through headphones using Reaper.</p>
-{#- PLACEHOLDER: a photo from the road. Put it in media/ (say media/sounds-of/) and add its src #}
-{% image { alt: "Behind the scenes: the cameras and microphones set up for an episode", caption: "Setting up for an episode.", ratio: "3/2" } %}
+<div class="narrow">
+  {% image { src: "media/sounds-of/filming-alexia-parenzee.jpg", alt: "Behind the camera at Alexia Parenzee's session: the band playing in a studio, and on the camera's screen in front", caption: "Filming Alexia Parenzee's session.", sizes: "(max-width: 759.98px) 100vw, 24rem" } %}
+</div>
 <div class="table-scroll">
   <table class="gear">
     <caption class="visually-hidden">Gear</caption>
@@ -47,23 +64,6 @@ share:
     </tbody>
   </table>
 </div>
-
-<h2>In the media</h2>
-{#- Also on the map, on the hollow markers (src/_data/sounds-of.csv) #}
-<h3>ABC North West Queensland</h3>
-<p>In Mount Isa, I was interviewed about the series on ABC North West Queensland's breakfast program (<a href="https://www.facebook.com/photo/?fbid=1638156014979713&amp;set=a.408194731309187">photo from the interview</a>).</p>
-{% audio { src: "/assets/audio/abc-north-west-queensland-interview.mp3", title: "Radio interview", caption: "ABC North West Queensland, Mount Isa" } %}
-
-<h3>Kalgoorlie Miner</h3>
-<p>Toby Cann from the Kalgoorlie Miner came along to my session with Yaz + The Universe in Kalgoorlie. <a href="https://www.facebook.com/reel/1647629713627632/">Watch the Kalgoorlie Miner's reel</a> (Facebook).</p>
-
-<h3>4ZZZ</h3>
-<p>In Brisbane, I talked about the series with Quentin Ellison on 4ZZZ, the city's community radio station (<a href="https://www.instagram.com/p/DXySbzoEhBm/">photos from the interview</a>).</p>
-{#- PLACEHOLDER: the interview's two parts. Put them in src/assets/audio/
-    and add their src (and to the 4ZZZ stop's audio column in
-    src/_data/sounds-of.csv). Hidden from visitors until then. #}
-{% audio { title: "Radio interview, part 1", caption: "4ZZZ, Brisbane" } %}
-{% audio { title: "Radio interview, part 2", caption: "4ZZZ, Brisbane" } %}
 
 <h2>Watch &amp; follow</h2>
 <p>Every episode is on <a href="https://www.youtube.com/@soundsofchannel">YouTube</a>, with clips on <a href="https://www.instagram.com/soundsof.aus/">Instagram</a> and <a href="https://www.tiktok.com/@soundsof.aus">TikTok</a>.</p>
