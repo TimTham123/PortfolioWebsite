@@ -2,7 +2,7 @@
 layout: layouts/project.njk
 title: Okiro
 description: Sound design, music and Unreal Engine implementation for OKIRO, a 3D puzzle adventure out on Steam.
-updated: 2026-11-15
+updated: 2026-11-16
 figures:
   - src: media/sound-design/okiro/mechanical-arm.jpg
     alt: "Lulu, a small black fluffy sprite in a red spotted mushroom cap, on a metal walkway as a giant mechanical hand with a red eye reaches down towards her"
@@ -24,47 +24,45 @@ figures:
     caption: "One week of commits."
 ---
 <h1 class="page-title">Okiro</h1>
-<p class="standfirst">Sound design, music &amp; implementation &middot; 2024 &middot; on Steam</p>
+<p class="standfirst">Sound design, implementation &amp; music &middot; 2024</p>
 
 <p>OKIRO is a 3D puzzle adventure set in a world swallowed by toxic fog. You play Lulu, a little plant sprite, exploring the ruins of a factory and collecting energy stones to grow seeds that clean the air. It came out on Steam in October 2024.</p>
-<p>Fellow RMIT sound designer Nick and I did all of its audio, splitting the music, sound design and implementation between us. Our idea was to make Lulu sound like the one soft, living thing in a world of machines. I wrote the music for the indoor areas, and designed and implemented much of the sound in Unreal Engine with Blueprints.</p>
+<p>Fellow RMIT sound designer Nicholas Duncan and I did all of its audio, splitting the sound design, implementation and music between us. Our idea was to make Lulu sound like the one soft, living thing in a world of machines. I designed and implemented the majority of the sound in Unreal Engine with Blueprints, and wrote the main theme.</p>
 
 {% video { youtube: "rfTi4LxGYUo", title: "Okiro audio showcase", caption: "Audio showcase: OKIRO's sound and music in the game." } %}
 
 <h2>What I did</h2>
 <ul class="points">
-  <li>Music: the theme for the indoor areas, in the same key as Nick's outdoor theme</li>
-  <li>Sound design: Lulu's movement and abilities, boxes, vans, moving platforms, pipes, fans, bells, a ship, and plants drying out and coming back to life</li>
+  <li>Sound design: the majority of it, including Lulu's movement and abilities, boxes, vans, moving platforms, pipes, fans, bells, a ship, and plants drying out and coming back to life</li>
   <li>Implementation in Unreal Engine 4.27: Blueprints, sound cues, attenuation, concurrency and audio volumes</li>
   <li>Sound for the opening and closing cutscenes</li>
+  <li>Music: the main theme, with the same motifs and key as Nick's outdoor theme</li>
 </ul>
 
 <h2>Sound</h2>
 <p>Lulu was the hardest sound to get right. The developers didn't want her to have a voice, so after trying little grunts, then my cat's meows, her jump became a band-pass filter swept over noise: cartoony, but not a voice. Her steps and landings are foley from a soft toy about her size.</p>
 <p>Most of the rest I recorded around the house: a milk crate dragged across concrete for the boxes, a mechanical clock for the clocks, and finger chimes, layered, pitched and washed in modulated reverb, for the magic bells. A library recording of a snake's hiss turned out to be the most convincing burn from the hot pipes.</p>
 
-{% soundcloud { track: "1800623653", title: "Okiro indoor theme (draft)", caption: "The indoor theme, an early draft." } %}
 {% soundcloud { track: "1800618343", title: "Okiro bell", caption: "The magic bell: layered finger chimes." } %}
 {% soundcloud { track: "1814930325", title: "Okiro hover van engine", caption: "The hovering van's engine loop." } %}
+{% soundcloud { track: "1800623653", title: "Okiro theme (draft)", caption: "An early draft of my theme." } %}
 
 <h2>Implementation</h2>
-<p>Getting all of that to behave took most of my time. Working in the developers' Blueprints, I:</p>
+<p>Getting all of that to behave took most of my time. Working in Unreal's Blueprints, in a version before MetaSounds, I:</p>
 <ul class="points">
   <li>synced sounds to animation frames, and gave Lulu's landings a different sound for each surface (wood, metal grate, cardboard, milk crate and more) by checking the physics material under her as she lands</li>
   <li>hooked sounds onto the developers' timelines, so vans rev up as they set off and moving platforms only hum while they're moving</li>
   <li>used child Blueprints so each kind of box has its own push sound, fading with distance</li>
   <li>added audio volumes so the reverb and ambience change between indoors and out</li>
   <li>stopped sounds doubling up with concurrency rules and do-once gates</li>
+  <li>and more</li>
 </ul>
 
 {% video { youtube: "hyFF5IgKoWw", title: "Okiro Blueprint breakdown", caption: "A short tour of some of the Blueprints behind the sound." } %}
 {% video { youtube: "zpJihLQnGNk", title: "Okiro demo run-through", caption: "A run through the game late in development." } %}
 
 <h2>Behind the scenes</h2>
-<div class="media-grid">
-  {% video { youtube: "NwFI9bfstCA", title: "Okiro Reaper session breakdown", caption: "How I made some of the sound effects, in Reaper." } %}
-  {% video { youtube: "jFsKeBc8OC8", title: "Okiro Blueprints, uncut", caption: "Every Blueprint, uncut (an hour and a half)." } %}
-</div>
+{% video { youtube: "jFsKeBc8OC8", title: "Okiro Blueprints, uncut", caption: "Every Blueprint, uncut (an hour and a half). Sorry, the audio in this one is quiet." } %}
 
 <h2>Project details</h2>
 <div class="table-scroll">
@@ -75,7 +73,7 @@ figures:
       <tr><th scope="row">Audio</th><td>Unreal's own audio system: sound cues, attenuation, concurrency, audio volumes</td></tr>
       <tr><th scope="row">DAW</th><td>Reaper</td></tr>
       <tr><th scope="row">Version control</th><td>SVN</td></tr>
-      <tr><th scope="row">Team</th><td>Ziya Gao, Songya Xu, Zhenxi Zhang and Tina Yao (development); Nick and me (audio)</td></tr>
+      <tr><th scope="row">Team</th><td>Ziya Gao, Songya Xu, Zhenxi Zhang and Tina Yao (development); Nicholas Duncan and me (audio)</td></tr>
       <tr><th scope="row">Timeframe</th><td>One semester at RMIT, March to June 2024</td></tr>
       <tr><th scope="row">Released</th><td>October 2024, on Steam (PC)</td></tr>
     </tbody>

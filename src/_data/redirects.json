@@ -3,5 +3,10 @@
     "from": "/sound-design/a-little-bit-of-gore/",
     "to": "/sound-design/little-bit-of-gore/",
     "title": "Little Bit of Gore"
+  },
+  {
+    "from": "/social-media-marketing/",
+    "to": "/social-media-production/",
+    "title": "Social Media Production"
   }
 ]

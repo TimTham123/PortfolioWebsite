@@ -58,7 +58,8 @@ src/
 │   ├── js/site.js         ← phone menu, dropdowns, picture popups, YouTube videos that load when played
 │   ├── js/sounds-of-map.js ← the map's markers, popup, timeline, route and zoom
 │   ├── js/travel.js       ← Travel: videos that play as you scroll (the photo popup is site.js's)
-│   ├── fonts/             ← Instrument Sans, Reenie Beanie and Waiting for the Sunrise (open-licence fonts)
+│   ├── fonts/             ← Figtree, Nunito, Reenie Beanie and Waiting for the Sunrise (open-licence fonts)
+│   ├── audio/             ← sound files used as they are (the ABC interview on Sounds Of)
 │   └── img/               ← put your images here
 │                            Me
 ├── index.njk              ← About Me (the home page)            /
@@ -78,7 +79,8 @@ src/
 │   ├── little-bit-of-gore.njk                                  /sound-design/little-bit-of-gore/
 │   ├── hubworld.njk                                            /sound-design/hubworld/
 │   └── feedra.njk         ← Feedra Prototype                   /sound-design/feedra/
-├── social-media-marketing.njk                                  /social-media-marketing/
+├── social-media-production.njk                                 /social-media-production/
+├── ongoing-works.njk      ← what you're working on now          /ongoing-works/
 │
 ├── qualifications.njk     ← Qualifications and Additional Credits  /qualifications/
 ├── contact.njk                                                 /contact/
@@ -88,6 +90,7 @@ lib/                       ← media components, filters, CSV reader, map outlin
                              and sounds-of.js (reads the trip from the CSV; where it ends)
 media/travel/              ← the Travel photos and videos
 media/sound-design/        ← pictures for the Sound Design pages, one folder per project
+media/climbing/            ← the training app, pictured on Climbing
 ```
 
 ## Everyday edits
@@ -145,7 +148,8 @@ the page, and old links to it (in a CV or an email, say) would stop
 working. To keep them working, add the old and new addresses to
 `src/_data/redirects.json`: the old one then sends visitors straight on
 to the new one. Little Bit of Gore moved like this, from
-`/sound-design/a-little-bit-of-gore/`.
+`/sound-design/a-little-bit-of-gore/`, and Social Media Production from
+`/social-media-marketing/`.
 
 ### The index (navigation)
 
@@ -200,7 +204,9 @@ placeholder becomes the real thing and nothing else on the page moves.
   videos stay quick. If a video's picture is a poor one, add
   `thumb: "maxres1"` (or `"maxres2"`, `"maxres3"`) for a frame from a quarter,
   half or three quarters of the way through; for a video with no big picture
-  (it shows as a small grey box), use `thumb: "sddefault"`.
+  (it shows as a small grey box), use `thumb: "sddefault"`. To start a video
+  part of the way in, add `start:` in seconds (Feedra's live showcase has
+  `start: 156`, 2:36).
 - **SoundCloud**: `track` is the number in the track's embed code
   (`…/tracks/1800618249`); a private track also needs its `secret`, the `s-…`
   part of its private link.
@@ -234,14 +240,27 @@ the column headings (the order doesn't matter):
 
 | Column | Example | Notes |
 | --- | --- | --- |
-| `date` | `2026-03-01` or `1/3/2026` | day/month/year is fine. A word such as `unreleased` shows instead of a date; leave it empty if you don't know it (the stop stays where it is in the list) |
-| `name` | `Grub` | the artist. Leave it empty for a stop with no episode yet (an empty marker) |
+| `date` | `2026-03-01` or `1/3/2026` | day/month/year is fine. A word such as `unreleased` or `coming soon`, or just a year (`2026`), shows instead of a date; leave it empty if you don't know it (the stop stays where it is in the list) |
+| `name` | `Grub` | the artist. Leave it empty for a stop that isn't an episode, like an interview or a visit ("along the way"). An artist with no video yet is an episode still to come ("coming soon"). Both have hollow markers |
 | `location` | `Sale, VIC` | the state at the end picks the marker colour. Stops with the same latitude and longitude share a marker (a dot each, in a bunch) |
 | `latitude` | `-38.11` | in Google Maps, right-click the place and click the numbers to copy them |
 | `longitude` | `147.07` | |
 | `youtube` | `https://www.youtube.com/watch?v=qX9Ej2ddQ5k` | the full link or just the ID |
 | `description` | `Grub is a singer-songwriter…` | a sentence or two |
 | `via` | `Hughenden -20.84 144.2` | optional: towns the road goes through on the way to this stop (name, latitude, longitude; separate several with `;`) |
+| `title` | `On 4ZZZ` | for a stop along the way: what its card is called (otherwise the place's name) |
+| `links` | `Photos (Instagram) \| https://…` | for a stop along the way: links on its card, as text \| address; separate several with `;` |
+| `audio` | `/assets/audio/interview.mp3` | for a stop along the way: a sound file on its card (put the file in `src/assets/audio/`) |
+| `photo` | `media/sounds-of/uluru.jpg` | for a stop along the way: a photo on its card, from `media/`; or `to come` for a grey box until there is one |
+
+**Hollow markers** are the stops that aren't part of the series: interviews,
+visits and the like ("along the way": Ballina, Brisbane's 4ZZZ interview,
+Mount Isa's ABC interview and Faby's video, Uluru, the Kalgoorlie Miner),
+and episodes still to come (Dieter and Peggy Jane, in Adelaide). They stay
+hollow, even in a bunch beside episodes, so they never look like episodes.
+Each one's card shows its `description`, then its sound, photo and links.
+When an episode still to come is out, add its `youtube` link and `date`,
+and its marker fills in.
 
 Stops are sorted by date, and that order is the route. A stop with no date
 stays where it is in the list, straight after the row above it. After the
@@ -267,23 +286,22 @@ The map puts being easy to read ahead of being exact:
   zoom, so on a small map (a phone, or zoomed right out) places near each
   other would overlap. Whenever the map's size or zoom changes,
   `assets/js/sounds-of-map.js` spreads the markers out just enough to leave
-  6px between their edges (`GAP`), each as near its real spot as it can be,
-  and redraws the route to meet them. Zooming in brings them back to where
-  they really are.
+  12px between the edges of two dots (`GAP`: 25px from middle to middle, so
+  every marker is a 24px target of its own, easy to tap), each as near its
+  real spot as it can be, and redraws the route to meet them. Zooming in
+  brings them back to where they really are.
 - Stops with the same latitude and longitude share one marker, with a dot
-  for each recording there, the dots touching in a little bunch: four in a
-  square in Melbourne, two side by side at the Big Dance Festival, Darwin,
-  Geraldton and Perth (three would make a triangle). So you can count them
-  at a glance, and different places never touch, so a bunch always reads as
-  one place. Pressing a bunch opens the episode whose dot is nearest the
-  pointer, and the dot you're pointing at stands out; the chosen one gets
-  its ring, and the bunch opens up a little to make room for it. From the
-  keyboard, a bunch opens its episodes in turn. The card lists the others
-  recorded in the same place, each a link, and the timeline under the map
-  still has every stop. A visit with no episode yet in a place that has one
-  (Mount Isa, Kalgoorlie) gets no dot of its own. To keep two stops apart,
-  give them different coordinates (the three Gippsland episodes each have
-  their own town).
+  for each stop there, the dots touching in a little bunch: four in a square
+  in Melbourne, three in a triangle at the Big Dance Festival and Mount Isa,
+  two side by side in Darwin, Geraldton, Perth, Kalgoorlie and Adelaide. So
+  you can count them at a glance, and different places never touch, so a
+  bunch always reads as one place. Pressing a bunch opens the stop whose dot
+  is nearest the pointer, and the dot you're pointing at stands out; the
+  chosen one gets its ring, and the bunch opens up a little to make room for
+  it. From the keyboard, a bunch opens its stops in turn. The card lists the
+  others in the same place, each a link, and the timeline under the map has
+  every stop. To keep two stops apart, give them different coordinates (the
+  three Gippsland episodes each have their own town).
 - Without JavaScript, places close enough to touch are nudged apart when the
   site is built (`MIN` in `src/_data/soundsOf.js`).
 - To move a place, change its latitude and longitude in the CSV.
@@ -292,9 +310,10 @@ The current file was built from the videos on the Sounds Of YouTube channel:
 names, dates and the first lines of each description, with approximate
 coordinates. The Big Dance Festival was near Daylesford, and the Gippsland
 episodes are in their own towns: Des Sheridan in Kongwak, Trey in Lakes
-Entrance and Grub in Sale. The empty stops (Brisbane, Mount Isa, Uluru,
-Kalgoorlie and two in Adelaide) have no dates yet; Uluru is placed between
-Alice Springs and Darwin.
+Entrance and Grub in Sale. The stops along the way have no dates; Ballina
+sits between the Coffs Coast and Brisbane, and Uluru between Alice Springs
+and Darwin. OnlyWithYou, also from the Big Dance, has `2026` for its date
+until its release date is in.
 
 The episode list under the map is made from the same file, so it always
 matches. The outline of Australia is generated from Natural Earth's public
@@ -410,18 +429,25 @@ Still to fill in:
 
 - **Contact:** the photo, and links to LinkedIn, Bandcamp and itch.io if you
   want them.
-- **Social Media Marketing:** the intro, what you do, a client case study,
-  results and tools. Only the Sounds Of channels show for now.
-- **Feedra Prototype:** who you made it with (if anyone), the tools, and
-  how long it took.
+- **Music:** the secret under Boogie with You ("can you keep a secret?"):
+  the next album's cover and the demos. It's hidden from visitors until
+  they're in.
+- **Ongoing Works:** the sample song from a Trashpanda project (hidden from
+  visitors until it's in).
+- **Feedra Prototype:** the sentence about the live game at the showcase
+  (it was cut off).
+- **Sounds Of:** OnlyWithYou's release date (it says 2026 for now).
+- **Qualifications:** the year of the Christmas celebrations at St Paul's,
+  Kealba, and the years you've done Wes Coeur's social media.
 - **Music and Qualifications:** the Operation Karma EP's title; a CV PDF.
 - **Photos** (the grey boxes; each says what it's for, and its shape is in
   `ratio:`, such as `3/4` for portrait): a portrait (About Me), at the mixing
   desk (Contact), playing live (Music), two climbing (Climbing), two of Luna
-  (Cat), one from the road for Sounds Of ("How it's made"), and two for Social
-  Media Marketing (plus three Reel covers in its case study, hidden with the
-  rest of it for now). To add one, put the file in `media/` and give its
-  entry a `src:`, like the Sound Design pictures.
+  (Cat), one from the road for Sounds Of ("How it's made"), Ballina and
+  Uluru (on the map's cards: their `photo` in the CSV), the Trashpanda team
+  at ACMI (Alchemeow), and two for Social Media Production. To add one, put
+  the file in `media/` and give its entry a `src:`, like the Sound Design
+  pictures.
 
 ## How it's designed
 
@@ -432,15 +458,16 @@ headings are the one step up in size, so long pages are easy to scan.)
 
 | | |
 | --- | --- |
-| Page | white |
-| Text | `#0a0a0a`, Instrument Sans, 17px on a 1.42 line, everywhere |
-| Section headings | 20px Instrument Sans Medium (500), a faint `#e4e4e4` line above |
-| Sub-headings and labels | text-sized, Instrument Sans Medium (500) |
+| Page | off-white `#fafafa` |
+| Text | `#0a0a0a`, Figtree, 17px on a 1.42 line, everywhere |
+| Index (the menu down the side) | Nunito, 15px, all lower case, 24px apart |
+| Section headings | 20px Figtree Medium (500), a faint `#e4e4e4` line above |
+| Sub-headings and labels | text-sized, Figtree Medium (500) |
 | Links | grey `#737373`; black and underlined when you point at them |
 | Current page | black (and its section, on project pages) |
 | Signature | your name in Reenie Beanie, top left (also the greeting, the map's title and page titles on phones) |
 | Handwritten notes | Waiting for the Sunrise, a rounder hand that's easier to read, so Reenie Beanie isn't everywhere: the names on the map (places, seas, states, the episode on its card), handwritten quotes, and "photo to come" on photos still to come |
-| Placeholders | photos still to come: grey boxes `#f2f2f2` for everyone; the rest hidden from visitors (with `?placeholders`, washed-out red notes `#a85555`) |
+| Placeholders | photos still to come: grey boxes `#f0f0f0` for everyone; the rest hidden from visitors (with `?placeholders`, washed-out red notes `#a85555`) |
 | Columns (wide screens) | index 16rem, 2rem gap, text 35rem, 2rem gap, images 15rem |
 
 **Responsive.** Wide screens (1100px and up) get index | text | images.

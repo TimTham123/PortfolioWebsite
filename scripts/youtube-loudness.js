@@ -15,16 +15,16 @@
 // video volume".
 (async () => {
   const site = "https://timtham123.github.io/PortfolioWebsite";
-  // Every video on the site when this was written (14 November 2026). Any
+  // Every video on the site when this was written (16 November 2026). Any
   // added since are found by reading the pages, if youtube.com allows it.
   const known = {
     "/sound-design/alchemeow/": ["BoqlfDL6nE4", "W4_7UcXP5Rg", "MP__TdD27Bg", "PwZ0O2aWIKA", "ezrB8ZG0ZxE", "KdkcZYDK_nk", "UntehcP54to", "4HSnTX_pgqA"],
     "/sound-design/cyberpedia/": ["sNgPT3m4pEo", "kUfHofRGstI", "rsAPzWTGN-I", "wuKtNwq_lL4", "0Ui_v2Cev7Y", "0MPxDL-id9s"],
-    "/sound-design/okiro/": ["rfTi4LxGYUo", "hyFF5IgKoWw", "zpJihLQnGNk", "NwFI9bfstCA", "jFsKeBc8OC8"],
-    "/sound-design/little-bit-of-gore/": ["EI_Ai8QRa8k", "6uZszkqPYvs", "XlGIT1-iayo", "vKw8gzmcEpI", "FhD7wP9znoA", "TlowvgaDqh4", "j0sC2IQvA4M"],
-    "/sound-design/hubworld/": ["o6zwMPDenAY", "n3-l2fnHx1c", "Gj9WLMUlhGM"],
-    "/sound-design/feedra/": ["u5PyVFrtbTo", "xR68Hf3g1fY", "vN-01wupS9s", "Yqd6STmF5hA"],
-    "/sounds-of/": ["OVTzG_S-WMo", "rHyBoVq-kCU", "dxMHPN0y4lQ", "hB0pCNFPIFw", "uYBy12z4WNM", "es-UXDPu6hs", "dy01EN56-s4", "jONU3c6GPHY", "qX9Ej2ddQ5k", "Wfg3ZxkV6Hc", "hTbrGV3Heq0", "UPYs_OT2IpA", "izGJl2ZPyqQ", "9F95-GvSdY4", "VFv-ZBRBjqI", "MGMN3CtRCEY", "i3GO281rztI", "QzYO_udcP4U", "mC7RkgoCmzM", "5nvnmgdgNNc", "JuoxNbSyEG0", "4Pf_9VMmegg", "8cxANvi9kIs", "C5psRgS8Wwc", "1sZrKHjwMrg", "nuOVLLn99I4", "xBT1mNdv1gE", "Zb1tGLKwVgk", "oXrMM0spPq4", "0MOiFMUs7As", "fSYB1D8eYLk", "j-IBitzROZc", "3DbKiVNvU6E", "9KJpviqSW8Q", "zmlKCE9fz6A"],
+    "/sound-design/okiro/": ["rfTi4LxGYUo", "hyFF5IgKoWw", "zpJihLQnGNk", "jFsKeBc8OC8"],
+    "/sound-design/little-bit-of-gore/": ["CkiWhODcvgU", "6uZszkqPYvs", "EI_Ai8QRa8k", "vKw8gzmcEpI", "FhD7wP9znoA", "j0sC2IQvA4M"],
+    "/sound-design/hubworld/": ["o6zwMPDenAY", "n3-l2fnHx1c"],
+    "/sound-design/feedra/": ["u5PyVFrtbTo", "xR68Hf3g1fY", "vN-01wupS9s", "tLJQhvQUyLU"],
+    "/sounds-of/": ["OVTzG_S-WMo", "rHyBoVq-kCU", "dxMHPN0y4lQ", "hB0pCNFPIFw", "uYBy12z4WNM", "es-UXDPu6hs", "dy01EN56-s4", "zcFbdtW_B9o", "jONU3c6GPHY", "qX9Ej2ddQ5k", "Wfg3ZxkV6Hc", "hTbrGV3Heq0", "UPYs_OT2IpA", "izGJl2ZPyqQ", "9F95-GvSdY4", "VFv-ZBRBjqI", "MGMN3CtRCEY", "i3GO281rztI", "QzYO_udcP4U", "mC7RkgoCmzM", "5nvnmgdgNNc", "JuoxNbSyEG0", "4Pf_9VMmegg", "8cxANvi9kIs", "C5psRgS8Wwc", "1sZrKHjwMrg", "nuOVLLn99I4", "xBT1mNdv1gE", "Zb1tGLKwVgk", "oXrMM0spPq4", "0MOiFMUs7As", "fSYB1D8eYLk", "j-IBitzROZc", "3DbKiVNvU6E", "9KJpviqSW8Q", "zmlKCE9fz6A", "ZZlFzoHA88g"],
   };
   const videos = new Map(); // id -> the page it's on
   for (const [page, ids] of Object.entries(known)) ids.forEach((id) => videos.set(id, page));

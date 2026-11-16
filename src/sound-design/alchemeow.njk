@@ -1,8 +1,8 @@
 ---
 layout: layouts/project.njk
 title: Alchemeow
-description: Sound design, music and Unity/FMOD audio programming for Alchemeow, a physics-based co-op game by Trashpanda Studio.
-updated: 2026-11-13
+description: "Sound lead on Alchemeow, a physics-based co-op game by Trashpanda Studio: sound design, Unity/FMOD audio programming and music."
+updated: 2026-11-16
 figures:
   - src: media/sound-design/alchemeow/cauldron.jpg
     alt: "A bubbling green cauldron on a cluttered wooden workbench, seen from above"
@@ -10,9 +10,6 @@ figures:
   - src: media/sound-design/alchemeow/three-pillars.jpg
     alt: "Three potion bottles labelled Magical Whimsy, Experimental Teamwork and Chaotic Playfulness"
     caption: "The brief: the game's three pillars."
-  - src: media/sound-design/alchemeow/knife-foley.jpg
-    alt: "Me holding up a cleaver and a wooden chopping board"
-    caption: "Recording the knife."
   - src: media/sound-design/alchemeow/mortar-faces.jpg
     alt: "Sketches of a mortar with a cat's face, in idle, neutral, shocked and tickled moods"
     caption: "Concept art for the mortar, which reacts to what you put in it."
@@ -25,21 +22,19 @@ figures:
   - src: media/sound-design/alchemeow/credits.jpg
     alt: "Alchemeow's credits screen, listing the six people in Trashpanda Studio"
     caption: "The credits. (Screenshot: Trashpanda Studio)"
+  # PLACEHOLDER: put the photo in media/sound-design/alchemeow/ and add its src
+  - alt: "The Trashpanda team at the ACMI indie games showcase"
+    caption: "With the Trashpanda team at the ACMI indie games showcase."
+    ratio: "3/2"
 ---
 <h1 class="page-title">Alchemeow</h1>
-<p class="standfirst">Sound design lead &amp; composer &middot; 2024 &middot; Trashpanda Studio</p>
+<p class="standfirst">Sound lead &middot; 2024 &middot; Trashpanda Studio</p>
 
 <p>Alchemeow is a physics-based couch co-op game from Trashpanda Studio. Two players are two cats, each controlling one paw, brewing potions together from hints. Each player is also cursed so they can't touch certain things, so you have to help each other out.</p>
-<p>I was the sound design lead and composer: I wrote the music, designed the sound, and wrote the Unity scripts and FMOD events that make it all respond to the physics.</p>
+<p>As sound lead, I designed the sound, wrote the Unity scripts and FMOD events that make it all respond to the physics, and wrote the music.</p>
+<p>The game lives on its players talking to each other, so the sound's job was to support that, not compete with it: clear cues for progress and failure, and enough atmosphere to draw you in, without ever getting in the way of the conversation.</p>
 
 {% video { youtube: "BoqlfDL6nE4", title: "Alchemeow full playthrough", caption: "A full playthrough, with the final sound and music." } %}
-
-<h2>Music</h2>
-<p>The team gave me three pillars (magical whimsy, experimental teamwork and chaotic playfulness) and a pile of references. After a few demos (the first was "too toybox-y"), I wrote an intro theme and three five-minute tracks for the game: Comfort, Jubilance and Wonder. They build slowly, so nothing jumps out at you mid-potion, and after playtesting I pulled back the drums and left more space in the melodies so they don't fight the sound effects. In FMOD, the music moves from the splash screen into the game in time with the beat.</p>
-
-{% soundcloud { track: "1926277814", secret: "s-2U44e3ZUvMv", title: "Alchemeow: Comfort", caption: "Comfort." } %}
-{% soundcloud { track: "1926277433", secret: "s-osMECe7C4Qg", title: "Alchemeow: Jubilance", caption: "Jubilance." } %}
-{% soundcloud { track: "1926277409", secret: "s-1ooah7pqqAV", title: "Alchemeow: Wonder", caption: "Wonder." } %}
 
 <h2>Sound and scripting</h2>
 <p>Everything in the room can be grabbed, dropped, thrown, crushed or sliced, so rather than wiring sounds up one at a time, I wrote general-purpose scripts in Unity (C#):</p>
@@ -49,15 +44,21 @@ figures:
   <li><b>Dialogue:</b> Animal Crossing-style babble, a random syllable for each letter as the text types out.</li>
   <li><b>Menus:</b> hover and click sounds (with a controller too), volume sliders, and a splash screen I animated and scored, which you can skip with a smooth transition.</li>
 </ul>
-<p>With those in place, giving each new ingredient its sounds was just a matter of dropping them in: bones, crystals, popping stars, flaming dragon scales, fish, roots, books, jars, and a slime ball whose whirr came from a failed experiment (measuring the force on its springs) that turned out funnier than what I was going for. The knife is a cleaver on my own chopping board.</p>
 
 <div class="media-grid">
   {% video { youtube: "W4_7UcXP5Rg", title: "Alchemeow impact script test", caption: "First test of the impact script." } %}
   {% video { youtube: "MP__TdD27Bg", title: "Alchemeow dragging script test", caption: "The dragging script on a test cube." } %}
-  {% video { youtube: "PwZ0O2aWIKA", title: "Alchemeow slime test", caption: "The slime ball's happy accident." } %}
+  {% video { youtube: "PwZ0O2aWIKA", title: "Alchemeow slime test", caption: "Testing the slime ball's sound." } %}
   {% video { youtube: "ezrB8ZG0ZxE", title: "Alchemeow dialogue test", caption: "The dialogue babble." } %}
 </div>
 {% video { youtube: "KdkcZYDK_nk", title: "Alchemeow splash screen test", caption: "The first version of the splash screen: animation and sound by me." } %}
+
+<h2>Music</h2>
+<p>The team gave me three pillars (magical whimsy, experimental teamwork and chaotic playfulness) and a pile of references. After a few demos (the first was "too toybox-y"), I wrote an intro theme and three five-minute tracks for the game: Comfort, Jubilance and Wonder. They build slowly, so nothing jumps out at you mid-potion, and after playtesting I pulled back the drums and left more space in the melodies so they don't fight the sound effects. In FMOD, the music moves from the splash screen into the game in time with the beat.</p>
+
+{% soundcloud { track: "1926277814", secret: "s-2U44e3ZUvMv", title: "Alchemeow: Comfort", caption: "Comfort." } %}
+{% soundcloud { track: "1926277433", secret: "s-osMECe7C4Qg", title: "Alchemeow: Jubilance", caption: "Jubilance." } %}
+{% soundcloud { track: "1926277409", secret: "s-1ooah7pqqAV", title: "Alchemeow: Wonder", caption: "Wonder." } %}
 
 <h2>Behind the scenes</h2>
 <div class="media-grid">

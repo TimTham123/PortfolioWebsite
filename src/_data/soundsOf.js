@@ -1,13 +1,15 @@
 // Data for the Sounds Of map, read from src/_data/sounds-of.csv.
 // The columns are explained in lib/sounds-of.js (and in the README).
 //
-// Each row is a stop on the road: an episode, or (with no artist name) an
-// empty marker for a place still to be filled in. Stops are sorted by date,
-// and that order is the route, which then heads home (HOME in
-// lib/sounds-of.js).
+// Each row is a stop on the road: an episode; an episode still to come (an
+// artist, but no video yet); or, with no artist, something else that
+// happened along the way, like an interview or a visit, which isn't part of
+// the series. Those last two have hollow markers, so they stand apart from
+// the episodes. Stops are sorted by date, and that order is the route,
+// which then heads home (HOME in lib/sounds-of.js).
 
 import fs from "node:fs";
-import { readStops, legKey, HOME } from "../../lib/sounds-of.js";
+import { readStops, parseLinks, legKey, HOME } from "../../lib/sounds-of.js";
 import { makeToMap } from "../../lib/projection.js";
 import { viewBox, fit, outline, echo } from "../../lib/australia-map.js";
 import { youtubeId, embedUrl, watchUrl } from "../../lib/youtube.js";
@@ -60,9 +62,15 @@ export default function () {
     const [x, y] = toMap(row.lat, row.lng);
     const when = row.when;
     const place = row.location.split(",")[0].trim();
+    // "episode", "upcoming" (an artist with no video yet) or "extra" (not
+    // part of the series: an interview, a visit…)
+    const kind = !row.name ? "extra" : id ? "episode" : "upcoming";
     return {
       index: i,
-      empty: !row.name,
+      kind,
+      hollow: kind !== "episode", // a hollow marker
+      // the small line over its name on the card
+      kicker: kind === "extra" ? "Along the way" : kind === "upcoming" ? "Coming soon" : "",
       lat: row.lat,
       lng: row.lng,
       // Where it really is on the map (x and y, below, are where its marker
@@ -72,11 +80,16 @@ export default function () {
       via: row.via.map(({ lat, lng }) => ({ lat, lng })),
       name: row.name,
       // What the stop is called on the map and in the timeline.
-      title: row.name || place,
+      title: curl(row.name || row.title || place),
       location: row.location,
       state,
       place,
       description: curl(row.description || ""), // (shown by the map's script, so curled here)
+      // For a stop that isn't an episode: links, a sound file and a photo,
+      // put on its card from a <template> (see sounds-of-map.njk).
+      links: parseLinks(row.links).map((link) => ({ ...link, text: curl(link.text) })),
+      audio: (row.audio || "").trim(),
+      photo: (row.photo || "").trim(),
       date: when ? when.toISOString().slice(0, 10) : "",
       // A word in the date column (e.g. "unreleased") shows in place of a date.
       dateLong: when ? `${when.getUTCDate()} ${MONTHS[when.getUTCMonth()]} ${when.getUTCFullYear()}` : (row.date || "").trim(),
@@ -93,19 +106,20 @@ export default function () {
 
   // For the markers' labels and the status line.
   for (const ep of episodes) {
-    ep.label = ep.empty
-      ? `${ep.location}${ep.dateLong ? `, ${ep.dateLong}` : ""} (no episode yet)`
+    ep.extra = Boolean(ep.links.length || ep.audio || ep.photo); // has a <template>
+    ep.label =
+      ep.kind === "extra" ? `${ep.title}, ${ep.location} (along the way, not an episode)`
+      : ep.kind === "upcoming" ? `${ep.name}, ${ep.location} (coming soon)`
       : [ep.name, ep.location, ep.dateLong].filter(Boolean).join(", ");
   }
 
-  // Stops in the same place share a marker, with a dot for each recording
-  // there, in a little bunch: two side by side (the Big Dance Festival,
-  // Darwin, Geraldton, Perth), four in a square (Melbourne), three in a
-  // triangle and more in a ring. So you can count them at a glance, and
-  // pressing a dot opens its episode. A visit with no episode yet gets no
-  // dot where the place has a recording (Mount Isa, Kalgoorlie; it's still
-  // in the timeline), and a place with no recordings at all has one empty
-  // dot (`shown` says which stops have a dot).
+  // Stops in the same place share a marker, with a dot for each stop there,
+  // in a little bunch: two side by side (Darwin, Geraldton, Perth), four in
+  // a square (Melbourne), three in a triangle (the Big Dance Festival, Mount
+  // Isa) and more in a ring. So you can count them at a glance, and pressing
+  // a dot opens its card. The dots for stops that aren't episodes (or are
+  // still to come) are hollow (`shown` says which stops have a dot: all of
+  // them, for now).
   //
   // With JavaScript, sounds-of-map.js spaces the places out for the size the
   // map is drawn at (see "Spacing the markers" there). Without it, places
@@ -122,8 +136,7 @@ export default function () {
     else places.push({ x: ep.x, y: ep.y, stops: [ep] });
   }
   for (const place of places) {
-    const recordings = place.stops.filter((ep) => !ep.empty);
-    place.shown = recordings.length ? recordings : place.stops.slice(0, 1);
+    place.shown = place.stops;
     place.spots = bunchLayout(place.shown.length);
     // how much further than a single dot the bunch reaches, in map units
     place.reach = (Math.max(...place.spots.map(([dx, dy]) => Math.hypot(dx, dy))) * HUDDLE) / LAPTOP;
@@ -150,8 +163,6 @@ export default function () {
     if (!moved) break;
   }
   for (const place of places) {
-    const recordings = place.shown.filter((ep) => !ep.empty);
-    const others = place.stops.length - recordings.length;
     place.stops.forEach((ep, n) => {
       const k = place.shown.indexOf(ep);
       ep.x = place.x;
@@ -162,19 +173,17 @@ export default function () {
       ep.dx = k >= 0 ? place.spots[k][0] : 0;
       ep.dy = k >= 0 ? place.spots[k][1] : 0;
     });
-    // The place's marker: a button with a dot for each recording (or one
-    // empty dot), as wide and tall as its bunch (in steps).
+    // The place's marker: a button with a dot for each stop (hollow for
+    // those that aren't episodes), as wide and tall as its bunch (in steps).
     const first = place.stops[0];
-    first.hollow = !recordings.length;
-    first.dots = place.shown.map((ep) => ({ index: ep.index, dx: ep.dx, dy: ep.dy }));
+    first.allHollow = place.shown.every((ep) => ep.hollow);
+    first.dots = place.shown.map((ep) => ({ index: ep.index, dx: ep.dx, dy: ep.dy, hollow: ep.hollow }));
     first.across = Math.max(...first.dots.map((d) => d.dx)) - Math.min(...first.dots.map((d) => d.dx));
     first.down = Math.max(...first.dots.map((d) => d.dy)) - Math.min(...first.dots.map((d) => d.dy));
     // What a marker for more than one stop says to a screen reader.
     if (place.stops.length > 1) {
-      first.groupLabel = recordings.length
-        ? `${first.location}: ${recordings.map((ep) => ep.name).join("; ")}` +
-          (others ? ` (and ${others === 1 ? "a visit" : `${others} visits`} with no episode yet)` : "")
-        : `${first.location}: ${place.stops.length} visits, no episodes yet`;
+      const say = (ep) => (ep.kind === "extra" ? `${ep.title} (along the way, not an episode)` : ep.kind === "upcoming" ? `${ep.name} (coming soon)` : ep.name);
+      first.groupLabel = `${first.location}: ${place.stops.map(say).join("; ")}`;
     }
   }
 
@@ -262,6 +271,6 @@ export default function () {
     previousState = ep.state;
   }
 
-  const episodeCount = episodes.filter((ep) => !ep.empty).length;
+  const episodeCount = episodes.filter((ep) => ep.kind === "episode").length;
   return { viewBox, outline, echo, borders, episodes, episodeCount, segments, home, labels };
 }

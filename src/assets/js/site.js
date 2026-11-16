@@ -284,14 +284,15 @@
     4. YouTube videos load when they're played. Until then each one is just
     its picture with a play button, a link to the video on YouTube (see the
     video shortcode in lib/shortcodes.js). Pressing it swaps in the player,
-    already playing.
+    already playing (from data-start, in seconds, if it has one).
   */
   each("a.yt", function (link) {
     link.addEventListener("click", function (event) {
       if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
       event.preventDefault();
       var frame = document.createElement("iframe");
-      frame.src = "https://www.youtube-nocookie.com/embed/" + encodeURIComponent(link.getAttribute("data-yt")) + "?autoplay=1&rel=0";
+      var start = Number(link.getAttribute("data-start")) || 0;
+      frame.src = "https://www.youtube-nocookie.com/embed/" + encodeURIComponent(link.getAttribute("data-yt")) + "?autoplay=1&rel=0" + (start ? "&start=" + start : "");
       frame.title = link.getAttribute("data-title") || "YouTube video";
       frame.setAttribute("allow", "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share");
       frame.setAttribute("allowfullscreen", "");
@@ -325,5 +326,47 @@
     Array.prototype.forEach.call(waiting, function (frame) { near.observe(frame); });
   } else {
     Array.prototype.forEach.call(waiting, load);
+  }
+
+  /*
+    6. The secret (Music): "can you keep a secret?" shows yes / no when it's
+    pressed. No, and it goes away; yes opens a popup with the next album's
+    cover and a few demos, closed with its ×, a click around it, or Escape.
+    Without JavaScript none of it shows.
+  */
+  var secret = document.querySelector(".secret");
+  var secretBox = document.querySelector(".secret-box");
+  if (secret && secretBox && typeof HTMLDialogElement === "function") {
+    var ask = secret.querySelector(".secret__ask");
+    var answer = secret.querySelector(".secret__answer");
+    var yes = answer.querySelector('[data-secret="yes"]');
+    secret.hidden = false;
+    ask.addEventListener("click", function () {
+      var asked = ask.getAttribute("aria-expanded") === "true";
+      ask.setAttribute("aria-expanded", asked ? "false" : "true");
+      answer.hidden = asked;
+    });
+    answer.querySelector('[data-secret="no"]').addEventListener("click", function () {
+      secret.hidden = true;
+    });
+    yes.addEventListener("click", function () {
+      secretBox.showModal();
+      secretBox.scrollTop = 0;
+    });
+    secretBox.querySelector(".secret-box__close").addEventListener("click", function () {
+      secretBox.close();
+    });
+    secretBox.addEventListener("click", function (event) {
+      if (event.target !== secretBox) return;
+      var box = secretBox.getBoundingClientRect();
+      var inside = event.clientX >= box.left && event.clientX <= box.right &&
+        event.clientY >= box.top && event.clientY <= box.bottom;
+      if (!inside) secretBox.close();
+    });
+    secretBox.addEventListener("close", function () {
+      // Stop any demo that's still playing.
+      Array.prototype.forEach.call(secretBox.querySelectorAll("audio"), function (audio) { audio.pause(); });
+      yes.focus();
+    });
   }
 })();

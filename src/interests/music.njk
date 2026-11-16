@@ -2,7 +2,7 @@
 layout: layouts/project.njk
 title: Music
 description: My own music as Callum Tam, my band Melonade, and production and mixing for other artists.
-updated: 2026-11-15
+updated: 2026-11-16
 placeholder: true
 figures:
   - alt: "Live photo: playing on stage"
@@ -68,7 +68,29 @@ figures:
 
 {% embed { src: "https://open.spotify.com/embed/track/30wD52sZxKJog6qLMUGl7X", title: "Boogie with You, by Melonade (Spotify player)", height: 152 } %}
 
-<h2>Projects, collaborations and credits</h2>
+{#- A secret under Boogie with You: "can you keep a secret?", then yes or
+    no. No, and it goes away; yes opens a popup with the next album's cover
+    and a few demos (site.js, "The secret"). Without JavaScript it isn't
+    shown. A placeholder, hidden from visitors, until the cover and the
+    demos are in: put them in media/ and src/assets/audio/, add their src,
+    and take away the <div class="ph"> around it. -#}
+<!-- PLACEHOLDER: the album cover and the demos -->
+<div class="ph">
+  <div class="secret" hidden>
+    <p><button class="secret__ask" type="button" aria-expanded="false" aria-controls="secret-answer">can you keep a secret?</button></p>
+    <p class="secret__answer" id="secret-answer" hidden><button type="button" data-secret="yes">yes</button> <span aria-hidden="true">/</span> <button type="button" data-secret="no">no</button></p>
+  </div>
+  <dialog class="secret-box" aria-labelledby="secret-title">
+    <button class="secret-box__close" type="button"><span class="visually-hidden">Close</span><span aria-hidden="true">&times;</span></button>
+    {% image { alt: "The cover of my next album (a mock-up)", ratio: "1/1", zoom: false } %}
+    <p id="secret-title">I'm currently working on my next album. Here are a few demos so far:</p>
+    {% audio { title: "Demo 1" } %}
+    {% audio { title: "Demo 2" } %}
+    {% audio { title: "Demo 3" } %}
+  </dialog>
+</div>
+
+<h2>Select credits</h2>
 <div class="table-scroll table-wide">
   <table class="credits">
     <thead>
@@ -87,3 +109,5 @@ figures:
 </div>
 
 {% embed { src: "https://open.spotify.com/embed/track/6E5E40OxXMTuVhBuelGuME", title: "Who Do You Love?, by Wes Coeur (Spotify player)", height: 152 } %}
+
+<p><a href="/qualifications/#credits">Full credits available here</a></p>

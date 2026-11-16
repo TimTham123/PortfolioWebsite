@@ -2,7 +2,7 @@
 layout: layouts/base.njk
 title: Sounds Of
 description: Sounds Of, a travelling live-music video series documenting emerging Australian artists.
-updated: 2026-11-15
+updated: 2026-11-16
 scripts:
   - /assets/js/sounds-of-map.js
 wide: true
@@ -25,7 +25,7 @@ share:
 
 <h2>About the series</h2>
 <p>Sounds Of took a portable recording rig on the road to film emerging Australian artists playing live in the places that shaped them: lounge rooms, community halls, beaches and back sheds.</p>
-<p>Every song is a single take, minimal edits, all on the go.</p>
+<p>Every video is a single take, minimal edits, all on the go.</p>
 <p>I produced, filmed, recorded and mixed each episode, and managed the series' YouTube and social channels.</p>
 
 <h2>How it's made</h2>
@@ -39,6 +39,8 @@ share:
       <tr><th scope="row">Cameras</th><td>Blackmagic Design Pocket Cinema Camera 4K &times; 2, Panasonic <span class="nowrap">NV-GS180</span></td></tr>
       <tr><th scope="row">Recorder</th><td>Behringer XR18 into <span class="nowrap">X-Air</span> Edit</td></tr>
       <tr><th scope="row">Microphones</th><td>Shure SM7B, Shure Beta 57A &times; 4, Rode NT5 &times; 2, Shure Beta 52A, Sennheiser e906 &times; 2, Shure SM58</td></tr>
+      <tr><th scope="row">DI boxes</th><td>Radial stereo passive DI, BSS <span class="nowrap">AR-133</span> active DI</td></tr>
+      <tr><th scope="row">Headphones</th><td>Audio-Technica <span class="nowrap">ATH-M50x</span></td></tr>
       <tr><th scope="row">Cables</th><td>All hand-soldered</td></tr>
       <tr><th scope="row">Editing &amp; mixing</th><td>DaVinci Resolve, Reaper</td></tr>
       <tr><th scope="row">Additional tools</th><td>iZotope RX 11</td></tr>
@@ -46,22 +48,38 @@ share:
   </table>
 </div>
 
+<h2>In the media</h2>
+{#- Also on the map, on the hollow markers (src/_data/sounds-of.csv) #}
+<h3>ABC North West Queensland</h3>
+<p>In Mount Isa, I was interviewed about the series on ABC North West Queensland's breakfast program (<a href="https://www.facebook.com/photo/?fbid=1638156014979713&amp;set=a.408194731309187">photo from the interview</a>).</p>
+{% audio { src: "/assets/audio/abc-north-west-queensland-interview.mp3", title: "Radio interview", caption: "ABC North West Queensland, Mount Isa" } %}
+
+<h3>Faby</h3>
+<p>Faby, a German YouTuber, joined me in Mount Isa and filmed me recording Leo Hooker, for a mini documentary about the series.</p>
+{% video { youtube: "ZZlFzoHA88g", title: "Why This 22 Year Old Records Artists All Across Australia for Free, by Faby", caption: "Faby's video: “Why This 22 Year Old Records Artists All Across Australia for Free”." } %}
+
+<h3>Kalgoorlie Miner</h3>
+<p>Toby Cann from the Kalgoorlie Miner came along to my session with Yaz + The Universe in Kalgoorlie. <a href="https://www.facebook.com/reel/1647629713627632/">Watch the Kalgoorlie Miner's reel</a> (Facebook).</p>
+
+<h3>4ZZZ</h3>
+<p>In Brisbane, I talked about the series with Quentin Ellison on 4ZZZ, the city's community radio station. There's no recording to share yet, but there are <a href="https://www.instagram.com/p/DXySbzoEhBm/">photos from the interview</a> (Instagram).</p>
+
 <h2>Watch &amp; follow</h2>
-<p>Every episode is on <a href="https://www.youtube.com/@soundsofchannel">YouTube</a>, with clips and behind-the-scenes on <a href="https://www.instagram.com/tim.tham/">Instagram</a> and <a href="https://www.tiktok.com/@soundsof.aus">TikTok</a>.</p>
-<p>Are you an artist, or know one, who'd suit the series? <a href="/contact/">Get in touch</a>.</p>
+<p>Every episode is on <a href="https://www.youtube.com/@soundsofchannel">YouTube</a>, with clips on <a href="https://www.instagram.com/soundsof.aus/">Instagram</a> and <a href="https://www.tiktok.com/@soundsof.aus">TikTok</a>.</p>
+<p>I'm looking to continue the series back in Melbourne. Are you an artist, or know one, who'd suit the series? <a href="/contact/">Get in touch</a>.</p>
 
 <h2>Episodes</h2>
-{#- Listed from src/_data/sounds-of.csv, newest first (stops with no episode
-    yet are left out). #}
+{#- Listed from src/_data/sounds-of.csv, newest first, with the episodes
+    still to come (the stops along the way, like interviews, are left out). #}
 <div class="table-scroll">
   <table class="episodes">
     <caption class="visually-hidden">Every episode, newest first</caption>
     <thead>
-      <tr><th scope="col">Date</th><th scope="col">Artist</th><th scope="col">Where</th></tr>
+      <tr><th scope="col">Date</th><th scope="col">Artist</th><th scope="col">Location</th></tr>
     </thead>
     <tbody>
       {%- for ep in soundsOf.episodes | reverse %}
-      {%- if not ep.empty %}
+      {%- if ep.kind != "extra" %}
       <tr><td{% if not ep.date %} class="is-word"{% endif %}>{{ ep.dateShort }}</td><td>{% if ep.video %}<a href="{{ ep.video.watch }}">{{ ep.name }}</a>{% else %}{{ ep.name }}{% endif %}</td><td>{{ ep.location }}</td></tr>
       {%- endif %}
       {%- endfor %}

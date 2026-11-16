@@ -3,9 +3,11 @@
   route that inks itself in as you move through the stops, and zoom.
 
   Stops come from the JSON block the page writes out (from
-  src/_data/sounds-of.csv), already in order. A stop with no episode yet has
-  an empty marker. After the last stop the route heads home, and that last
-  leg is inked when you reach the last stop.
+  src/_data/sounds-of.csv), already in order. A stop that isn't an episode
+  (an interview, a visit: "along the way") or is one still to come has a
+  hollow marker, and its card shows what happened there instead of a video
+  (its <template>, in sounds-of-map.njk). After the last stop the route
+  heads home, and that last leg is inked when you reach the last stop.
 
   Zoom: the + / − buttons, Ctrl/⌘ + scroll or a trackpad pinch, double-click,
   and two-finger pinch on phones. Drag to move around once zoomed in. Zooming
@@ -51,6 +53,7 @@
   var zoomInButton = $('[data-zoom="in"]');
   var zoomOutButton = $('[data-zoom="out"]');
   var field = {
+    kicker: $(".sm__kicker"),
     date: $(".sm__date"),
     name: $(".sm__name"),
     location: $(".sm__location"),
@@ -58,6 +61,7 @@
     empty: $(".sm__empty"),
     video: $(".sm__video"),
     description: $(".sm__description"),
+    extra: $(".sm__extra"),
     watch: $(".sm__watch a"),
   };
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -106,7 +110,7 @@
   // chosen (HUDDLE_OPEN), so there's always room left for that. The route's
   // legs are redrawn to meet the places where they end up (the roads
   // between stay put).
-  var GAP = 6; // px between the edges of two markers
+  var GAP = 12; // px between the edges of two dots: 25px from middle to middle, so each marker (24px across) has a target of its own
   var RADIUS = 6.5; // px: an 11px dot and its outline (style.css)
   var HUDDLE_OPEN = 15; // px between the middles of two dots in an open bunch (style.css)
 
@@ -123,8 +127,8 @@
     // its marker (on its first stop) and the marker's dots
     p.marker = root.querySelector('.sm__marker[data-index="' + p.stops[0] + '"]');
     p.dotEls = Array.prototype.slice.call(p.marker.querySelectorAll(".sm__dot"));
-    // what pressing it moves through: its recordings, or (with none) its visits
-    p.choices = p.shown.length && !episodes[p.shown[0]].empty ? p.shown : p.stops;
+    // what pressing it moves through (from the keyboard): its stops, in turn
+    p.choices = p.shown.length ? p.shown : p.stops;
     // where its dots are, in px from the place, with the bunch open
     p.dots = p.shown.map(function (i) { return [episodes[i].dx * HUDDLE_OPEN, episodes[i].dy * HUDDLE_OPEN]; });
     p.far = 0; // the furthest any dot is from the place
@@ -590,26 +594,27 @@
     if (!ep.video) return;
     var frame = document.createElement("iframe");
     frame.src = ep.video.embed;
-    frame.title = "Sounds Of: " + ep.name;
+    frame.title = ep.kind === "extra" ? ep.title : "Sounds Of: " + ep.name;
     frame.allow = "accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
     frame.referrerPolicy = "strict-origin-when-cross-origin";
     frame.allowFullscreen = true;
     field.video.appendChild(frame);
   }
 
-  // The other recordings in the same place (the rest of its bunch), each
-  // a button that opens it.
+  // The other stops in the same place (the rest of its bunch), each a
+  // button that opens it: "Also recorded here" when they're all episodes.
   function showAlso(ep) {
-    var others = spots[ep.index].place.stops.filter(function (i) { return i !== ep.index && !episodes[i].empty; });
+    var others = spots[ep.index].place.stops.filter(function (i) { return i !== ep.index; });
     field.also.textContent = "";
     field.also.hidden = !others.length;
     if (!others.length) return;
-    field.also.appendChild(document.createTextNode("Also recorded here: "));
+    var allEpisodes = others.every(function (i) { return episodes[i].kind === "episode"; });
+    field.also.appendChild(document.createTextNode(allEpisodes ? "Also recorded here: " : "Also here: "));
     others.forEach(function (i, k) {
       var button = document.createElement("button");
       button.type = "button";
       button.className = "sm__also-link";
-      button.textContent = episodes[i].name;
+      button.textContent = episodes[i].title;
       button.addEventListener("click", function () {
         select(i);
         field.name.focus();
@@ -619,15 +624,28 @@
     });
   }
 
+  // What a stop that isn't an episode has instead of a video: its sound,
+  // photo and links, copied from its <template>.
+  function showExtra(ep) {
+    field.extra.textContent = "";
+    var template = ep.extra && document.getElementById("sm-extra-" + ep.index);
+    if (template) field.extra.appendChild(template.content.cloneNode(true));
+  }
+
   function openPopup(ep) {
-    field.date.textContent = ep.dateLong;
-    field.date.hidden = !ep.dateLong;
+    field.kicker.textContent = ep.kicker || "";
+    field.kicker.hidden = !ep.kicker;
+    // (for an episode still to come, "coming soon" is said by the kicker)
+    var when = ep.kind === "upcoming" && !ep.date ? "" : ep.dateLong;
+    field.date.textContent = when;
+    field.date.hidden = !when;
     field.name.textContent = ep.title;
     field.location.textContent = ep.location;
     showAlso(ep);
-    field.empty.hidden = !ep.empty;
+    field.empty.hidden = !(ep.kind === "extra" && !ep.description && !ep.extra);
     field.description.textContent = ep.description || "";
     field.description.hidden = !ep.description;
+    showExtra(ep);
     field.watch.href = ep.video ? ep.video.watch : "https://www.youtube.com/@soundsofchannel";
     field.watch.parentNode.hidden = !ep.video;
     showVideo(ep);
@@ -642,6 +660,7 @@
     if (popup.hidden) return;
     popup.hidden = true;
     field.video.textContent = ""; // stops the video
+    field.extra.textContent = ""; // ...or the sound
     root.classList.remove("is-open");
   }
 
