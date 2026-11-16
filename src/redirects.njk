@@ -18,8 +18,10 @@ eleventyExcludeFromCollections: true
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{ redirect.title }} &ndash; {{ site.name }}</title>
-  <link rel="canonical" href="{{ site.origin }}{{ redirect.to | url }}">
-  <script>location.replace({{ redirect.to | url | dump | safe }} + location.hash);</script>
+  {#- (a new address can point at a part of a page, like /interests/#luna:
+      then that's where it goes, whatever part of the old page was asked for) #}
+  <link rel="canonical" href="{{ site.origin }}{{ redirect.to.split('#')[0] | url }}">
+  <script>location.replace({{ redirect.to | url | dump | safe }}{% if redirect.to.indexOf('#') == -1 %} + location.hash{% endif %});</script>
   <meta http-equiv="refresh" content="0; url={{ redirect.to }}">
 </head>
 <body>

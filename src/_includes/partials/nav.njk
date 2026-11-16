@@ -3,11 +3,11 @@
   edit that file (not this one) to rename, reorder or add pages.
 
   Three levels:
-    a section label with no page (Me, Work)
-      → pages (About Me, Sounds Of…), some with sub-pages behind a "+"
-        → sub-pages (Music, Cyberpedia…)
-  A top-level item with a url (Qualifications…, Contact) is a plain link.
-  An item with "link": false (Interests) isn't a link: clicking its name
+    a section label with no page (Work, Me)
+      → pages (Sounds Of, About Me…), some with sub-pages behind a "+"
+        → sub-pages (Cyberpedia, Okiro…)
+  A top-level item with a url (Experience, Contact) is a plain link.
+  An item with "link": false (Sound Design) isn't a link: clicking its name
   opens and closes its sub-pages.
 -#}
 {%- macro navItem(item, id, currentUrl) %}
@@ -56,7 +56,7 @@
   </ul>
 </nav>
 <script>
-  /* Which dropdowns (Interests, Sound Design) start open. The one for the
+  /* Which dropdowns (Sound Design) start open. The one for the
      section you're in is open. On wider screens, once one has been open it
      stays open from page to page until it's closed with its button
      (remembered for the visit, in the browser's session storage; see also

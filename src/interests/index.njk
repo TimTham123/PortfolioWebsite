@@ -1,19 +1,88 @@
 ---
 layout: layouts/base.njk
-title: Interests
-description: Music, climbing, my cat and travel.
+title: Outside Work
+description: "Away from the desk: climbing, my cat Luna, and photos and videos from the road."
+# runs on into the space on the right, for the travel photos at the end
+wide: true
+scripts:
+  - /assets/js/luna.js
+  - /assets/js/travel.js
 ---
-<h1 class="page-title">Interests</h1>
+{#- Climbing, Cat and Travel used to be pages of their own; their old
+    addresses now come here, to their sections (src/_data/redirects.json). #}
+<h1 class="page-title">Outside Work</h1>
 <p class="standfirst">What I get up to away from the desk.</p>
 
-{#- Each interest, with the line at the top of its page. -#}
-<dl class="index">
-  <dt><a href="/interests/music/">Music</a></dt>
-  <dd>My first love: my own music as Callum Tam, my band Melonade, and production and mixing for other artists.</dd>
-  <dt><a href="/interests/climbing/">Climbing</a></dt>
-  <dd>Mostly indoors, mostly bouldering, mostly falling.</dd>
-  <dt><a href="/interests/cat/">Cat</a></dt>
-  <dd>Luna, my real boss.</dd>
-  <dt><a href="/interests/travel/">Travel</a></dt>
-  <dd>Photos and videos from the road.</dd>
-</dl>
+<h2 id="climbing">Climbing</h2>
+<p>I’ve been climbing for five years. Most mornings you’ll find me bouldering or training at Urban Climb: I love small holds, hate round flat ones, and spend a lot of time falling onto mats.</p>
+
+<ul>
+  <li><b>Favourite crag:</b> Bleachers, Grampians</li>
+  <li><b>Current goal:</b> get strong again after travelling</li>
+  <li><b>Best sends:</b> The Show Must Go On (V7), Plastic Facts (V6), Evac (V6)</li>
+</ul>
+
+{%- set rowSizes = "(max-width: 759.98px) 55vw, 20rem" %}
+<div class="photo-row">
+  {% image { src: "media/climbing/bouldering-indoors.jpg", alt: "Me on an indoor bouldering wall, reaching up for a red hold", sizes: rowSizes } %}
+  {% image { src: "media/climbing/bouldering-outside.jpg", alt: "Climbing the Heart Boulder at Bleachers, in the Grampians: a sandstone overhang, with a friend spotting below and a crash pad", caption: "Climbing the Heart Boulder, Bleachers.", sizes: rowSizes } %}
+</div>
+
+<p>For my weekly training I built <a href="https://climbapp-demo.pages.dev/">this app</a>. It's hard-coded for my own routine, so it won't suit yours, but have a look.</p>
+{#- A picture of the app on a phone, linking to the app itself #}
+<figure class="app-shot">
+  <a href="https://climbapp-demo.pages.dev/">{% image { src: "media/climbing/training-app.png", alt: "The training app on a phone, showing today's session: Pull strength, with its exercises, sets and reps", bare: true, sizes: "13rem" } %}</a>
+  <figcaption><a href="https://climbapp-demo.pages.dev/">Open the app</a></figcaption>
+</figure>
+
+<h2 id="cat">Cat</h2>
+<p>This is Luna, my real boss. She is 9 years old and supervises every session from the top of my keyboard.</p>
+
+<p>Occasional foley contributor: purrs, chirps and the odd annoyed meow have all ended up in a project.</p>
+
+<div class="photo-row">
+  {% image { src: "media/cat/grumpy-luna.jpg", alt: "Luna, a black and white cat, glaring from my lap on the couch", caption: "Grumpy Luna.", sizes: rowSizes } %}
+  {% image { src: "media/cat/luna-on-the-couch.jpg", alt: "Luna lounging on a grey couch, one white paw stretched out", caption: "Luna, off duty.", sizes: rowSizes } %}
+</div>
+
+<h3>Likes</h3>
+<ul>
+  <li>Cheek scritches</li>
+  <li>Chicken-flavoured Temptations</li>
+  <li>Sitting on whatever I’m working on</li>
+</ul>
+
+<h3>Dislikes</h3>
+<ul>
+  <li>Loud noises</li>
+  <li>Not being fed</li>
+  <li>Cavoodles</li>
+</ul>
+
+{% include "partials/luna.njk" %}
+
+<h2 id="travel">Travel</h2>
+<p>Photos and videos from the road.</p>
+
+{#- The photos and videos from media/travel/ (see src/_data/travel.js).
+    Clicking a photo opens it in a popup, and videos play as you scroll to
+    them (see assets/js/travel.js). How wide a tile is at each screen size,
+    so the browser fetches a big enough photo (see the gallery in
+    style.css): #}
+{%- set sizes = "(min-width: 1100px) calc(25vw - 90px), (min-width: 760px) 16rem, calc(50vw - 20px)" %}
+<div class="gallery wide">
+  {%- for item in travel.items %}
+  {%- if item.type == "photo" %}
+  <a class="gallery__item{% if item.tall %} gallery__item--tall{% endif %}" href="{{ item.full }}">
+    <picture>
+      <source type="image/webp" srcset="{{ item.webp }}" sizes="{{ sizes }}">
+      <img src="{{ item.fallback }}" srcset="{{ item.jpeg }}" sizes="{{ sizes }}" width="{{ item.width }}" height="{{ item.height }}" alt="{{ item.alt }}" loading="lazy" decoding="async">
+    </picture>
+  </a>
+  {%- else %}
+  <figure class="gallery__item gallery__item--video"{% if item.row %} style="--row: {{ item.row }}; --column: {{ item.column }}"{% endif %}>
+    <video controls playsinline preload="metadata" src="{{ item.src }}#t=0.5" title="{{ item.title }}" aria-label="{{ item.title }}"></video>
+  </figure>
+  {%- endif %}
+  {%- endfor %}
+</div>

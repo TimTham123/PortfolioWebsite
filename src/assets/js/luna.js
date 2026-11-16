@@ -1,5 +1,5 @@
 /*
-  Luna, at the bottom of the Cat page (src/_includes/partials/luna.njk).
+  Luna, at the end of the Cat section of Outside Work (src/_includes/partials/luna.njk).
 
   Her eyes follow the cursor around the page: the black of each eye drifts
   towards it (smoothly), inside an eye that always stays the same size. When

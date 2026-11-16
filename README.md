@@ -46,7 +46,7 @@ src/
 │   ├── sounds-of.csv      ← every Sounds Of stop on the road (drives the map)
 │   ├── sounds-of-routes.json ← the roads between stops (npm run routes)
 │   ├── soundsOf.js        ← places the stops and roads on the map
-│   ├── travel.js          ← builds the Travel gallery from media/travel/
+│   ├── travel.js          ← builds the travel gallery (Outside Work) from media/travel/
 │   └── build.js           ← a version tag for the CSS/JS links
 ├── _includes/
 │   ├── layouts/
@@ -57,32 +57,29 @@ src/
 │   ├── css/style.css      ← all the styling, with comments
 │   ├── js/site.js         ← phone menu, dropdowns, picture popups, YouTube videos that load when played
 │   ├── js/sounds-of-map.js ← the map's markers, popup, timeline, route and zoom
-│   ├── js/travel.js       ← Travel: videos that play as you scroll (the photo popup is site.js's)
+│   ├── js/travel.js       ← the travel gallery: videos that play as you scroll (the photo popup is site.js's)
 │   ├── fonts/             ← Figtree, Nunito, Reenie Beanie and Waiting for the Sunrise (open-licence fonts)
 │   ├── audio/             ← sound files used as they are (the ABC interview on Sounds Of)
 │   └── img/               ← put your images here
-│                            Me
-├── index.njk              ← About Me (the home page)            /
-├── interests/
-│   ├── index.njk          ← Interests overview                 /interests/
-│   ├── music.njk                                               /interests/music/
-│   ├── climbing.njk                                            /interests/climbing/
-│   ├── cat.njk                                                 /interests/cat/
-│   └── travel.njk         ← photo and video gallery            /interests/travel/
 │                            Work
 ├── sounds-of.njk                                               /sounds-of/
+├── social-media-production.njk  ← a case study: Wes Coeur      /social-media-production/
 ├── sound-design/
 │   ├── index.njk          ← Sound Design overview (About Me links here) /sound-design/
 │   ├── alchemeow.njk                                           /sound-design/alchemeow/
 │   ├── cyberpedia.njk                                          /sound-design/cyberpedia/
 │   ├── okiro.njk                                               /sound-design/okiro/
 │   ├── little-bit-of-gore.njk                                  /sound-design/little-bit-of-gore/
-│   └── hubworld.njk                                            /sound-design/hubworld/
+│   ├── hubworld.njk                                            /sound-design/hubworld/
+│   └── ongoing-works.njk  ← what you're working on now          /sound-design/ongoing-works/
 ├── feedra.njk             ← Feedra Prototype                   /feedra/
-├── social-media-production.njk                                 /social-media-production/
-├── ongoing-works.njk      ← what you're working on now          /ongoing-works/
+│                            Me
+├── index.njk              ← About Me (the home page)            /
+├── interests/
+│   ├── music.njk                                               /interests/music/
+│   └── index.njk          ← Outside Work: climbing, Luna, travel  /interests/
 │
-├── qualifications.njk     ← Qualifications and Additional Credits  /qualifications/
+├── experience.njk         ← roles, education and credits        /experience/
 ├── contact.njk                                                 /contact/
 ├── 404.njk                ← "Not Found" page
 └── redirects.njk          ← sends old addresses on to the new ones (src/_data/redirects.json)
@@ -90,7 +87,8 @@ lib/                       ← media components, filters, CSV reader, map outlin
                              and sounds-of.js (reads the trip from the CSV; where it ends)
 media/travel/              ← the Travel photos and videos
 media/sound-design/        ← pictures for the Sound Design pages, one folder per project
-media/climbing/            ← the training app, pictured on Climbing
+media/climbing/            ← the climbing photos and the training app (Outside Work)
+media/cat/                 ← Luna's photos (Outside Work)
 ```
 
 ## Everyday edits
@@ -149,21 +147,29 @@ working. To keep them working, add the old and new addresses to
 to the new one. Little Bit of Gore moved like this, from
 `/sound-design/a-little-bit-of-gore/`, Social Media Production from
 `/social-media-marketing/`, and Feedra Prototype from `/sound-design/feedra/`.
+In the November 2026 redesign, Qualifications became Experience (from
+`/qualifications/`), Ongoing Works moved under Sound Design (from
+`/ongoing-works/`), and Climbing, Cat and Travel became sections of one
+Outside Work page: a new address can point at part of a page, so
+`/interests/cat/` goes to `/interests/#cat`.
+
+(The site as it was before the redesign is kept on the branch
+`backup-before-redesign`, to go back to if you want it.)
 
 ### The index (navigation)
 
 Edit `src/_data/navigation.json`. The order there is the order in the index,
 in three levels:
 
-- **Sections** with no page of their own (`Me`, `Work`) show as black labels.
-- **Pages** sit under them. A page with `children` (Interests, Sound Design)
-  gets a `+` dropdown. With `"link": false` (Interests, Sound Design) its name isn't a link:
+- **Sections** with no page of their own (`Work`, `Me`) show as black labels.
+- **Pages** sit under them. A page with `children` (Sound Design)
+  gets a `+` dropdown. With `"link": false` (Sound Design) its name isn't a link:
   clicking it opens and closes the list instead. Once a dropdown has been
   open, it stays open from page to page until it's closed.
 - **Sub-pages** sit under those, and get ← previous / next → links to each
   other.
 
-A top-level item with a `url` (Qualifications and Additional Credits, Contact)
+A top-level item with a `url` (Experience, Contact)
 is a plain link. To add a page, create the `.njk` file and add a line for it
 here. Its address follows its file name and folder, so
 `src/sound-design/hubworld.njk` becomes `/sound-design/hubworld/`.
@@ -225,10 +231,24 @@ Lists of pages with pictures:
   a new release, add its cover there and copy one of the `<li>`s.
 - **Sound Design's projects** (`<ul class="projects">`) show a picture from
   each project's page beside its name, year and a line about it.
-- **Interests** (`<dl class="index">`) lists each interest with a line about
-  it.
 - A long list can be folded away under a "+" with `<details class="more">`
-  and a `<summary>` (as Qualifications does with every Sounds Of episode).
+  and a `<summary>` (as Experience does with every Sounds Of episode, and
+  the game pages do with their extras: test clips, more tracks, behind the
+  scenes). Players inside load when it's opened.
+
+A few one-off pieces:
+
+- **About Me's highlights** (`<ul class="highlights">`): three things to look
+  at first, each a link, with `<span class="highlights__big">` for the part
+  in black. Under them, **buttons**: `<a class="button">` in a
+  `<p class="actions">`, with `button--solid` for the main one.
+- **Headline numbers** (`<ul class="stats">`, Social Media Production): each
+  number in `<span class="stats__n">`, with what it counts after it. Three
+  sit in a row; where they don't fit, they go one under the other.
+- **Roles** (`<ul class="roles">`, Experience): the years down the side in
+  `<span class="roles__when">`, then the role and a line about it.
+- **Photos side by side** (`<div class="photo-row">`, Outside Work): two or
+  three `{% image %}`s, all the same height, whatever their shape.
 
 ### The Sounds Of map
 
@@ -319,10 +339,11 @@ The episode list under the map is made from the same file, so it always
 matches. The outline of Australia is generated from Natural Earth's public
 domain coastline (`lib/australia-map.js`); there's no need to touch it.
 
-### The Travel page
+### The travel photos
 
-The Travel page has no text, just a grid of photos and videos. To fill it,
-put your files in `media/travel/`:
+The Travel section at the end of Outside Work is a grid of photos and
+videos, under one line of text. To fill it, put your files in
+`media/travel/`:
 
 - **Photos** (`.jpg`, `.png`, `.webp`) go in at full size. The build makes
   smaller copies for the grid, and clicking a photo opens the large one.
@@ -430,7 +451,11 @@ Still to fill in:
   visitors until they're in).
 - **Feedra Prototype:** the link to download the prototype (hidden until
   it's in).
-- **Qualifications:** the Operation Karma EP's title.
+- **Experience:** the Operation Karma EP's title.
+- **About Me:** a showreel, a minute or so of the best bits: give the
+  `{% video %}` under the opening lines its YouTube id (hidden until then).
+- **Social Media Production:** the Sounds Of channels' numbers (hidden until
+  they're in).
 
 There are no photos still to come. To add one, put the file in `media/` and
 give its entry a `src:`, like the Sound Design pictures, and strip a phone
@@ -460,7 +485,7 @@ headings are the one step up in size, so long pages are easy to scan.)
 
 **Responsive.** Wide screens (1100px and up) get index | text | images.
 Between 760px and 1100px the images move below the text. Where the credits
-tables (Music, Qualifications) don't have room for their four columns, each
+tables (Music, Experience) don't have room for their four columns, each
 credit stacks up beside its year instead.
 
 **Phones (below 760px)** get their own layout rather than a squashed one:
@@ -481,16 +506,17 @@ credit stacks up beside its year instead.
 Without JavaScript the index is simply listed under the signature and the
 pictures follow the text.
 
-**The index.** Me and Work are black labels with their pages indented
-underneath; Qualifications and Additional Credits and Contact close the list.
+**The index.** Work and Me are black labels with their pages indented
+underneath (the work first, as it's what most visitors come for);
+Experience and Contact close the list.
 Each level steps in a little, like an outline.
 
-**The dropdowns.** "Interests" and "Sound Design" aren't pages in the index:
-clicking either name opens its sub-pages underneath, indented (the Sound
+**The dropdown.** "Sound Design" isn't a page in the index:
+clicking its name opens its sub-pages underneath, indented (the Sound
 Design overview page still exists, and About Me links to it). It works by
 click, tap or keyboard (Enter/Space; Escape closes it), not on hover, so
 nothing jumps around as the mouse passes. It's open automatically when you're
-on one of those pages, and on wider screens, once opened, it stays open from
+on one of its pages, and on wider screens, once opened, it stays open from
 page to page. On phones only the section you're in starts open, so the whole
 index fits on the screen. Without JavaScript the sub-pages are simply always
 listed.

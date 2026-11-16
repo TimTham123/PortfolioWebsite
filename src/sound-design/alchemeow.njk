@@ -33,7 +33,11 @@ figures:
 <p>The game lives on its players talking to each other, so the sound's job was to support that, not compete with it. The goal was to create clear cues for progress and failure, and enough atmosphere to build a world, without ever getting in the way of the communication.</p>
 
 {% video { youtube: "u3WhRK-SBO8", title: "Alchemeow trailer", caption: "The trailer." } %}
-{% video { youtube: "BoqlfDL6nE4", title: "Alchemeow full playthrough", caption: "A full playthrough, with the final sound and music." } %}
+{#- The extras, folded away under a "+" so the page stays short #}
+<details class="more">
+  <summary>The full playthrough</summary>
+  {% video { youtube: "BoqlfDL6nE4", title: "Alchemeow full playthrough", caption: "A full playthrough, with the final sound and music." } %}
+</details>
 
 <h2>Sound and scripting</h2>
 <p>Everything in the room can be grabbed, dropped, thrown, crushed or sliced, so rather than wiring sounds up one at a time, I wrote general-purpose scripts in Unity (C#):</p>
@@ -44,26 +48,35 @@ figures:
   <li><b>Menus:</b> hover and click sounds (with a controller too), volume sliders, and a splash screen I animated and scored, which you can skip with a smooth transition.</li>
 </ul>
 
-<div class="media-grid">
-  {% video { youtube: "W4_7UcXP5Rg", title: "Alchemeow impact script test", caption: "First test of the impact script." } %}
-  {% video { youtube: "MP__TdD27Bg", title: "Alchemeow dragging script test", caption: "The dragging script on a test cube." } %}
-  {% video { youtube: "PwZ0O2aWIKA", title: "Alchemeow slime test", caption: "Testing the slime ball's sound." } %}
-  {% video { youtube: "ezrB8ZG0ZxE", title: "Alchemeow dialogue test", caption: "The dialogue babble." } %}
-</div>
-{% video { youtube: "KdkcZYDK_nk", title: "Alchemeow splash screen test", caption: "The first version of the splash screen: animation and sound by me." } %}
+<details class="more">
+  <summary>The tests: five short clips</summary>
+  <div class="media-grid">
+    {% video { youtube: "W4_7UcXP5Rg", title: "Alchemeow impact script test", caption: "First test of the impact script." } %}
+    {% video { youtube: "MP__TdD27Bg", title: "Alchemeow dragging script test", caption: "The dragging script on a test cube." } %}
+    {% video { youtube: "PwZ0O2aWIKA", title: "Alchemeow slime test", caption: "Testing the slime ball's sound." } %}
+    {% video { youtube: "ezrB8ZG0ZxE", title: "Alchemeow dialogue test", caption: "The dialogue babble." } %}
+  </div>
+  {% video { youtube: "KdkcZYDK_nk", title: "Alchemeow splash screen test", caption: "The first version of the splash screen: animation and sound by me." } %}
+</details>
 
 <h2>Music</h2>
 <p>The team gave me three pillars (magical whimsy, experimental teamwork and chaotic playfulness) and a pile of references. After a few demos (the first was "too toybox-y"), I wrote an intro theme and three five-minute tracks for the game: Comfort, Jubilance and Wonder. They build slowly, so nothing jumps out at you mid-potion, and after playtesting I pulled back the drums and left more space in the melodies so they don't fight the sound effects. In FMOD, the music moves from the splash screen into the game in time with the beat.</p>
 
 {% soundcloud { track: "1926277814", secret: "s-2U44e3ZUvMv", title: "Alchemeow: Comfort", caption: "Comfort." } %}
-{% soundcloud { track: "1926277433", secret: "s-osMECe7C4Qg", title: "Alchemeow: Jubilance", caption: "Jubilance." } %}
-{% soundcloud { track: "1926277409", secret: "s-1ooah7pqqAV", title: "Alchemeow: Wonder", caption: "Wonder." } %}
+<details class="more">
+  <summary>Two more tracks: Jubilance and Wonder</summary>
+  {% soundcloud { track: "1926277433", secret: "s-osMECe7C4Qg", title: "Alchemeow: Jubilance", caption: "Jubilance." } %}
+  {% soundcloud { track: "1926277409", secret: "s-1ooah7pqqAV", title: "Alchemeow: Wonder", caption: "Wonder." } %}
+</details>
 
 <h2>Behind the scenes</h2>
-<div class="media-grid">
-  {% video { youtube: "UntehcP54to", title: "Alchemeow FMOD breakdown", caption: "My FMOD session and scripts, partway through.", thumb: "maxres1" } %}
-  {% video { youtube: "4HSnTX_pgqA", title: "Alchemeow full breakdown", caption: "The full breakdown: an hour and a half through my Unity, FMOD, Logic and Reaper sessions.", thumb: "maxres3" } %}
-</div>
+<details class="more">
+  <summary>My FMOD session, and the full breakdown</summary>
+  <div class="media-grid">
+    {% video { youtube: "UntehcP54to", title: "Alchemeow FMOD breakdown", caption: "My FMOD session and scripts, partway through.", thumb: "maxres1" } %}
+    {% video { youtube: "4HSnTX_pgqA", title: "Alchemeow full breakdown", caption: "The full breakdown: an hour and a half through my Unity, FMOD, Logic and Reaper sessions.", thumb: "maxres3" } %}
+  </div>
+</details>
 
 <h2>Project details</h2>
 <div class="table-scroll">

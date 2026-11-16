@@ -1,25 +1,9 @@
 [
   {
-    "title": "Me",
-    "children": [
-      { "title": "About Me", "url": "/" },
-      {
-        "title": "Interests",
-        "url": "/interests/",
-        "link": false,
-        "children": [
-          { "title": "Music", "url": "/interests/music/" },
-          { "title": "Climbing", "url": "/interests/climbing/" },
-          { "title": "Cat", "url": "/interests/cat/" },
-          { "title": "Travel", "url": "/interests/travel/" }
-        ]
-      }
-    ]
-  },
-  {
     "title": "Work",
     "children": [
       { "title": "Sounds Of", "url": "/sounds-of/" },
+      { "title": "Social Media Production", "url": "/social-media-production/" },
       {
         "title": "Sound Design",
         "url": "/sound-design/",
@@ -29,14 +13,21 @@
           { "title": "Cyberpedia", "url": "/sound-design/cyberpedia/" },
           { "title": "Okiro", "url": "/sound-design/okiro/" },
           { "title": "Little Bit of Gore", "url": "/sound-design/little-bit-of-gore/" },
-          { "title": "Hubworld", "url": "/sound-design/hubworld/" }
+          { "title": "Hubworld", "url": "/sound-design/hubworld/" },
+          { "title": "Ongoing Works", "url": "/sound-design/ongoing-works/" }
         ]
       },
-      { "title": "Feedra Prototype", "url": "/feedra/" },
-      { "title": "Social Media Production", "url": "/social-media-production/" },
-      { "title": "Ongoing Works", "url": "/ongoing-works/" }
+      { "title": "Feedra Prototype", "url": "/feedra/" }
     ]
   },
-  { "title": "Qualifications and Additional Credits", "url": "/qualifications/" },
+  {
+    "title": "Me",
+    "children": [
+      { "title": "About Me", "url": "/" },
+      { "title": "Music", "url": "/interests/music/" },
+      { "title": "Outside Work", "url": "/interests/" }
+    ]
+  },
+  { "title": "Experience", "url": "/experience/" },
   { "title": "Contact", "url": "/contact/" }
 ]

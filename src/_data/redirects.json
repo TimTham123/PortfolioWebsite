@@ -13,5 +13,30 @@
     "from": "/sound-design/feedra/",
     "to": "/feedra/",
     "title": "Feedra Prototype"
+  },
+  {
+    "from": "/ongoing-works/",
+    "to": "/sound-design/ongoing-works/",
+    "title": "Ongoing Works"
+  },
+  {
+    "from": "/qualifications/",
+    "to": "/experience/",
+    "title": "Experience"
+  },
+  {
+    "from": "/interests/climbing/",
+    "to": "/interests/#climbing",
+    "title": "Outside Work: Climbing"
+  },
+  {
+    "from": "/interests/cat/",
+    "to": "/interests/#cat",
+    "title": "Outside Work: Luna"
+  },
+  {
+    "from": "/interests/travel/",
+    "to": "/interests/#travel",
+    "title": "Outside Work: Travel"
   }
 ]

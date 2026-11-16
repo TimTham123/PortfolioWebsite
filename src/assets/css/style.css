@@ -413,7 +413,7 @@ a:hover {
   content: "\2013";
 }
 
-/* Interests isn't a page: its name is the button that opens its list, with
+/* Sound Design isn't a page: its name is the button that opens its list, with
    the + / – after it. Without JavaScript it's just a label over the list. */
 .nav-toggle--label {
   display: inline;
@@ -585,31 +585,55 @@ figcaption {
   margin-bottom: 0;
 }
 
-/* A list of pages (<dl class="index">: Sound Design's projects, Interests):
-   each name in black, faintly underlined so it's clear it's a link, then a
-   line about it */
-.content .index dt {
-  font-weight: 500;
+/* Roles (Experience): the years down the side, like the credits below it,
+   then the role and a line about it */
+.content .roles > li {
+  display: grid;
+  grid-template-columns: 4.75rem minmax(0, 1fr);
+  column-gap: 1rem;
 }
 
-.content .index dt a {
+.content .roles > li + li {
+  margin-top: 1em;
+}
+
+.roles__when {
+  color: var(--muted);
+}
+
+.content .roles p {
+  margin: 0;
+}
+
+/* Headline numbers (Social Media Production): side by side, each number
+   black and two sizes up, with what it counts under it in grey, and a faint
+   line above. Where there isn't room for all three in a row (under 30rem),
+   one under the other, never two and one. */
+.content .stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem 1.5rem;
+  margin-top: 0.45rem;
+}
+
+.content .stats > li {
+  flex-grow: 1;
+  flex-basis: calc((30rem - 100%) * 999);
+  padding-top: 0.6rem;
+  border-top: 1px solid var(--rule);
+  color: var(--muted);
+}
+
+.stats__n {
+  display: block;
   color: var(--fg);
-  text-decoration: underline;
-  text-decoration-color: var(--track);
-  text-decoration-thickness: 1px;
-  text-underline-offset: 0.22em;
-}
-
-.content .index dt a:hover {
-  text-decoration-color: currentColor;
-}
-
-.content .index dd {
-  margin-bottom: 1em;
+  font-size: 1.5rem;
+  font-weight: 500;
+  line-height: 1.25;
 }
 
 /* Sound Design's projects: a small picture beside each name, its year and
-   a line about it. Names in black, faintly underlined, as in .index. The
+   a line about it. Names in black, faintly underlined, so it's clear they're links. The
    picture gets smaller when the list is narrow (a phone, or a tablet held
    upright), so the text beside it has room */
 .content .projects {
@@ -696,6 +720,70 @@ figcaption {
   font-weight: 400;
   line-height: 1;
   letter-spacing: 0;
+}
+
+/* About Me's highlights: three things to look at first, one under the
+   other, each a link to its page. What it is, in black and a size up, and
+   beside it (under it, on a phone) a line about it, grey like any link;
+   a faint line between them. Pointing at one turns it all black. */
+.content .highlights {
+  margin: calc(var(--gap) * 1.25) 0 calc(var(--gap) * 1.25);
+  border-bottom: 1px solid var(--rule);
+}
+
+.highlights a {
+  display: grid;
+  grid-template-columns: 10.5rem minmax(0, 1fr);
+  column-gap: 1rem;
+  align-items: baseline;
+  padding: 0.7rem 0;
+  border-top: 1px solid var(--rule);
+  color: var(--muted);
+}
+
+.highlights a:hover {
+  color: var(--fg);
+  text-decoration: none;
+}
+
+.highlights__big {
+  color: var(--fg);
+  font-size: 1.25rem;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+/* Buttons (About Me): a line round the words; the main one filled in.
+   Pointing at one swaps them round. */
+.content .actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.button {
+  display: inline-block;
+  padding: 0.4em 1.15em;
+  border: 1px solid var(--fg);
+  border-radius: 999px;
+  color: var(--fg);
+  line-height: 1.3;
+}
+
+.button:hover {
+  background: var(--fg);
+  color: var(--bg);
+  text-decoration: none;
+}
+
+.button--solid {
+  background: var(--fg);
+  color: var(--bg);
+}
+
+.button--solid:hover {
+  background: transparent;
+  color: var(--fg);
 }
 
 
@@ -1346,6 +1434,21 @@ html:not(.js) .media__frame > iframe[data-src] {
 
 .app-shot a:hover img {
   opacity: 0.9;
+}
+
+/* Photos side by side, all the same height (Outside Work): each takes a
+   share of the row in proportion to its shape (--ratio, its width over its
+   height, from {% image %}), so their tops and bottoms line up */
+.photo-row {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  margin-bottom: var(--gap);
+}
+
+.photo-row > .figure {
+  flex: var(--ratio, 1.333) 1 0;
+  min-width: 0;
 }
 
 /* "can you keep a secret?" (Music): handwritten, like a note in the
@@ -2829,6 +2932,23 @@ html.has-lightbox {
   .page--signoff .signoff {
     margin-top: auto;
     padding-top: calc(var(--gap) * 2);
+  }
+
+  /* About Me's highlights: the line about each one under it */
+  .highlights a {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 0.1rem;
+  }
+
+  /* Photos side by side: a little closer */
+  .photo-row {
+    gap: 0.6rem;
+  }
+
+  /* Experience's roles: each one's years above it, not beside it, so the
+     text has the width */
+  .content .roles > li {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
