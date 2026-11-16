@@ -131,7 +131,7 @@
   {%- elif ep.photo.endsWith(".mp4") %}
   <figure class="sm__clip"><video src="{{ ep.photo }}" poster="{{ ep.photo | replace('.mp4', '-poster.jpg') }}" controls playsinline preload="none" aria-label="{{ ep.title }}, {{ ep.place }}"></video></figure>
   {%- elif ep.photo %}
-  {% image { src: ep.photo, alt: ep.title + ", " + ep.place, zoom: false, sizes: "20rem" } %}
+  {% image { src: ep.photo, alt: ep.alt or (ep.title + ", " + ep.place), zoom: false, sizes: "20rem" } %}
   {%- endif %}
   {%- if ep.links.length %}
   <ul>

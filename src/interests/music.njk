@@ -8,7 +8,7 @@ figures:
   - embed:
       src: "https://www.instagram.com/tv/CdnIgHfJZII/embed/"
       title: "Melonade live (Instagram player)"
-      caption: "Live with Melonade."
+      caption: "Live with Melonade, 2022."
       height: 392
 ---
 <h1 class="page-title">Music</h1>
@@ -71,7 +71,7 @@ figures:
 {% embed { src: "https://open.spotify.com/embed/track/30wD52sZxKJog6qLMUGl7X", title: "Boogie with You, by Melonade (Spotify player)", height: 152 } %}
 
 {#- A secret under Boogie with You: "can you keep a secret?", yes or no.
-    No, and it says thanks for your honesty; yes opens a popup with the next album's cover and
+    No, and it says thanks for your honesty; yes opens a popup with the first full-length album's cover and
     a few demos (site.js, "The secret"). Without JavaScript it isn't shown.
     The cover is in media/music/, the demos in src/assets/audio/. -#}
 <div class="secret" hidden aria-live="polite">
@@ -80,11 +80,12 @@ figures:
 </div>
 <dialog class="secret-box" aria-labelledby="secret-title">
   <button class="secret-box__close" type="button"><span class="visually-hidden">Close</span><span aria-hidden="true">&times;</span></button>
-  {% image { src: "media/music/next-album-cover.jpg", alt: "A mock-up of my next album's cover: a face half in shadow, hand to cheek, among swirls of dark ink", zoom: false, sizes: "22rem" } %}
-  <p id="secret-title">I'm currently working on my next album. Here are a few demos so far:</p>
-  {% audio { src: "/assets/audio/demo-through-the-white-gates.mp3", title: "Through the White Gates", caption: "demo" } %}
-  {% audio { src: "/assets/audio/demo-dont-run-away.mp3", title: "Don't Run Away", caption: "demo" } %}
-  {% audio { src: "/assets/audio/demo-the-blue.mp3", title: "The Blue", caption: "demo" } %}
+  {% image { src: "media/music/next-album-cover.jpg", alt: "A mock-up of the cover of my first full-length album: a face half in shadow, hand to cheek, among swirls of dark ink", zoom: false, sizes: "22rem" } %}
+  <p id="secret-title">I'm currently working on my first full-length album. Here are a few demos so far:</p>
+  {#- untitled: their names are only for screen readers (style.css) #}
+  {% audio { src: "/assets/audio/demo-1.mp3", title: "Demo 1" } %}
+  {% audio { src: "/assets/audio/demo-2.mp3", title: "Demo 2" } %}
+  {% audio { src: "/assets/audio/demo-3.mp3", title: "Demo 3" } %}
 </dialog>
 
 <h2>Select credits</h2>

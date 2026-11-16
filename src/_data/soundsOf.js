@@ -90,6 +90,7 @@ export default function () {
       links: parseLinks(row.links).map((link) => ({ ...link, text: curl(link.text) })),
       audio: (row.audio || "").split(";").map((s) => s.trim()).filter(Boolean),
       photo: (row.photo || "").trim(),
+      alt: curl((row.alt || "").trim()), // what the photo shows (for screen readers)
       date: when ? when.toISOString().slice(0, 10) : "",
       // A word in the date column (e.g. "unreleased") shows in place of a date.
       dateLong: when ? `${when.getUTCDate()} ${MONTHS[when.getUTCMonth()]} ${when.getUTCFullYear()}` : (row.date || "").trim(),

@@ -1414,6 +1414,16 @@ html:not(.js) .media__frame > iframe[data-src] {
   margin-bottom: 1em;
 }
 
+/* The demos are untitled: their names are kept for screen readers only */
+.secret-box .audio figcaption {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 /* "demos to come", pencilled, until they're in */
 .content .secret-box__soon {
   margin: 0 0 0.8em;

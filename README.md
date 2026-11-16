@@ -252,6 +252,7 @@ the column headings (the order doesn't matter):
 | `links` | `Photos (Instagram) \| https://…` | for a stop along the way: links on its card, as text \| address; separate several with `;` |
 | `audio` | `/assets/audio/interview.mp3` | for a stop along the way: a sound file on its card (put the file in `src/assets/audio/`); several, separated by `;`, show as parts 1, 2… |
 | `photo` | `media/sounds-of/uluru.jpg` | for a stop along the way: a photo on its card, from `media/`; or `to come` for a grey box until there is one; or a short `.mp4` video in `src/assets/video/` (with a `…-poster.jpg` picture beside it), like Ballina's |
+| `alt` | `Me at the foot of Uluru` | for a stop along the way: what its photo shows, for people who can't see it |
 
 **Hollow markers** are the stops that aren't part of the series: interviews,
 visits and the like ("along the way": Ballina, Brisbane's 4ZZZ interview,
@@ -433,9 +434,8 @@ Still to fill in:
   visitors until it's in).
 - **Qualifications:** the Operation Karma EP's title.
 - **Photos** (the grey boxes; each says what it's for, and its shape is in
-  `ratio:`, such as `3/4` for portrait): at the mixing desk (Contact), Uluru
-  (on the map's card: its `photo` in the CSV), and two for Social Media
-  Production. To add one, put the file in `media/` and give its entry a
+  `ratio:`, such as `3/4` for portrait): at the mixing desk (Contact), and
+  two for Social Media Production. To add one, put the file in `media/` and give its entry a
   `src:`, like the Sound Design pictures. Strip a phone photo's location
   before it goes in (the build doesn't copy it into the resized pictures,
   but the original in `media/` is in the repository).
