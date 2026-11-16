@@ -426,16 +426,16 @@ its comment, and it appears for everyone.
 
 Still to fill in:
 
-- **Contact:** the photo, and links to LinkedIn, Bandcamp and itch.io if you
-  want them.
-- **Feedra Prototype:** the link to download the prototype (hidden from
-  visitors until it's in).
+- **Contact:** links to Bandcamp and itch.io, if you want them (hidden from
+  visitors until they're in).
+- **Feedra Prototype:** the link to download the prototype (hidden until
+  it's in).
 - **Qualifications:** the Operation Karma EP's title.
-- **Photos** (the grey boxes; each says what it's for, and its shape is in
-  `ratio:`, such as `3/4` for portrait): at the mixing desk (Contact). To add one, put the file in `media/` and give its entry a
-  `src:`, like the Sound Design pictures. Strip a phone photo's location
-  before it goes in (the build doesn't copy it into the resized pictures,
-  but the original in `media/` is in the repository).
+
+There are no photos still to come. To add one, put the file in `media/` and
+give its entry a `src:`, like the Sound Design pictures, and strip a phone
+photo's location first (the build doesn't copy it into the resized
+pictures, but the original in `media/` is in the repository).
 
 ## How it's designed
 

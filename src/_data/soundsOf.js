@@ -273,5 +273,6 @@ export default function () {
   }
 
   const episodeCount = episodes.filter((ep) => ep.kind === "episode").length;
-  return { viewBox, outline, echo, borders, episodes, episodeCount, segments, home, labels };
+  const upcomingCount = episodes.filter((ep) => ep.kind === "upcoming").length;
+  return { viewBox, outline, echo, borders, episodes, episodeCount, upcomingCount, segments, home, labels };
 }

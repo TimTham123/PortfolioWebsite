@@ -67,7 +67,10 @@ share:
 
 <h2>Episodes</h2>
 {#- Listed from src/_data/sounds-of.csv, newest first, with the episodes
-    still to come (the stops along the way, like interviews, are left out). #}
+    still to come (the stops along the way, like interviews, are left out).
+    Folded away under a "+": the map above already shows them all. #}
+<details class="more">
+<summary>Every episode ({{ soundsOf.episodeCount }}{% if soundsOf.upcomingCount %}, and {{ soundsOf.upcomingCount }} still to come{% endif %})</summary>
 <div class="table-scroll">
   <table class="episodes">
     <caption class="visually-hidden">Every episode, newest first</caption>
@@ -83,3 +86,4 @@ share:
     </tbody>
   </table>
 </div>
+</details>
