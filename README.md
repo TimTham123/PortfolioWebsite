@@ -312,8 +312,8 @@ coordinates. The Big Dance Festival was near Daylesford, and the Gippsland
 episodes are in their own towns: Des Sheridan in Kongwak, Trey in Lakes
 Entrance and Grub in Sale. The stops along the way have no dates; Ballina
 sits between the Coffs Coast and Brisbane, and Uluru between Alice Springs
-and Darwin. OnlyWithYou, also from the Big Dance, has just `2026` for its
-date.
+and Darwin. OnlyWithYou, also from the Big Dance, is unreleased, like
+Reflex Blue.
 
 The episode list under the map is made from the same file, so it always
 matches. The outline of Australia is generated from Natural Earth's public
