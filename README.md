@@ -454,8 +454,6 @@ Still to fill in:
 - **Experience:** the Operation Karma EP's title.
 - **About Me:** a showreel, a minute or so of the best bits: give the
   `{% video %}` under the opening lines its YouTube id (hidden until then).
-- **Social Media Production:** the Sounds Of channels' numbers (hidden until
-  they're in).
 
 There are no photos still to come. To add one, put the file in `media/` and
 give its entry a `src:`, like the Sound Design pictures, and strip a phone
