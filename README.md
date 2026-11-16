@@ -312,8 +312,8 @@ coordinates. The Big Dance Festival was near Daylesford, and the Gippsland
 episodes are in their own towns: Des Sheridan in Kongwak, Trey in Lakes
 Entrance and Grub in Sale. The stops along the way have no dates; Ballina
 sits between the Coffs Coast and Brisbane, and Uluru between Alice Springs
-and Darwin. OnlyWithYou, also from the Big Dance, has `2026` for its date
-until its release date is in.
+and Darwin. OnlyWithYou, also from the Big Dance, has just `2026` for its
+date.
 
 The episode list under the map is made from the same file, so it always
 matches. The outline of Australia is generated from Natural Earth's public
@@ -434,11 +434,6 @@ Still to fill in:
   they're in.
 - **Ongoing Works:** the sample song from a Trashpanda project (hidden from
   visitors until it's in).
-- **Feedra Prototype:** the sentence about the live game at the showcase
-  (it was cut off).
-- **Sounds Of:** OnlyWithYou's release date (it says 2026 for now).
-- **Qualifications:** the year of the Christmas celebrations at St Paul's,
-  Kealba, and the years you've done Wes Coeur's social media.
 - **Music and Qualifications:** the Operation Karma EP's title; a CV PDF.
 - **Photos** (the grey boxes; each says what it's for, and its shape is in
   `ratio:`, such as `3/4` for portrait): a portrait (About Me), at the mixing
