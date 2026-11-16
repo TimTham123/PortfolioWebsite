@@ -123,9 +123,9 @@
 {%- asyncEach ep in map.episodes %}
 {%- if ep.extra %}
 <template id="sm-extra-{{ ep.index }}">
-  {%- if ep.audio %}
-  {% audio { src: ep.audio, title: ep.title } %}
-  {%- endif %}
+  {%- for src in ep.audio %}
+  {% audio { src: src, title: (ep.title + ", part " + loop.index) if ep.audio.length > 1 else ep.title } %}
+  {%- endfor %}
   {%- if ep.photo == "to come" %}
   {% image { alt: ep.title + ", " + ep.place, ratio: "3/2", zoom: false } %}
   {%- elif ep.photo %}

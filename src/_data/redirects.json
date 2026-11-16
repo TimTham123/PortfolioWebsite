@@ -8,5 +8,10 @@
     "from": "/social-media-marketing/",
     "to": "/social-media-production/",
     "title": "Social Media Production"
+  },
+  {
+    "from": "/sound-design/feedra/",
+    "to": "/feedra/",
+    "title": "Feedra Prototype"
   }
 ]

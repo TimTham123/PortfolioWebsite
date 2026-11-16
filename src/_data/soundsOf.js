@@ -88,7 +88,7 @@ export default function () {
       // For a stop that isn't an episode: links, a sound file and a photo,
       // put on its card from a <template> (see sounds-of-map.njk).
       links: parseLinks(row.links).map((link) => ({ ...link, text: curl(link.text) })),
-      audio: (row.audio || "").trim(),
+      audio: (row.audio || "").split(";").map((s) => s.trim()).filter(Boolean),
       photo: (row.photo || "").trim(),
       date: when ? when.toISOString().slice(0, 10) : "",
       // A word in the date column (e.g. "unreleased") shows in place of a date.
@@ -106,7 +106,7 @@ export default function () {
 
   // For the markers' labels and the status line.
   for (const ep of episodes) {
-    ep.extra = Boolean(ep.links.length || ep.audio || ep.photo); // has a <template>
+    ep.extra = Boolean(ep.links.length || ep.audio.length || ep.photo); // has a <template>
     ep.label =
       ep.kind === "extra" ? `${ep.title}, ${ep.location} (along the way, not an episode)`
       : ep.kind === "upcoming" ? `${ep.name}, ${ep.location} (coming soon)`

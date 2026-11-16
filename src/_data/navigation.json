@@ -29,10 +29,10 @@
           { "title": "Cyberpedia", "url": "/sound-design/cyberpedia/" },
           { "title": "Okiro", "url": "/sound-design/okiro/" },
           { "title": "Little Bit of Gore", "url": "/sound-design/little-bit-of-gore/" },
-          { "title": "Hubworld", "url": "/sound-design/hubworld/" },
-          { "title": "Feedra Prototype", "url": "/sound-design/feedra/" }
+          { "title": "Hubworld", "url": "/sound-design/hubworld/" }
         ]
       },
+      { "title": "Feedra Prototype", "url": "/feedra/" },
       { "title": "Social Media Production", "url": "/social-media-production/" },
       { "title": "Ongoing Works", "url": "/ongoing-works/" }
     ]

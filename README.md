@@ -77,8 +77,8 @@ src/
 │   ├── cyberpedia.njk                                          /sound-design/cyberpedia/
 │   ├── okiro.njk                                               /sound-design/okiro/
 │   ├── little-bit-of-gore.njk                                  /sound-design/little-bit-of-gore/
-│   ├── hubworld.njk                                            /sound-design/hubworld/
-│   └── feedra.njk         ← Feedra Prototype                   /sound-design/feedra/
+│   └── hubworld.njk                                            /sound-design/hubworld/
+├── feedra.njk             ← Feedra Prototype                   /feedra/
 ├── social-media-production.njk                                 /social-media-production/
 ├── ongoing-works.njk      ← what you're working on now          /ongoing-works/
 │
@@ -148,8 +148,8 @@ the page, and old links to it (in a CV or an email, say) would stop
 working. To keep them working, add the old and new addresses to
 `src/_data/redirects.json`: the old one then sends visitors straight on
 to the new one. Little Bit of Gore moved like this, from
-`/sound-design/a-little-bit-of-gore/`, and Social Media Production from
-`/social-media-marketing/`.
+`/sound-design/a-little-bit-of-gore/`, Social Media Production from
+`/social-media-marketing/`, and Feedra Prototype from `/sound-design/feedra/`.
 
 ### The index (navigation)
 
@@ -250,7 +250,7 @@ the column headings (the order doesn't matter):
 | `via` | `Hughenden -20.84 144.2` | optional: towns the road goes through on the way to this stop (name, latitude, longitude; separate several with `;`) |
 | `title` | `On 4ZZZ` | for a stop along the way: what its card is called (otherwise the place's name) |
 | `links` | `Photos (Instagram) \| https://…` | for a stop along the way: links on its card, as text \| address; separate several with `;` |
-| `audio` | `/assets/audio/interview.mp3` | for a stop along the way: a sound file on its card (put the file in `src/assets/audio/`) |
+| `audio` | `/assets/audio/interview.mp3` | for a stop along the way: a sound file on its card (put the file in `src/assets/audio/`); several, separated by `;`, show as parts 1, 2… |
 | `photo` | `media/sounds-of/uluru.jpg` | for a stop along the way: a photo on its card, from `media/`; or `to come` for a grey box until there is one |
 
 **Hollow markers** are the stops that aren't part of the series: interviews,
@@ -430,14 +430,17 @@ Still to fill in:
 - **Contact:** the photo, and links to LinkedIn, Bandcamp and itch.io if you
   want them.
 - **Music:** the secret under Boogie with You ("can you keep a secret?"):
-  the next album's cover and the demos. It's hidden from visitors until
-  they're in.
+  the next album's cover and the demos ("photo to come" and "demos to come"
+  show in their place for now).
+- **Feedra Prototype:** the links to download the prototype and to the full
+  documentation (hidden from visitors until they're in).
+- **Sounds Of:** the two parts of the 4ZZZ interview (hidden until they're
+  in).
 - **Ongoing Works:** the sample song from a Trashpanda project (hidden from
   visitors until it's in).
-- **Music and Qualifications:** the Operation Karma EP's title; a CV PDF.
+- **Qualifications:** the Operation Karma EP's title.
 - **Photos** (the grey boxes; each says what it's for, and its shape is in
-  `ratio:`, such as `3/4` for portrait): a portrait (About Me), at the mixing
-  desk (Contact), playing live (Music), two climbing (Climbing), two of Luna
+  `ratio:`, such as `3/4` for portrait): at the mixing desk (Contact), playing live (Music), two climbing (Climbing), two of Luna
   (Cat), one from the road for Sounds Of ("How it's made"), Ballina and
   Uluru (on the map's cards: their `photo` in the CSV), the Trashpanda team
   at ACMI (Alchemeow), and two for Social Media Production. To add one, put

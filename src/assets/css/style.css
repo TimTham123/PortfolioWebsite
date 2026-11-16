@@ -486,6 +486,12 @@ a:hover {
   color: var(--muted);
 }
 
+/* The grey line at the top of each page is all in lower case, like the
+   index (its words keep their capitals in the page itself) */
+.content > .standfirst:first-of-type {
+  text-transform: lowercase;
+}
+
 .content h2,
 .content h3 {
   margin-top: var(--gap);
@@ -564,6 +570,11 @@ figcaption {
   content: "\2013";
   position: absolute;
   left: -1.1em;
+}
+
+/* ...except a last line that just rounds the list off ("and more") */
+.content .points > li.plain::before {
+  content: none;
 }
 
 .content dd {
@@ -721,8 +732,15 @@ blockquote {
 }
 
 /* A quote that signs a page off (`signoff:` at the top of the page, About
-   Me): at the very bottom of the text column, however tall the window, and
-   after the pictures on a phone */
+   Me): small, in the bottom right-hand corner of the page, however tall the
+   window (on a phone, after everything else, still on the right). The page
+   runs on to the right-hand edge for it, while the text keeps to the
+   reading width. */
+.signoff {
+  max-width: 17rem;
+  font-size: 1rem;
+}
+
 @media (min-width: 760px) {
   .main--signoff {
     grid-template-rows: auto 1fr auto;
@@ -730,8 +748,42 @@ blockquote {
 
   .main--signoff .signoff {
     grid-row: 3;
-    grid-column: 1;
+    grid-column: 1 / -1;
+    justify-self: end;
     align-self: end;
+  }
+
+  .page--signoff .content {
+    max-width: var(--text-w);
+  }
+}
+
+@media (min-width: 1100px) {
+  .page--signoff {
+    grid-template-areas:
+      "header .    .    ."
+      "nav    main main main"
+      "footer footer footer footer";
+  }
+
+  .page--signoff .main {
+    grid-template-columns: minmax(0, var(--text-w)) var(--fig-w) 1fr;
+  }
+}
+
+@media (min-width: 760px) and (max-width: 1099.98px) {
+  .page--signoff {
+    grid-template-areas:
+      "header .    ."
+      "nav    main main"
+      "footer footer footer";
+  }
+}
+
+@media (max-width: 759.98px) {
+  .signoff {
+    max-width: 15rem;
+    margin-left: auto;
   }
 }
 
@@ -1276,7 +1328,7 @@ html:not(.js) .media__frame > iframe[data-src] {
 }
 
 /* "can you keep a secret?" (Music): handwritten, like a note in the
-   margin, with yes / no underneath once it's asked */
+   margin, with yes / no underneath */
 .secret {
   margin-bottom: var(--gap);
   font-family: var(--font-note);
@@ -1298,8 +1350,7 @@ html:not(.js) .media__frame > iframe[data-src] {
   cursor: pointer;
 }
 
-.secret button:hover,
-.secret__ask[aria-expanded="true"] {
+.secret button:hover {
   color: var(--fg);
 }
 
@@ -1342,6 +1393,16 @@ html:not(.js) .media__frame > iframe[data-src] {
 
 .secret-box .figure {
   margin-bottom: 1em;
+}
+
+/* "demos to come", pencilled, until they're in */
+.content .secret-box__soon {
+  margin: 0 0 0.8em;
+  color: var(--on-faint);
+  font-family: var(--font-note);
+  font-size: 1.25rem;
+  line-height: 1.2;
+  letter-spacing: 0;
 }
 
 
@@ -1729,8 +1790,13 @@ div.ph {
   pointer-events: none;
 }
 
-.sm__place.is-left {
-  transform: translate(calc(-100% - 14px - var(--reach, 0px)), -55%);
+/* (where it actually goes, clear of the route, is worked out by the map's
+   script, which moves it with an inline transform) */
+
+/* It stays on one line (the text's "text-wrap: pretty" would let it wrap) */
+.sm__stage .sm__place {
+  white-space: nowrap;
+  text-wrap: nowrap;
 }
 
 .sm__place:empty {
@@ -2192,7 +2258,7 @@ div.ph {
   }
 
   .sm__place {
-    font-size: 1.3125rem;
+    font-size: 1.125rem;
   }
 
   /* The zoom buttons side by side, low in the Southern Ocean, clear of the

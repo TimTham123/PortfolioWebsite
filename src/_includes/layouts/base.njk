@@ -52,7 +52,7 @@
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
 
-  <div class="page{% if wide %} page--wide{% endif %}">
+  <div class="page{% if wide %} page--wide{% endif %}{% if signoff %} page--signoff{% endif %}">
     {% include "partials/header.njk" %}
 
     {% include "partials/nav.njk" %}

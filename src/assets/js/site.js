@@ -329,24 +329,17 @@
   }
 
   /*
-    6. The secret (Music): "can you keep a secret?" shows yes / no when it's
-    pressed. No, and it goes away; yes opens a popup with the next album's
-    cover and a few demos, closed with its ×, a click around it, or Escape.
-    Without JavaScript none of it shows.
+    6. The secret (Music): "can you keep a secret?", yes or no. No, and it
+    goes away; yes opens a popup with the next album's cover and a few
+    demos, closed with its ×, a click around it, or Escape. Without
+    JavaScript none of it shows.
   */
   var secret = document.querySelector(".secret");
   var secretBox = document.querySelector(".secret-box");
   if (secret && secretBox && typeof HTMLDialogElement === "function") {
-    var ask = secret.querySelector(".secret__ask");
-    var answer = secret.querySelector(".secret__answer");
-    var yes = answer.querySelector('[data-secret="yes"]');
+    var yes = secret.querySelector('[data-secret="yes"]');
     secret.hidden = false;
-    ask.addEventListener("click", function () {
-      var asked = ask.getAttribute("aria-expanded") === "true";
-      ask.setAttribute("aria-expanded", asked ? "false" : "true");
-      answer.hidden = asked;
-    });
-    answer.querySelector('[data-secret="no"]').addEventListener("click", function () {
+    secret.querySelector('[data-secret="no"]').addEventListener("click", function () {
       secret.hidden = true;
     });
     yes.addEventListener("click", function () {

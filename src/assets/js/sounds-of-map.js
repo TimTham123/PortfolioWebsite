@@ -133,9 +133,11 @@
     p.dots = p.shown.map(function (i) { return [episodes[i].dx * HUDDLE_OPEN, episodes[i].dy * HUDDLE_OPEN]; });
     p.far = 0; // the furthest any dot is from the place
     p.wide = 0; // ...and the furthest to either side
+    p.tall = 0; // ...and up or down
     p.dots.forEach(function (d) {
       p.far = Math.max(p.far, Math.sqrt(d[0] * d[0] + d[1] * d[1]));
       p.wide = Math.max(p.wide, Math.abs(d[0]));
+      p.tall = Math.max(p.tall, Math.abs(d[1]));
     });
   });
 
@@ -302,39 +304,91 @@
       homeDot.setAttribute("cx", num(home.x));
       homeDot.setAttribute("cy", num(home.y));
     }
+    sampleRoute();
   }
 
-  // The handwritten name of the place you're at goes on whichever side of
-  // its line of dots covers fewer markers, and stays on the map (if it's all
-  // the same, beside the chosen dot of a bunch, or else on the right unless
-  // that's near the right-hand edge).
-  function nameGoesLeft(spot) {
+  // Points every few map units along the whole route, so the place's name
+  // can stay off it (below).
+  var routePoints = [];
+  function sampleRoute() {
+    routePoints = [];
+    faintSegments.forEach(function (path) {
+      var length = path.getTotalLength();
+      var steps = Math.max(2, Math.ceil(length / 4));
+      for (var k = 0; k <= steps; k++) {
+        var pt = path.getPointAtLength((length * k) / steps);
+        routePoints.push(pt.x, pt.y);
+      }
+    });
+  }
+
+  // The handwritten name of the place you're at goes beside its marker: on
+  // the right or the left, above or below, or off one of its corners (and,
+  // where it's crowded, a little further out), wherever it stays on the map
+  // and covers the least of the route and the other markers. It's clear of
+  // a bunch's dots (here.wide, here.tall). If it's all the same, it goes
+  // beside the chosen dot of a bunch, or else on the right unless that's
+  // near the right-hand edge. Returns where it goes, from the marker, in px.
+  function nameOffset(spot) {
     var width = stage.clientWidth;
     var height = stage.clientHeight;
     var x = (spot.left / 100) * width;
     var y = (spot.top / 100) * height;
-    var gap = 14 + spots[current].place.wide; // as in style.css (--reach)
+    var here = spots[current].place;
     var w = place.offsetWidth;
     var h = place.offsetHeight;
-    function covered(left) {
-      var x0 = left ? x - gap - w : x + gap;
-      var y0 = y - 0.55 * h;
-      var count = x0 < 0 || x0 + w > width ? 100 : 0;
+    // in a bunch, beside the chosen dot; else on the right, unless that's
+    // near the right-hand edge
+    var dx = episodes[current].shown ? episodes[current].dx : 0;
+    var first = dx ? (dx < 0 ? -1 : 1) : spot.left > 62 ? -1 : 1;
+    var candidates = [];
+    [0, 18, 36].forEach(function (out, ring) {
+      var gap = 14 + here.wide + out;
+      var gapY = 12 + here.tall + out;
+      var cornerX = 6 + here.wide + out * 0.7;
+      var cornerY = 8 + here.tall + out * 0.7;
+      [
+        [first > 0 ? gap : -gap - w, -0.55 * h],
+        [first > 0 ? -gap - w : gap, -0.55 * h],
+        [-w / 2, -gapY - h],
+        [-w / 2, gapY],
+        [first > 0 ? cornerX : -cornerX - w, -cornerY - h],
+        [first > 0 ? cornerX : -cornerX - w, cornerY],
+        [first > 0 ? -cornerX - w : cornerX, -cornerY - h],
+        [first > 0 ? -cornerX - w : cornerX, cornerY],
+      ].forEach(function (offset, k) {
+        candidates.push({ offset: offset, cost: ring * 4 + k * 0.01 });
+      });
+    });
+    // the route, from map units to px in the stage
+    var vw = W / view.k;
+    var vh = H / view.k;
+    var left0 = view.cx - vw / 2;
+    var top0 = view.cy - vh / 2;
+    var sx = width / vw;
+    var sy = height / vh;
+    var best = candidates[0];
+    var bestCost = Infinity;
+    candidates.forEach(function (c) {
+      var x0 = x + c.offset[0];
+      var y0 = y + c.offset[1];
+      var cost = c.cost + (x0 < 0 || x0 + w > width || y0 < 0 || y0 + h > height ? 1000 : 0);
+      if (cost >= bestCost) return;
       places.forEach(function (p) {
-        if (p === spots[current].place) return;
+        if (p === here) return;
         var at = toStage(p.x / scale, p.y / scale);
         var mx = (at.left / 100) * width;
         var my = (at.top / 100) * height;
-        if (mx > x0 - 7 && mx < x0 + w + 7 && my > y0 - 7 && my < y0 + h + 7) count++;
+        if (mx > x0 - 7 && mx < x0 + w + 7 && my > y0 - 7 && my < y0 + h + 7) cost += 12;
       });
-      return count;
-    }
-    var right = covered(false);
-    var left = covered(true);
-    if (left !== right) return left < right;
-    // in a bunch, beside the chosen dot
-    var side = episodes[current].shown ? episodes[current].dx : 0;
-    return side ? side < 0 : spot.left > 62;
+      for (var k = 0; k < routePoints.length && cost < bestCost; k += 2) {
+        var px = (routePoints[k] - left0) * sx;
+        var py = (routePoints[k + 1] - top0) * sy;
+        if (px > x0 - 2 && px < x0 + w + 2 && py > y0 - 2 && py < y0 + h + 2) cost += 2;
+      }
+      if (cost < bestCost) { bestCost = cost; best = c; }
+    });
+    return best.offset;
   }
 
   function render() {
@@ -365,7 +419,8 @@
       var spot = toStage(line.x, line.y);
       place.style.left = spot.left + "%";
       place.style.top = spot.top + "%";
-      place.classList.toggle("is-left", nameGoesLeft(spot));
+      var offset = nameOffset(spot);
+      place.style.transform = "translate(" + Math.round(offset[0]) + "px, " + Math.round(offset[1]) + "px)";
     }
 
     root.classList.toggle("is-zoomed", view.k > 1.001);
