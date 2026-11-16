@@ -3,14 +3,8 @@ layout: layouts/base.njk
 title: Social Media Production
 description: "Social media production and strategy: growing Melbourne artist Wes Coeur's audience, and the Sounds Of channels."
 updated: 2026-11-16
-placeholder: true
-figures:
-  - alt: "Behind the scenes on a content shoot"
-    caption: "(on a content shoot)"
-    ratio: "4/5"
-  - alt: "A recent Instagram grid on a phone screen"
-    caption: "(a recent Instagram grid)"
-    ratio: "3/4"
+# runs on into the space on the right, so the two videos fit side by side
+wide: true
 ---
 <h1 class="page-title">Social Media Production</h1>
 <p class="standfirst">Social media content and strategy for artists.</p>
@@ -20,11 +14,17 @@ figures:
 <p>I help Melbourne artist <a href="https://open.spotify.com/artist/4zjTgLNIPksuxMXCKClne9">Wes Coeur</a> produce his social media content and plan the strategy behind it. Together we've grown his Instagram from 500 to 5,000 followers and his TikTok from nothing to 3,400, with many of his videos passing a million views on TikTok and Instagram.</p>
 <p>The strategy is to let Wes be himself. His videos are about the things he genuinely cares about, so the audience they find shares his interests, and they're the people most likely to love his music: R&amp;B, soul and electro-pop that owes as much to Prince's romance as to Tyler, the Creator's playful weirdness. (Wes and I also frequently collaborate musically together: see <a href="/interests/music/">Music</a>.)</p>
 
-{#- Two of the videos, side by side where there's room. The players load
-    as they come near the screen (site.js). -#}
-<div class="reels">
-  {% embed { src: "https://www.tiktok.com/embed/v2/7675668506834259218", title: "Wes Coeur on TikTok (TikTok player)", caption: "On <a href=\"https://www.tiktok.com/@wescoeur/video/7675668506834259218\">TikTok</a>.", height: 486 } %}
-  {% embed { src: "https://www.instagram.com/reel/DW_E7drEpC8/embed/", title: "Wes Coeur on Instagram (Instagram player)", caption: "On <a href=\"https://www.instagram.com/reel/DW_E7drEpC8/\">Instagram</a>.", height: 552 } %}
+{#- Two of the videos, side by side where there's room, each at the size
+    its player is made for (326px across). TikTok's player is put in
+    straight away (the browser loads it as it comes near the screen);
+    Instagram's loads the same way through site.js. Under each, a plain
+    link to the video, in case a browser won't play it here. -#}
+<div class="reels wide">
+  <figure class="media">
+    <div class="media__frame media__frame--embed" style="height: 580px"><iframe src="https://www.tiktok.com/embed/v2/7675668506834259218" title="Wes Coeur on TikTok (TikTok player)" loading="lazy" allow="encrypted-media; fullscreen; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
+    <figcaption>On <a href="https://www.tiktok.com/@wescoeur/video/7675668506834259218">TikTok</a>.</figcaption>
+  </figure>
+  {% embed { src: "https://www.instagram.com/reel/DW_E7drEpC8/embed/", title: "Wes Coeur on Instagram (Instagram player)", caption: "On <a href=\"https://www.instagram.com/reel/DW_E7drEpC8/\">Instagram</a>.", height: 616 } %}
 </div>
 
 <h2>Sounds Of</h2>

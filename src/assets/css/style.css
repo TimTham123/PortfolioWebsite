@@ -1288,19 +1288,21 @@ html:not(.js) .media__frame > iframe[data-src] {
 }
 
 /* Short vertical videos (Social Media Production): side by side where
-   there's room, one under the other on a phone. Their players have a set
-   size, so they're 270px wide (two fit across the text). */
+   there's room (the page runs on to the right for them), one under the
+   other on a phone. Their players are made for 325px or so. */
 .reels {
   display: flex;
   flex-wrap: wrap;
-  column-gap: 20px;
+  column-gap: 24px;
   align-items: flex-start;
+  max-width: 700px;
 }
 
 .reels > .media {
-  width: 270px;
+  width: 326px;
   max-width: 100%;
 }
+
 
 .reels .media__frame {
   background: #fff;
@@ -1435,15 +1437,13 @@ html:not(.js) .media__frame > iframe[data-src] {
 }
 
 
-/* 8. Footer & pager
+/* 8. The end of the page & pager
    ========================================================================== */
 
-.site-footer {
-  grid-area: footer;
-  padding-top: 4.5em;
-  color: var(--muted);
-  font-size: 0.875rem;
-  line-height: 1.4;
+/* No footer: just some room after the last thing on a page (but not on
+   About Me, whose quote sits right down in the bottom corner) */
+.main:not(.main--signoff) {
+  padding-bottom: 3.5rem;
 }
 
 /* ← previous / next → between project pages */
@@ -2812,8 +2812,23 @@ html.has-lightbox {
     padding: 10px 0;
   }
 
-  .site-footer {
-    padding-top: 3em;
+  /* About Me's quote, down in the bottom right-hand corner of the screen */
+  .page--signoff {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+
+  .page--signoff .main {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+  }
+
+  .page--signoff .signoff {
+    margin-top: auto;
+    padding-top: calc(var(--gap) * 2);
   }
 }
 
@@ -2846,7 +2861,6 @@ html.has-lightbox {
   .skip-link,
   .site-header .menu-toggle,
   .site-nav,
-  .site-footer,
   .pager,
   .figures,
   .media,

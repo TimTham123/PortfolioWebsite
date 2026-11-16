@@ -8,7 +8,7 @@ top, a few titles and the labels on the Sounds Of map.
 
 It's a traditional multi-page site: every page is its own HTML file. It's built
 with [Eleventy](https://www.11ty.dev/), which assembles the pages from a shared
-layout so the navigation and footer only have to be written once. The finished
+layout so the navigation only has to be written once. The finished
 site is plain HTML and CSS plus a few small scripts. Its fonts are stored in
 the site itself, and it uses no CDNs or trackers, so nothing can break when an
 outside service changes or goes away.
@@ -50,9 +50,9 @@ src/
 │   └── build.js           ← a version tag for the CSS/JS links
 ├── _includes/
 │   ├── layouts/
-│   │   ├── base.njk       ← the page: signature, index | text | images, footer
+│   │   ├── base.njk       ← the page: signature, index | text | images
 │   │   └── project.njk    ← base + ← previous / next → links, for sub-pages
-│   └── partials/          ← signature, nav, footer, page date, Sounds Of map
+│   └── partials/          ← signature, nav, Sounds Of map
 ├── assets/
 │   ├── css/style.css      ← all the styling, with comments
 │   ├── js/site.js         ← phone menu, dropdowns, picture popups, YouTube videos that load when played
@@ -113,7 +113,7 @@ Each page is a `.njk` file. It's HTML with a short settings block at the top:
 layout: layouts/base.njk      # project pages use layouts/project.njk
 title: Cyberpedia             # browser tab title
 description: One-line summary for search engines.
-updated: 2026-11-10           # "Updated …" in the footer
+updated: 2026-11-10           # when the page last changed (not shown on the page)
 placeholder: true             # adds "placeholder content" to that line
 wide: true                    # (optional) run on past the right-hand margin, like Sounds Of and Travel
 signoff:                      # (optional) a handwritten quote at the very bottom, like About Me
@@ -421,7 +421,6 @@ remembers until you visit an address ending in `?placeholders=off`. (Setting
 | `<span class="ph">[…]</span>` | a fact to fill in, such as `[Role]` or `[2025]` |
 | `{% image %}` with no file (or a picture in `figures:` with no `src`) | a photo still to come: a grey box, shown to everyone |
 | `{% video %}`, `{% audio %}` or `{% embed %}` with no URL | a player still to add |
-| `placeholder: true` at the top of a page | "placeholder content" in its footer, when previewing |
 
 When something's finished, delete its `class="ph"` (or the wrapper `div`) and
 its comment, and it appears for everyone.
@@ -434,8 +433,7 @@ Still to fill in:
   visitors until it's in).
 - **Qualifications:** the Operation Karma EP's title.
 - **Photos** (the grey boxes; each says what it's for, and its shape is in
-  `ratio:`, such as `3/4` for portrait): at the mixing desk (Contact), and
-  two for Social Media Production. To add one, put the file in `media/` and give its entry a
+  `ratio:`, such as `3/4` for portrait): at the mixing desk (Contact). To add one, put the file in `media/` and give its entry a
   `src:`, like the Sound Design pictures. Strip a phone photo's location
   before it goes in (the build doesn't copy it into the resized pictures,
   but the original in `media/` is in the repository).

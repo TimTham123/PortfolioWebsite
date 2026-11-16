@@ -1,8 +1,0 @@
-{#- The footer: the page's "Updated …" date (the 404 page has none) and a
-    copyright line. #}
-<footer class="site-footer">
-  {%- if not hideStamp %}
-  {% include "partials/stamp.njk" %}
-  {%- endif %}
-  <p>&copy; {{ build.year }} {{ site.name }}</p>
-</footer>
