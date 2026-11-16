@@ -205,7 +205,7 @@ placeholder becomes the real thing and nothing else on the page moves.
   half or three quarters of the way through; for a video with no big picture
   (it shows as a small grey box), use `thumb: "sddefault"`. To start a video
   part of the way in, add `start:` in seconds (Feedra's live showcase has
-  `start: 156`, 2:36).
+  `start: 768`, 12:48).
 - **SoundCloud**: `track` is the number in the track's embed code
   (`…/tracks/1800618249`); a private track also needs its `secret`, the `s-…`
   part of its private link.
