@@ -113,8 +113,7 @@ Each page is a `.njk` file. It's HTML with a short settings block at the top:
 layout: layouts/base.njk      # project pages use layouts/project.njk
 title: Cyberpedia             # browser tab title
 description: One-line summary for search engines.
-updated: 2026-11-10           # when the page last changed (not shown on the page)
-placeholder: true             # adds "placeholder content" to that line
+placeholder: true             # (optional) a reminder that the page still has things to fill in
 wide: true                    # (optional) run on past the right-hand margin, like Sounds Of and Travel
 signoff:                      # (optional) a handwritten quote at the very bottom, like About Me
   quote: Practicing an art…
