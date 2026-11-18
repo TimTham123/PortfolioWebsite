@@ -58,7 +58,7 @@ src/
 │   ├── js/site.js         ← phone menu, dropdowns, picture popups, YouTube videos that load when played
 │   ├── js/sounds-of-map.js ← the map's markers, popup, timeline, route and zoom
 │   ├── js/travel.js       ← the travel gallery: videos that play as you scroll (the photo popup is site.js's)
-│   ├── fonts/             ← Figtree, Nunito, Reenie Beanie and Waiting for the Sunrise (open-licence fonts)
+│   ├── fonts/             ← Figtree, Nunito, Reenie Beanie, Waiting for the Sunrise and Amatic SC (open-licence fonts)
 │   ├── audio/             ← sound files used as they are (the ABC interview on Sounds Of)
 │   └── img/               ← put your images here
 │                            Work
@@ -112,7 +112,7 @@ layout: layouts/base.njk      # project pages use layouts/project.njk
 title: Cyberpedia             # browser tab title
 description: One-line summary for search engines.
 placeholder: true             # (optional) a reminder that the page still has things to fill in
-wide: true                    # (optional) run on past the right-hand margin, like Sounds Of and Travel
+wide: true                    # (optional) run on past the right-hand margin, like Sounds Of and Outside Work
 signoff:                      # (optional) a handwritten quote at the very bottom, like About Me
   quote: Practicing an art…
   by: Kurt Vonnegut
@@ -120,6 +120,12 @@ figures:                      # pictures beside the text (optional)
   - src: media/sound-design/cyberpedia/bookworth.jpg
     alt: Bookworth, a book with glasses and a bow tie
     caption: Bookworth, your museum assistant.
+  - video:                    # ...or a video, like Melonade's on Music (embed: for a player from another site)
+      src: /assets/video/melonade-live-2022.mp4
+      poster: /assets/video/melonade-live-2022-poster.jpg
+      title: Melonade live, 2022
+      caption: Live with Melonade, 2022.
+      ratio: "640/482"
 figuresLast: true             # (optional) on phones, the pictures follow the text instead of leading it, like Contact
 ---
 <h1 class="page-title">Cyberpedia</h1>
@@ -240,8 +246,7 @@ A few one-off pieces:
 
 - **About Me's highlights** (`<ul class="highlights">`): three things to look
   at first, each a link, with `<span class="highlights__big">` for the part
-  in black. Under them, **buttons**: `<a class="button">` in a
-  `<p class="actions">`, with `button--solid` for the main one.
+  in black.
 - **Headline numbers** (`<ul class="stats">`, Social Media Production): each
   number in `<span class="stats__n">`, with what it counts after it. Three
   sit in a row; where they don't fit, they go one under the other.
@@ -476,7 +481,8 @@ headings are the one step up in size, so long pages are easy to scan.)
 | Sub-headings and labels | text-sized, Figtree Medium (500) |
 | Links | grey `#737373`; black and underlined when you point at them |
 | Current page | black (and its section, on project pages) |
-| Signature | your name in Reenie Beanie, top left (also the greeting, the map's title and page titles on phones) |
+| Signature | your name in Reenie Beanie, top left, and the way back to About Me, which isn't in the index (also the greeting and page titles on phones) |
+| Map title | "Sounds Of Australia" in Amatic SC Bold, tall hand-drawn capitals, with a grey line under it saying the dots can be clicked ("tap" on a touch screen) |
 | Handwritten notes | Waiting for the Sunrise, a rounder hand that's easier to read, so Reenie Beanie isn't everywhere: the names on the map (places, seas, states, the episode on its card), handwritten quotes, and "photo to come" on photos still to come |
 | Placeholders | photos still to come: grey boxes `#f0f0f0` for everyone; the rest hidden from visitors (with `?placeholders`, washed-out red notes `#a85555`) |
 | Columns (wide screens) | index 16rem, 2rem gap, text 35rem, 2rem gap, images 15rem |
@@ -506,7 +512,8 @@ pictures follow the text.
 
 **The index.** Work and Me are black labels with their pages indented
 underneath (the work first, as it's what most visitors come for);
-Experience and Contact close the list.
+Experience and Contact close the list. About Me isn't in it: the
+signature, top left, takes you there.
 Each level steps in a little, like an outline.
 
 **The dropdown.** "Sound Design" isn't a page in the index:

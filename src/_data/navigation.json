@@ -23,7 +23,6 @@
   {
     "title": "Me",
     "children": [
-      { "title": "About Me", "url": "/" },
       { "title": "Music", "url": "/interests/music/" },
       { "title": "Outside Work", "url": "/interests/" }
     ]

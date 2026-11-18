@@ -16,6 +16,9 @@ share:
 {#- The page's title, handwritten and centred over the map. Unlike the
     other pages' titles, it shows at every size. #}
 <h1 class="sm-heading wide">Sounds Of Australia</h1>
+{#- ...and under it, a line to say the map can be clicked ("tap" on a
+    touch screen) #}
+<p class="standfirst sm-hint wide"><span class="sm-hint__mouse">Click</span><span class="sm-hint__touch">Tap</span> a dot on the map to watch the session.</p>
 
 {#- The map comes first, as big as the window allows. #}
 {% include "partials/sounds-of-map.njk" %}
@@ -28,7 +31,7 @@ share:
 <h2>In the media</h2>
 {#- Also on the map, on the hollow markers (src/_data/sounds-of.csv) #}
 <h3>ABC North West Queensland</h3>
-<p>In Mount Isa, I was interviewed about the series on ABC North West Queensland's breakfast program (<a href="https://www.facebook.com/photo/?fbid=1638156014979713&amp;set=a.408194731309187">photo from the interview</a>).</p>
+<p>In Mount Isa, I was interviewed about the series on ABC North West Queensland's breakfast program.</p>
 {% audio { src: "/assets/audio/abc-north-west-queensland-interview.mp3", title: "Radio interview", caption: "ABC North West Queensland, Mount Isa" } %}
 
 <h3>Kalgoorlie Miner</h3>
@@ -43,7 +46,7 @@ share:
 <h2>How it's made</h2>
 <p>Everything fits in one car: two BMPCC 4Ks, a camcorder, a bag of microphones, a portable interface and a laptop. Songs were captured as multitracks on location, then mixed back through headphones using Reaper.</p>
 <div class="narrow">
-  {% image { src: "media/sounds-of/filming-alexia-parenzee.jpg", alt: "Behind the camera at Alexia Parenzee's session: the band playing in a studio, and on the camera's screen in front", caption: "Filming Alexia Parenzee's session.", sizes: "(max-width: 759.98px) 100vw, 24rem" } %}
+  {% image { src: "media/sounds-of/filming-alexia-parenzee.jpg", alt: "Behind the camera at Alexia Parenzee's session: the band playing in a studio, and on the camera's screen in front", caption: "BTS with Alexia Parenzee.", sizes: "(max-width: 759.98px) 100vw, 24rem" } %}
 </div>
 <div class="table-scroll">
   <table class="gear">
@@ -64,6 +67,7 @@ share:
 <h2>Watch &amp; follow</h2>
 <p>Every episode is on <a href="https://www.youtube.com/@soundsofchannel">YouTube</a>, with clips on <a href="https://www.instagram.com/soundsof.aus/">Instagram</a> and <a href="https://www.tiktok.com/@soundsof.aus">TikTok</a>.</p>
 <p>I'm looking to continue the series back in Melbourne. Are you an artist, or know one, who'd suit the series? <a href="/contact/">Get in touch</a>.</p>
+<p>And there are <a href="/interests/#travel">photos and videos from the road</a> too.</p>
 
 <h2>Episodes</h2>
 {#- Listed from src/_data/sounds-of.csv, newest first, with the episodes

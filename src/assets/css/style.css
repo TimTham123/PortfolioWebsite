@@ -64,6 +64,15 @@
   font-display: swap;
 }
 
+/* Tall, hand-drawn capitals, for the Sounds Of map's title */
+@font-face {
+  font-family: "Amatic SC";
+  src: url("../fonts/amatic-sc-latin-700-normal.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 
 /* 2. Tokens
    ========================================================================== */
@@ -83,6 +92,7 @@
   --font-nav: "Nunito", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
   --font-hand: "Reenie Beanie", "Bradley Hand", "Segoe Print", cursive;
   --font-note: "Waiting for the Sunrise", "Reenie Beanie", "Bradley Hand", "Segoe Print", cursive;
+  --font-title: "Amatic SC", "Reenie Beanie", "Bradley Hand", "Segoe Print", cursive;
   --size: 1.0625rem;    /* 17px, everywhere */
   --line: 1.42;         /* lines of links stay 24px apart, easy to tap */
   --gap: 1.42em;        /* one blank line */
@@ -753,40 +763,6 @@ figcaption {
   line-height: 1.3;
 }
 
-/* Buttons (About Me): a line round the words; the main one filled in.
-   Pointing at one swaps them round. */
-.content .actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-}
-
-.button {
-  display: inline-block;
-  padding: 0.4em 1.15em;
-  border: 1px solid var(--fg);
-  border-radius: 999px;
-  color: var(--fg);
-  line-height: 1.3;
-}
-
-.button:hover {
-  background: var(--fg);
-  color: var(--bg);
-  text-decoration: none;
-}
-
-.button--solid {
-  background: var(--fg);
-  color: var(--bg);
-}
-
-.button--solid:hover {
-  background: transparent;
-  color: var(--fg);
-}
-
-
 blockquote {
   padding-left: 1em;
 }
@@ -1401,6 +1377,7 @@ html:not(.js) .media__frame > iframe[data-src] {
 .content .narrow,
 .page--wide .content > .narrow {
   max-width: 24rem;
+  margin-bottom: var(--gap);
 }
 
 /* A player beside the text, in place of a picture (Music's Instagram
@@ -2350,12 +2327,33 @@ div.ph {
    map. Unlike other pages' titles it shows beside the index too. */
 .content .sm-heading {
   margin: 0 0 0.12em;
-  font-family: var(--font-hand);
-  font-size: 3.5rem;
-  font-weight: 400;
+  font-family: var(--font-title);
+  font-size: 3.8rem;
+  font-weight: 700;
   line-height: 1;
   letter-spacing: 0.01em;
   text-align: center;
+}
+
+/* Under it, a grey line to say the dots can be clicked: "Click" with a
+   mouse, "Tap" on a touch screen */
+.content .sm-hint {
+  margin: 0 0 0.6rem;
+  text-align: center;
+}
+
+.sm-hint__touch {
+  display: none;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .sm-hint__mouse {
+    display: none;
+  }
+
+  .sm-hint__touch {
+    display: inline;
+  }
 }
 
 /* As big as the window allows, with its title above it and the timeline
@@ -2363,8 +2361,9 @@ div.ph {
    as wide as the map, so it's centred over it. */
 @media (min-width: 760px) {
   .sm,
-  .content .sm-heading {
-    width: max(min(100%, 32rem), min(100%, calc((100vh - 224px) * 1.067)));
+  .content .sm-heading,
+  .content .sm-hint {
+    width: max(min(100%, 32rem), min(100%, calc((100vh - 268px) * 1.067)));
   }
 }
 
@@ -2863,7 +2862,7 @@ html.has-lightbox {
   /* The Sounds Of title, over the map, a little smaller than other pages'
      titles so it fits on one line */
   .content .sm-heading {
-    font-size: min(2.75rem, 12vw);
+    font-size: min(3.25rem, 14vw);
   }
 
   .main {

@@ -68,6 +68,8 @@
         {%- asyncEach figure in figures %}
         {%- if figure.embed %}
         {% embed figure.embed %}
+        {%- elif figure.video %}
+        {% video figure.video %}
         {%- else %}
         {% image figure %}
         {%- endif %}

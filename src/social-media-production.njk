@@ -28,13 +28,14 @@ wide: true
 
 <h3>Examples</h3>
 {#- Two of the videos, side by side where there's room, each at the size
-    its player is made for (326px across). TikTok's player is put in
+    its player is made for (326px across). TikTok's player (its newer one,
+    /player/v1/, the one TikTok's own embed code uses now) is put in
     straight away (the browser loads it as it comes near the screen);
     Instagram's loads the same way through site.js. Under each, a plain
     link to the video, in case a browser won't play it here. -#}
 <div class="reels wide">
   <figure class="media">
-    <div class="media__frame media__frame--embed" style="height: 580px"><iframe src="https://www.tiktok.com/embed/v2/7675668506834259218" title="Wes Coeur on TikTok (TikTok player)" loading="lazy" allow="encrypted-media; fullscreen; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
+    <div class="media__frame media__frame--embed" style="height: 578px"><iframe src="https://www.tiktok.com/player/v1/7675668506834259218?music_info=1&amp;description=1" title="Wes Coeur on TikTok (TikTok player)" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; fullscreen; gyroscope; picture-in-picture; web-share" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
     <figcaption>On <a href="https://www.tiktok.com/@wescoeur/video/7675668506834259218">TikTok</a>.</figcaption>
   </figure>
   {% embed { src: "https://www.instagram.com/reel/DW_E7drEpC8/embed/", title: "Wes Coeur on Instagram (Instagram player)", caption: "On <a href=\"https://www.instagram.com/reel/DW_E7drEpC8/\">Instagram</a>.", height: 616 } %}
