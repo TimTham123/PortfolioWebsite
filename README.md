@@ -454,8 +454,6 @@ Still to fill in:
 
 - **Contact:** links to Bandcamp and itch.io, if you want them (hidden from
   visitors until they're in).
-- **Feedra Prototype:** the link to download the prototype (hidden until
-  it's in).
 - **Experience:** the Operation Karma EP's title.
 - **About Me:** a showreel, a minute or so of the best bits: give the
   `{% video %}` under the opening lines its YouTube id (hidden until then).
