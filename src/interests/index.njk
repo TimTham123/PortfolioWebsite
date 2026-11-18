@@ -13,27 +13,7 @@ scripts:
 <h1 class="page-title">Outside Work</h1>
 <p class="standfirst">What I get up to away from the desk.</p>
 
-<h2 id="climbing">Climbing</h2>
-<p>I’ve been climbing for five years. Most mornings you’ll find me bouldering or training at Urban Climb: I love small holds, hate round flat ones, and spend a lot of time falling onto mats.</p>
-
-<ul>
-  <li><b>Favourite crag:</b> Bleachers, Grampians</li>
-  <li><b>Current goal:</b> get strong again after travelling</li>
-  <li><b>Best sends:</b> The Show Must Go On (V7), Plastic Facts (V6), Evac (V6)</li>
-</ul>
-
 {%- set rowSizes = "(max-width: 759.98px) 55vw, 20rem" %}
-<div class="photo-row">
-  {% image { src: "media/climbing/bouldering-indoors.jpg", alt: "Me on an indoor bouldering wall, reaching up for a red hold", sizes: rowSizes } %}
-  {% image { src: "media/climbing/bouldering-outside.jpg", alt: "Climbing the Heart Boulder at Bleachers, in the Grampians: a sandstone overhang, with a friend spotting below and a crash pad", caption: "Climbing the Heart Boulder, Bleachers.", sizes: rowSizes } %}
-</div>
-
-<p>For my weekly training I built <a href="https://climbapp-demo.pages.dev/">this app</a>. It's hard-coded for my own routine, so it won't suit yours, but have a look.</p>
-{#- A picture of the app on a phone, linking to the app itself #}
-<figure class="app-shot">
-  <a href="https://climbapp-demo.pages.dev/">{% image { src: "media/climbing/training-app.png", alt: "The training app on a phone, showing today's session: Pull strength, with its exercises, sets and reps", bare: true, sizes: "13rem" } %}</a>
-  <figcaption><a href="https://climbapp-demo.pages.dev/">Open the app</a></figcaption>
-</figure>
 
 <h2 id="cat">Cat</h2>
 <p>This is Luna, my real boss. She is 9 years old and supervises every session from the top of my keyboard.</p>
@@ -60,6 +40,27 @@ scripts:
 </ul>
 
 {% include "partials/luna.njk" %}
+
+<h2 id="climbing">Climbing</h2>
+<p>I’ve been climbing for five years. Most mornings you’ll find me bouldering or training at Urban Climb: I love small holds, hate round flat ones, and spend a lot of time falling onto mats.</p>
+
+<ul>
+  <li><b>Favourite crag:</b> Bleachers, Grampians</li>
+  <li><b>Current goal:</b> get strong again after travelling</li>
+  <li><b>Best sends:</b> The Show Must Go On (V7), Plastic Facts (V6), Evac (V6)</li>
+</ul>
+
+<div class="photo-row">
+  {% image { src: "media/climbing/bouldering-indoors.jpg", alt: "Me on an indoor bouldering wall, reaching up for a red hold", sizes: rowSizes } %}
+  {% image { src: "media/climbing/bouldering-outside.jpg", alt: "Climbing the Heart Boulder at Bleachers, in the Grampians: a sandstone overhang, with a friend spotting below and a crash pad", caption: "Climbing the Heart Boulder, Bleachers.", sizes: rowSizes } %}
+</div>
+
+<p>For my weekly training I built <a href="https://climbapp-demo.pages.dev/">this app</a>. It's hard-coded for my own routine, so it won't suit yours, but have a look.</p>
+{#- A picture of the app on a phone, linking to the app itself #}
+<figure class="app-shot">
+  <a href="https://climbapp-demo.pages.dev/">{% image { src: "media/climbing/training-app.png", alt: "The training app on a phone, showing today's session: Pull strength, with its exercises, sets and reps", bare: true, sizes: "13rem" } %}</a>
+  <figcaption><a href="https://climbapp-demo.pages.dev/">Open the app</a></figcaption>
+</figure>
 
 <h2 id="travel">Travel</h2>
 <p>Photos and videos from the road.</p>

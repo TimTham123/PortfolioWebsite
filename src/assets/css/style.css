@@ -624,6 +624,13 @@ figcaption {
   color: var(--muted);
 }
 
+/* ...and a number on its own (the Sounds Of views) stays small, as wide as
+   its words, not the whole row */
+.content .stats > li:only-child {
+  flex: 0 1 auto;
+  min-width: 9rem;
+}
+
 .stats__n {
   display: block;
   color: var(--fg);
