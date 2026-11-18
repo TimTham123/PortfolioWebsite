@@ -2881,10 +2881,13 @@ html.has-lightbox {
 
   /* The pictures: a strip under the opening line, to swipe through, the
      next one peeking in from the side. Each is at most --strip-h tall and
-     most of the screen wide, whatever its shape (--ratio, its width over
-     its height, comes from the image shortcode) */
+     at most 86% of the screen wide, whatever its shape (--ratio, its width
+     over its height, comes from the image shortcode). --strip-h is about
+     the height a wide picture gets at that width, so the pictures in a
+     strip all come out much the same height: a tall one doesn't leave a
+     gap under the wide ones beside it. */
   .figures {
-    --strip-h: min(64vw, 340px);
+    --strip-h: min(calc((100vw - 2 * var(--pad)) * 0.86 / 1.6), 300px);
     display: flex;
     flex-direction: row;
     align-items: flex-start;
@@ -2904,7 +2907,7 @@ html.has-lightbox {
 
   .figures > .figure {
     flex: 0 0 auto;
-    width: min(78%, calc(var(--strip-h) * var(--ratio, 1.333)));
+    width: min(86%, calc(var(--strip-h) * var(--ratio, 1.333)));
     scroll-snap-align: start;
   }
 
