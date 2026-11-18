@@ -1,0 +1,16 @@
+---
+permalink: /sitemap.xml
+eleventyExcludeFromCollections: true
+---
+{#- Every page, for search engines (robots.txt points them here; submit it in
+    Google Search Console too). Pages that move and pages marked noindex are
+    left out; it updates itself as pages are added. -#}
+<?xml version="1.0" encoding="utf-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+{%- set origin = build.origin or site.origin %}
+{%- for item in collections.all | sort(false, false, "url") %}
+{%- if item.url and not item.data.noindex %}
+  <url><loc>{{ origin }}{{ item.url | url }}</loc></url>
+{%- endif %}
+{%- endfor %}
+</urlset>

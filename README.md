@@ -530,6 +530,44 @@ the dropdowns and the phone Menu (the page behind is out of reach while the
 index is open over it), visible focus outlines, colour contrast at WCAG AA or
 better, links spaced at least 24px apart, and alt text on every image.
 
+## Search engines
+
+What the site does for search (Google, Bing):
+
+- **Titles.** Each page's title in search results is `seoTitle` from the
+  top of the page if it has one (`Okiro: Game Sound Design – Callum Tham`),
+  otherwise its `title`. The home page's is `site.json`'s name and tagline:
+  "Callum Tham – Sound Designer & Video Creator in Melbourne". Keep them
+  under about 60 characters.
+- **Descriptions.** The `description` at the top of each page is the line
+  under the title in results: about 150 characters, saying what's on the
+  page in plain words.
+- **Who it's about.** The home page carries structured data
+  (`src/_includes/partials/structured-data.njk`): a profile of Callum Tham
+  (sound designer, video creator, social media producer, Melbourne, RMIT,
+  LinkedIn and Instagram), and the site's name. Add new profiles to its
+  `sameAs` list. Check it with Google's Rich Results Test.
+- **The list of pages.** `/sitemap.xml` (made by `src/sitemap.njk`) lists
+  every page and updates itself; `/robots.txt` points search engines to it.
+  The old addresses that forward on, and the Not Found page, are marked
+  `noindex` so they stay out of results (`noindex: true` at the top of a
+  page does the same for any other).
+
+What only you can do, and what matters most:
+
+1. **Google Search Console** (search.google.com/search-console): add a
+   *Domain* property for `callumtham.com` and verify it with the TXT record
+   it gives you (in Cloudflare: DNS → Records → Add record → TXT, name `@`).
+   Then submit `https://callumtham.com/sitemap.xml` under Sitemaps, and use
+   URL Inspection → Request indexing on the home page.
+2. **Bing Webmaster Tools** (bing.com/webmasters): sign in and import the
+   site from Search Console (one click). That covers Bing, DuckDuckGo and
+   Yahoo.
+3. **Link to the site from everywhere you are**: LinkedIn (contact info and
+   Featured), Instagram, TikTok and YouTube bios, Spotify for Artists,
+   SoundCloud, itch.io, your email signature, and ask the studios and
+   artists you've worked with to link to it from their credits.
+
 ## Putting it online
 
 Any static host works. Build with `npm run build` and publish the `_site/`

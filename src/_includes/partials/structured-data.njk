@@ -1,0 +1,33 @@
+{#-
+  For search engines, on the home page only: who the site is about (a
+  "ProfilePage" for a "Person"), what they do, where, and their other
+  profiles ("sameAs"), and the site's own name (so results can show it as
+  "Callum Tham"). Google reads this as data; visitors never see it. Check it
+  with https://search.google.com/test/rich-results after a change.
+  The email is left out on purpose: here it would be plain text for spam
+  bots (on Contact it's written in a way they miss).
+-#}
+{%- set origin = build.origin or site.origin %}
+{%- set home = origin + ("/" | url) %}
+{%- set person = {
+  "@type": "Person",
+  "@id": home + "#person",
+  "name": site.name,
+  "alternateName": "Callum Tam",
+  "url": home,
+  "jobTitle": ["Sound Designer", "Video Creator", "Social Media Producer"],
+  "description": "Sound designer for games, video creator and social media producer based in Melbourne, Australia.",
+  "address": { "@type": "PostalAddress", "addressLocality": "Melbourne", "addressRegion": "VIC", "addressCountry": "AU" },
+  "alumniOf": { "@type": "CollegeOrUniversity", "name": "RMIT University" },
+  "knowsAbout": ["Sound design", "Game audio", "FMOD", "Unity", "Unreal Engine", "Foley", "Music production", "Mixing", "Live sound", "Video production", "Social media production"],
+  "sameAs": ["https://www.linkedin.com/in/callum-tham-5b8b73142/", "https://www.instagram.com/tim.tham/"]
+} %}
+{%- set data = {
+  "@context": "https://schema.org",
+  "@graph": [
+    { "@type": "WebSite", "@id": home + "#website", "name": site.name, "url": home, "inLanguage": "en-AU" },
+    { "@type": "ProfilePage", "@id": home + "#page", "url": home, "name": site.name + " – " + site.tagline, "isPartOf": { "@id": home + "#website" }, "mainEntity": { "@id": home + "#person" } },
+    person
+  ]
+} %}
+<script type="application/ld+json">{{ data | jsonScript | safe }}</script>

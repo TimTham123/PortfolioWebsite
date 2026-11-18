@@ -3,15 +3,19 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% if page.url != "/" %}{{ title }} &ndash; {{ site.name }}{% else %}{{ site.name }} &ndash; {{ site.tagline }}{% endif %}</title>
+  <title>{% if page.url != "/" %}{{ seoTitle or title }} &ndash; {{ site.name }}{% else %}{{ site.name }} &ndash; {{ site.tagline }}{% endif %}</title>
   <meta name="description" content="{{ description or site.description }}">
+  <meta name="author" content="{{ site.name }}">
+  {%- if noindex %}
+  <meta name="robots" content="noindex">
+  {%- endif %}
   {#- How the page looks when its link is shared (messages, social media):
       its title, description and a picture (shareImage, worked out in
       src/_data/eleventyComputed.js). The addresses have to be complete, so
       they start with the site's address (build.origin, from the deploy, or
       site.origin). #}
   {%- set origin = build.origin or site.origin %}
-  {%- set pageTitle %}{% if page.url != "/" %}{{ title }} – {{ site.name }}{% else %}{{ site.name }} – {{ site.tagline }}{% endif %}{% endset %}
+  {%- set pageTitle %}{% if page.url != "/" %}{{ seoTitle or title }} – {{ site.name }}{% else %}{{ site.name }} – {{ site.tagline }}{% endif %}{% endset %}
   {%- if page.url != "/404.html" %}
   <link rel="canonical" href="{{ origin }}{{ page.url | url }}">
   <meta property="og:url" content="{{ origin }}{{ page.url | url }}">
@@ -27,6 +31,9 @@
   <meta property="og:image:alt" content="{{ share.alt }}">
   <meta property="og:locale" content="en_AU">
   <meta name="twitter:card" content="summary_large_image">
+  {%- if page.url == "/" %}
+  {% include "partials/structured-data.njk" %}
+  {%- endif %}
   <meta name="theme-color" content="#fafafa">
   <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
   <link rel="icon" href="/assets/img/favicon-32.png" type="image/png" sizes="32x32">
