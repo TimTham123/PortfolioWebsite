@@ -2710,8 +2710,8 @@ html.has-lightbox {
    --------------------------------------------------------------------------
    The quote fills the screen in the note hand and is written out word by
    word, each word drawn in from the left like a pen stroke, then the whole
-   thing fades away and leaves the page underneath. About six seconds: four
-   to write, then it holds for a moment. A tap skips it. html.show-intro is set by a script in the page's head
+   thing fades away and leaves the page underneath: about four seconds to
+   write, then it holds for four seconds. A tap skips it. html.show-intro is set by a script in the page's head
    (base.njk), which also decides when it plays. Without JavaScript, on
    bigger screens or after the first visit, none of this shows.
    ========================================================================== */
