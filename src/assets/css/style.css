@@ -586,10 +586,11 @@ figcaption {
 }
 
 /* Roles (Experience): the years down the side, like the credits below it,
-   then the role and a line about it */
+   then the role and a line about it. The side column is wide enough for a
+   month and year ("Nov 2026–") to sit clear of the text. */
 .content .roles > li {
   display: grid;
-  grid-template-columns: 4.75rem minmax(0, 1fr);
+  grid-template-columns: 5.75rem minmax(0, 1fr);
   column-gap: 1rem;
 }
 
