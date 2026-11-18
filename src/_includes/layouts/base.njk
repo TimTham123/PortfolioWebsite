@@ -41,6 +41,9 @@
   <link rel="preload" href="/assets/fonts/figtree-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/nunito-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/reenie-beanie-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  {%- if signoff %}
+  <link rel="preload" href="/assets/fonts/waiting-for-the-sunrise-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  {%- endif %}
   <link rel="stylesheet" href="/assets/css/style.css?v={{ build.version }}">
   <script>
     document.documentElement.classList.add("js");
@@ -53,6 +56,23 @@
       if (localStorage.getItem("placeholders") === "on") document.documentElement.classList.add("show-ph");
     } catch (e) { /* no storage: placeholders stay hidden */ }
   </script>
+  {%- if signoff %}
+  <script>
+    /* About Me on a phone, the first time: the quote is written out by hand
+       before the page appears (see "The intro" in style.css). Decided here,
+       before anything is drawn, so the page doesn't flash up first. Not on
+       bigger screens, not for search engines' robots, and only once (the
+       browser remembers; without storage it doesn't play at all). */
+    try {
+      if (window.matchMedia("(max-width: 759.98px)").matches &&
+          !/bot|crawl|spider|slurp|lighthouse/i.test(navigator.userAgent) &&
+          !localStorage.getItem("intro-seen")) {
+        localStorage.setItem("intro-seen", "1");
+        document.documentElement.classList.add("show-intro");
+      }
+    } catch (e) { /* no storage: no intro */ }
+  </script>
+  {%- endif %}
   <script src="/assets/js/site.js?v={{ build.version }}" defer></script>
   {%- for src in scripts %}
   <script src="{{ src }}?v={{ build.version }}" defer></script>
@@ -60,6 +80,47 @@
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
+  {%- if signoff %}
+
+  {#- The intro (phones, first visit): the quote, word by word, as if being
+      written, then it fades away and leaves the page. Tap to skip. Hidden
+      from screen readers: the page's own text is there underneath. #}
+  <div class="intro" aria-hidden="true">
+    <div class="intro__quote">
+      {%- set words = signoff.quote.split(" ") %}
+      <p>{% for w in words %}<span class="intro__w" style="--i: {{ loop.index0 }}">{% if loop.first %}&ldquo;{% endif %}{{ w }}{% if loop.last %}&rdquo;{% endif %}</span>{% if not loop.last %} {% endif %}{% endfor %}</p>
+      <p class="intro__by" style="--i: {{ words.length + 2 }}">&ndash; {{ signoff.by }}</p>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var root = document.documentElement;
+      var intro = document.currentScript.previousElementSibling;
+      if (!root.classList.contains("show-intro")) { intro.remove(); return; }
+      var gone = false;
+      function leave() {
+        if (gone) return;
+        gone = true;
+        intro.classList.add("is-leaving");
+        setTimeout(function () { root.classList.remove("show-intro"); intro.remove(); }, 700);
+      }
+      /* Start writing once the handwriting has loaded (or after a second,
+         whichever comes first), then leave about 3.4 seconds later */
+      var started = false;
+      function write() {
+        if (started) return;
+        started = true;
+        intro.classList.add("is-writing");
+        setTimeout(leave, 3400);
+      }
+      if (document.fonts && document.fonts.load) {
+        document.fonts.load('1em "Waiting for the Sunrise"').then(write, write);
+      }
+      setTimeout(write, 1000);
+      intro.addEventListener("click", leave);
+    })();
+  </script>
+  {%- endif %}
 
   <div class="page{% if wide %} page--wide{% endif %}{% if signoff %} page--signoff{% endif %}">
     {% include "partials/header.njk" %}

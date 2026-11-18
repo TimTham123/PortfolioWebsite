@@ -504,6 +504,14 @@ credit stacks up beside its year instead.
 - The Sounds Of map runs edge to edge, and an episode opens as a card under
   the timeline, so the map stays in view while you watch.
 - Photo popups swipe from one picture to the next.
+- **The intro:** the first time someone opens About Me on a phone, the quote
+  is written out by hand, word by word (about four seconds; a tap skips
+  it), then fades away to leave the page. On phones the quote isn't shown
+  on the page itself. It plays once per browser (to see it again, open the
+  site in a private tab), never on bigger screens or for search engines'
+  robots, and without the writing for people who've asked their phone to
+  reduce motion. The timing is in `src/_includes/layouts/base.njk`, the
+  look under "The intro" in `style.css`.
 
 Without JavaScript the index is simply listed under the signature and the
 pictures follow the text.
