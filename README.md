@@ -505,7 +505,7 @@ credit stacks up beside its year instead.
   the timeline, so the map stays in view while you watch.
 - Photo popups swipe from one picture to the next.
 - **The intro:** the first time someone opens About Me on a phone, the quote
-  is written out by hand, word by word (2.8 seconds), holds for four
+  is written out by hand, word by word (2.8 seconds), holds for 3.5
   seconds, then fades away to leave the page (a tap skips it). On phones the quote isn't shown
   on the page itself. It plays once per browser (to see it again, open the
   site in a private tab), never on bigger screens or for search engines'
