@@ -3,13 +3,9 @@ layout: layouts/project.njk
 title: Music
 description: My own music as Callum Tam, my band Melonade, and production and mixing for other artists.
 figures:
-  # Melonade live (a video, not a picture: see base.njk), filmed by Gus Fiedler
-  - video:
-      src: /assets/video/melonade-live-2022.mp4
-      poster: /assets/video/melonade-live-2022-poster.jpg
-      title: "Melonade live, 2022"
-      caption: "Live with Melonade, 2022. (Video: Gus Fiedler)"
-      ratio: "640/482"
+  - src: media/music/in-the-studio.jpg
+    alt: "Me at a large mixing console in a dark studio, with a session up on the screens above"
+    caption: "In the studio."
 ---
 <h1 class="page-title">Music</h1>
 <p class="standfirst">My first love.</p>
@@ -44,6 +40,12 @@ figures:
 <p>I’m also the frontman of a band called Melonade, and I produced, recorded and mixed all of our music. I help other artists with production and mixing, too.</p>
 
 <h2>Band releases</h2>
+{#- Melonade live, filmed by Gus Fiedler: in the pictures' column, level
+    with the band's releases, where there's room for the column (on phones
+    and narrower windows, here among them) #}
+<div class="aside">
+  {% video { src: "/assets/video/melonade-live-2022.mp4", poster: "/assets/video/melonade-live-2022-poster.jpg", title: "Melonade live, 2022", caption: "Live with Melonade, 2022. (Video: Gus Fiedler)", ratio: "640/482" } %}
+</div>
 <ul class="covers">
   <li>
     <a href="https://open.spotify.com/album/0yCBbwqkaMH7QkKCYvyED9">{% image { src: "media/music/boogie-with-you.jpg", alt: "", bare: true, sizes: "(max-width: 759.98px) 40vw, 8rem" } %}<span class="covers__title">Boogie with You</span></a>

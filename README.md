@@ -58,7 +58,7 @@ src/
 │   ├── js/site.js         ← phone menu, dropdowns, picture popups, YouTube videos that load when played
 │   ├── js/sounds-of-map.js ← the map's markers, popup, timeline, route and zoom
 │   ├── js/travel.js       ← the travel gallery: videos that play as you scroll (the photo popup is site.js's)
-│   ├── fonts/             ← Figtree, Nunito, Reenie Beanie, Waiting for the Sunrise and Amatic SC (open-licence fonts)
+│   ├── fonts/             ← Figtree, Nunito, Reenie Beanie and Waiting for the Sunrise (open-licence fonts)
 │   ├── audio/             ← sound files used as they are (the ABC interview on Sounds Of)
 │   └── img/               ← put your images here
 │                            Work
@@ -120,7 +120,7 @@ figures:                      # pictures beside the text (optional)
   - src: media/sound-design/cyberpedia/bookworth.jpg
     alt: Bookworth, a book with glasses and a bow tie
     caption: Bookworth, your museum assistant.
-  - video:                    # ...or a video, like Melonade's on Music (embed: for a player from another site)
+  - video:                    # ...or a video (embed: for a player from another site)
       src: /assets/video/melonade-live-2022.mp4
       poster: /assets/video/melonade-live-2022-poster.jpg
       title: Melonade live, 2022
@@ -481,8 +481,8 @@ headings are the one step up in size, so long pages are easy to scan.)
 | Sub-headings and labels | text-sized, Figtree Medium (500) |
 | Links | grey `#737373`; black and underlined when you point at them |
 | Current page | black (and its section, on project pages) |
-| Signature | your name in Reenie Beanie, top left, and the way back to About Me, which isn't in the index (also the greeting and page titles on phones) |
-| Map title | "Sounds Of Australia" in Amatic SC Bold, tall hand-drawn capitals, with a grey line under it saying the dots can be clicked ("tap" on a touch screen) |
+| Signature | your name in Reenie Beanie, top left, and the way back to About Me, which isn't in the index (also the greeting, the map's title and page titles on phones) |
+| Map title | "Sounds Of Australia" in Reenie Beanie, with a grey line under it saying the dots can be clicked ("tap" on a touch screen), short enough for one line on any phone |
 | Handwritten notes | Waiting for the Sunrise, a rounder hand that's easier to read, so Reenie Beanie isn't everywhere: the names on the map (places, seas, states, the episode on its card), handwritten quotes, and "photo to come" on photos still to come |
 | Placeholders | photos still to come: grey boxes `#f0f0f0` for everyone; the rest hidden from visitors (with `?placeholders`, washed-out red notes `#a85555`) |
 | Columns (wide screens) | index 16rem, 2rem gap, text 35rem, 2rem gap, images 15rem |

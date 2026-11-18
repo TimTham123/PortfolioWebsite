@@ -64,15 +64,6 @@
   font-display: swap;
 }
 
-/* Tall, hand-drawn capitals, for the Sounds Of map's title */
-@font-face {
-  font-family: "Amatic SC";
-  src: url("../fonts/amatic-sc-latin-700-normal.woff2") format("woff2");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
 
 /* 2. Tokens
    ========================================================================== */
@@ -92,7 +83,6 @@
   --font-nav: "Nunito", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
   --font-hand: "Reenie Beanie", "Bradley Hand", "Segoe Print", cursive;
   --font-note: "Waiting for the Sunrise", "Reenie Beanie", "Bradley Hand", "Segoe Print", cursive;
-  --font-title: "Amatic SC", "Reenie Beanie", "Bradley Hand", "Segoe Print", cursive;
   --size: 1.0625rem;    /* 17px, everywhere */
   --line: 1.42;         /* lines of links stay 24px apart, easy to tap */
   --gap: 1.42em;        /* one blank line */
@@ -1380,8 +1370,27 @@ html:not(.js) .media__frame > iframe[data-src] {
   margin-bottom: var(--gap);
 }
 
-/* A player beside the text, in place of a picture (Music's Instagram
-   video): the width its player is made for */
+/* Something that belongs beside a part of the text (Music's Melonade
+   video, beside the band's releases): in the pictures' column, level with
+   that part, where the column is beside the text (wide screens); elsewhere
+   it sits in the text, where it is in the page. It floats out past the
+   text's right-hand edge, across the gap, into the column, so the text
+   doesn't wrap round it. */
+@media (min-width: 1100px) {
+  .content .aside {
+    float: right;
+    clear: right;
+    width: var(--fig-w);
+    margin-right: calc((var(--fig-w) + var(--col-gap)) * -1);
+  }
+
+  .content .aside .media {
+    margin-bottom: 0;
+  }
+}
+
+/* A player beside the text, in place of a picture: the width its player
+   is made for */
 .figures > .media {
   width: 240px;
   max-width: 100%;
@@ -2327,9 +2336,9 @@ div.ph {
    map. Unlike other pages' titles it shows beside the index too. */
 .content .sm-heading {
   margin: 0 0 0.12em;
-  font-family: var(--font-title);
-  font-size: 3.8rem;
-  font-weight: 700;
+  font-family: var(--font-hand);
+  font-size: 3.5rem;
+  font-weight: 400;
   line-height: 1;
   letter-spacing: 0.01em;
   text-align: center;
@@ -2340,6 +2349,7 @@ div.ph {
 .content .sm-hint {
   margin: 0 0 0.6rem;
   text-align: center;
+  text-wrap: balance;
 }
 
 .sm-hint__touch {
@@ -2862,7 +2872,7 @@ html.has-lightbox {
   /* The Sounds Of title, over the map, a little smaller than other pages'
      titles so it fits on one line */
   .content .sm-heading {
-    font-size: min(3.25rem, 14vw);
+    font-size: min(2.75rem, 12vw);
   }
 
   .main {
