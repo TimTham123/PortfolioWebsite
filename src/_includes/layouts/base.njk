@@ -105,13 +105,14 @@
         setTimeout(function () { root.classList.remove("show-intro"); intro.remove(); }, 700);
       }
       /* Start writing once the handwriting has loaded (or after a second,
-         whichever comes first), then leave about 3.4 seconds later */
+         whichever comes first). The writing takes about four seconds; then
+         the quote holds for a moment and leaves, 5.4 seconds after it began */
       var started = false;
       function write() {
         if (started) return;
         started = true;
         intro.classList.add("is-writing");
-        setTimeout(leave, 3400);
+        setTimeout(leave, 5400);
       }
       if (document.fonts && document.fonts.load) {
         document.fonts.load('1em "Waiting for the Sunrise"').then(write, write);
