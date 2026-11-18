@@ -26,9 +26,17 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      # The site lives at https://<user>.github.io/PortfolioWebsite/, so links need that prefix.
-      - run: npx @11ty/eleventy --pathprefix=/${{ github.event.repository.name }}/
-      - uses: actions/configure-pages@v5
+      # Where the site lives, as set in the repo's Settings -> Pages: the custom
+      # domain (https://callumtham.com, at the root) once it's set there, or
+      # https://<user>.github.io/PortfolioWebsite/ until then. The build follows
+      # whichever it is: links get the /PortfolioWebsite/ prefix only when it's
+      # needed, and the full addresses (for search engines and link previews)
+      # use the right domain. After changing the domain, run this again.
+      - id: pages
+        uses: actions/configure-pages@v5
+      - run: npx @11ty/eleventy --pathprefix="${{ steps.pages.outputs.base_path }}/"
+        env:
+          SITE_ORIGIN: ${{ steps.pages.outputs.origin }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site

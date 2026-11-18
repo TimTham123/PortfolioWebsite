@@ -11,7 +11,8 @@ eleventyExcludeFromCollections: true
     address, so old links keep working: GitHub Pages can't redirect by
     itself. The script keeps any #section on the end; the meta tag does the
     same job without it. (The meta tag's address is left plain because the
-    build adds /PortfolioWebsite/ to it, as it does to links.) -#}
+    build adds /PortfolioWebsite/ to it, as it does to links, when the site
+    is on github.io rather than its own domain.) -#}
 <!doctype html>
 <html lang="{{ site.language }}">
 <head>
@@ -20,7 +21,7 @@ eleventyExcludeFromCollections: true
   <title>{{ redirect.title }} &ndash; {{ site.name }}</title>
   {#- (a new address can point at a part of a page, like /interests/#luna:
       then that's where it goes, whatever part of the old page was asked for) #}
-  <link rel="canonical" href="{{ site.origin }}{{ redirect.to.split('#')[0] | url }}">
+  <link rel="canonical" href="{{ build.origin or site.origin }}{{ redirect.to.split('#')[0] | url }}">
   <script>location.replace({{ redirect.to | url | dump | safe }}{% if redirect.to.indexOf('#') == -1 %} + location.hash{% endif %});</script>
   <meta http-equiv="refresh" content="0; url={{ redirect.to }}">
 </head>

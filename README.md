@@ -13,7 +13,7 @@ site is plain HTML and CSS plus a few small scripts. Its fonts are stored in
 the site itself, and it uses no CDNs or trackers, so nothing can break when an
 outside service changes or goes away.
 
-**Live site:** <https://timtham123.github.io/PortfolioWebsite/>
+**Live site:** <https://callumtham.com> (also at <https://timtham123.github.io/PortfolioWebsite/>, which forwards there once the domain is set up)
 
 ## Running it
 
@@ -436,7 +436,7 @@ their final shape. **Visitors never see placeholder text** (or a player
 still to add), so what they read always looks finished. To see everything
 (with a small handwritten *placeholder* note in washed-out red beside each),
 add `?placeholders` to any address, for example
-`https://timtham123.github.io/PortfolioWebsite/?placeholders`. Your browser
+`https://callumtham.com/?placeholders`. Your browser
 remembers until you visit an address ending in `?placeholders=off`. (Setting
 `"showPlaceholders": true` in `src/_data/site.json` shows them to everyone.)
 
@@ -536,8 +536,41 @@ Any static host works. Build with `npm run build` and publish the `_site/`
 folder.
 
 - **GitHub Pages (set up):** `.github/workflows/deploy.yml` builds and publishes
-  the site on every push, to <https://timtham123.github.io/PortfolioWebsite/>.
-  Progress shows under the repo's **Actions** tab.
+  the site on every push. Progress shows under the repo's **Actions** tab. It
+  builds for wherever the repo's **Settings → Pages** says the site lives:
+  <https://callumtham.com> once the custom domain is set there, otherwise
+  <https://timtham123.github.io/PortfolioWebsite/>. After changing the
+  domain, run the workflow again (Actions → Deploy to GitHub Pages → Run
+  workflow) so the links follow.
+
+### The domain (callumtham.com, registered with Cloudflare)
+
+1. **GitHub:** the repo's **Settings → Pages → Custom domain**: enter
+   `callumtham.com` and save. (Do this first, so nobody else can claim the
+   domain on GitHub.)
+2. **Cloudflare:** **callumtham.com → DNS → Records**, with the proxy turned
+   off ("DNS only", the grey cloud) on each, so GitHub can set up HTTPS:
+
+   | Type | Name | Content |
+   | --- | --- | --- |
+   | A | `@` | `185.199.108.153` |
+   | A | `@` | `185.199.109.153` |
+   | A | `@` | `185.199.110.153` |
+   | A | `@` | `185.199.111.153` |
+   | AAAA | `@` | `2606:50c0:8000::153` |
+   | AAAA | `@` | `2606:50c0:8001::153` |
+   | AAAA | `@` | `2606:50c0:8002::153` |
+   | AAAA | `@` | `2606:50c0:8003::153` |
+   | CNAME | `www` | `timtham123.github.io` |
+
+   Delete any other A, AAAA or CNAME records for `@` or `www` first.
+3. **GitHub:** once **Settings → Pages** shows the DNS check has passed
+   (minutes, sometimes an hour or so), tick **Enforce HTTPS**.
+4. Run the deploy workflow again (above), so the site builds for its new
+   address.
+
+The old github.io address then forwards to callumtham.com by itself, and
+`www.callumtham.com` goes to `callumtham.com`.
 - **Netlify / Cloudflare Pages / Vercel:** build command `npm run build`,
   output directory `_site`.
 - **Old-school:** upload the contents of `_site/` to any web server over FTP.
