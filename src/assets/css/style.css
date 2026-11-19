@@ -1079,11 +1079,11 @@ tbody th[scope="row"] ~ td {
   margin-bottom: 0.6em;
 }
 
-/* The footage under a game's trailer (the full playthrough, the audio
-   showcase): folded away behind a bar that's plainly something to open and
-   watch, with a play button like the videos' own, what it is, and the + on
-   the right. Pointing at it turns it black, as a video's play button does.
-   (Positioned rather than flex: Safari won't lay out a <summary> as flex.) */
+/* The full playthrough under a game's trailer: folded away behind a bar
+   that's plainly something to open and watch, with a play button like the
+   videos' own, what it is, and the + on the right. Pointing at it turns it
+   black, as a video's play button does. (Positioned rather than flex:
+   Safari won't lay out a <summary> as flex.) */
 .more--watch > summary {
   position: relative;
   display: block;
