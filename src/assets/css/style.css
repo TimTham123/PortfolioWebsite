@@ -1079,6 +1079,74 @@ tbody th[scope="row"] ~ td {
   margin-bottom: 0.6em;
 }
 
+/* The footage under a game's trailer (the full playthrough, the audio
+   showcase): folded away behind a bar that's plainly something to open and
+   watch, with a play button like the videos' own, what it is, and the + on
+   the right. Pointing at it turns it black, as a video's play button does.
+   (Positioned rather than flex: Safari won't lay out a <summary> as flex.) */
+.more--watch > summary {
+  position: relative;
+  display: block;
+  padding: 0.7em 2.8em 0.7em 3.3em;
+  border: 1px solid var(--fg);
+  color: var(--fg);
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.more--watch > summary::after {
+  position: absolute;
+  top: 50%;
+  right: 0.65em;
+  margin: 0;
+  font-size: 1.25em;
+  line-height: 1;
+  text-align: center;
+  transform: translateY(-50%);
+}
+
+.more__play {
+  position: absolute;
+  top: 50%;
+  left: 0.75em;
+  width: 1.8em;
+  height: 1.8em;
+  border-radius: 50%;
+  background: var(--fg);
+  transform: translateY(-50%);
+  transition: background-color 0.15s;
+}
+
+/* Its triangle, a little right of centre so it looks centred */
+.more__play::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -0.34em 0 0 -0.2em;
+  border-top: 0.34em solid transparent;
+  border-bottom: 0.34em solid transparent;
+  border-left: 0.58em solid var(--bg);
+}
+
+@media (hover: hover) {
+  .more--watch > summary:hover {
+    background: var(--fg);
+    color: var(--bg);
+  }
+
+  .more--watch > summary:hover .more__play {
+    background: var(--bg);
+  }
+
+  .more--watch > summary:hover .more__play::before {
+    border-left-color: var(--fg);
+  }
+}
+
+.more--watch[open] > summary {
+  margin-bottom: 0.9em;
+}
+
 /* Sounds Of's episodes: date, artist, where. Where there isn't room for
    three columns, each episode stacks beside its date: the artist, then
    where */
@@ -3095,7 +3163,8 @@ html.has-lightbox {
   .figures,
   .media,
   .sm,
-  .more > summary::after {
+  .more > summary::after,
+  .more--watch {
     display: none !important;
   }
 

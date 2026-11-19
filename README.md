@@ -240,7 +240,12 @@ Lists of pages with pictures:
 - A long list can be folded away under a "+" with `<details class="more">`
   and a `<summary>` (as Experience does with every Sounds Of episode, and
   the game pages do with their extras: test clips, more tracks, behind the
-  scenes). Players inside load when it's opened.
+  scenes). Players inside load when it's opened. The longer footage right
+  under a game's trailer (the full playthrough, Little Bit of Gore's audio
+  showcase) folds away behind a bar with a play button instead:
+  `<details class="more more--watch">`, with
+  `<span class="more__play" aria-hidden="true"></span>` at the start of its
+  `<summary>`.
 
 A few one-off pieces:
 
