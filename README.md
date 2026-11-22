@@ -313,20 +313,30 @@ the state each time the road crosses into a new one.
 The map puts being easy to read ahead of being exact:
 
 - No two markers ever touch. Markers stay the same size on screen at every
-  zoom, so on a small map (a phone, or zoomed right out) places near each
-  other would overlap. Whenever the map's size or zoom changes,
+  zoom, so on a small map (a small screen, or zoomed right out) places near
+  each other would overlap. Whenever the map's size or zoom changes,
   `assets/js/sounds-of-map.js` spreads the markers out just enough to leave
   12px between the edges of two dots (`GAP`: 25px from middle to middle, so
   every marker is a 24px target of its own, easy to tap), each as near its
   real spot as it can be, and redraws the route to meet them. Zooming in
   brings them back to where they really are.
+- On a phone, where there isn't room to spread them all out, places too
+  close to tap apart join into one numbered group instead: a circle in the
+  state's colour saying how many stops it stands for (on an iPhone,
+  Victoria's 10, Perth and Margaret River's 3, and a few 2s and 4s up the
+  east coast), roughly where they are and wholly on land. Tapping one zooms
+  in and it splits into its dots; any still too close make a smaller group
+  (tap again), and zoomed right in there are none. Groups only join stops
+  in the same state, so each has one colour. The route runs into a group's
+  circle, and choosing one of its stops from the timeline rings the group.
+  Anything wider than a phone (600px and up) spreads the markers out
+  instead.
 - No marker is ever pushed into the sea. Spreading the markers out keeps
   each one on land (on its own landmass, so a Victorian stop can't hop
   over to Tasmania): a marker that's been moved sits clear of the coast,
-  and a bunch always has all its dots on land. On a small phone, where
-  there's no room along the coast, the south-east's markers spread inland
-  instead. A single marker at its real spot can still sit right on the
-  coastline, where the town is.
+  and a bunch always has all its dots on land. Where there's no room along
+  the coast, markers spread inland instead. A single marker at its real
+  spot can still sit right on the coastline, where the town is.
 - Stops with the same latitude and longitude share one marker, with a dot
   for each stop there, the dots touching in a little bunch: four in a square
   in Melbourne, three in a triangle at the Big Dance Festival and Mount Isa,

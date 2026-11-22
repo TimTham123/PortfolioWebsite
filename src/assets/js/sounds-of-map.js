@@ -17,7 +17,9 @@
   Markers never touch: whenever the map's scale changes (a smaller screen,
   or zooming), dots that would be too close are spread apart, without ever
   being pushed into the sea, and the route is redrawn to meet them (see
-  "Spacing the markers" and "Keeping the markers on land"). Stops in the same
+  "Spacing the markers" and "Keeping the markers on land"). On a phone,
+  places too close to press apart join into a numbered group instead, which
+  zooms in when pressed (see "Numbered groups"). Stops in the same
   place share a marker, with a dot for each recording there, in a little
   bunch; pressing a dot opens its episode.
 */
@@ -66,6 +68,9 @@
     watch: $(".sm__watch a"),
   };
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  // A phone: places too close to press apart join into a numbered group
+  // (see "Numbered groups"), and the popup is a card under the timeline.
+  var phone = window.matchMedia("(max-width: 599.98px)");
 
   var current = -1; // the selected episode (none to begin with)
   var inked = 0;    // how many legs of the route are drawn in black
@@ -146,7 +151,7 @@
   function reach(p, ux, uy) {
     var most = 0;
     p.dots.forEach(function (d) { most = Math.max(most, d[0] * ux + d[1] * uy); });
-    return most + RADIUS;
+    return most + (p.radius || RADIUS);
   }
 
   // The marker for stop `i`: its place's.
@@ -313,10 +318,13 @@
   // Each place's landmass (for a spot just off the drawn coast, the nearest
   // one) and how far inside it the place really is.
   land = makeLand();
-  if (land) {
-    places.forEach(function (p) {
-      var col = Math.min(land.cols - 1, Math.max(0, Math.floor(p.tx / LAND_STEP)));
-      var row = Math.min(land.rows - 1, Math.max(0, Math.floor(p.ty / LAND_STEP)));
+
+  // The landmass under a spot (for a spot just off the drawn coast, the
+  // nearest one), and how far inside it the spot is.
+  function landOf(tx, ty) {
+    if (!land) return {};
+      var col = Math.min(land.cols - 1, Math.max(0, Math.floor(tx / LAND_STEP)));
+      var row = Math.min(land.rows - 1, Math.max(0, Math.floor(ty / LAND_STEP)));
       var id = 0;
       for (var r = 0; r <= 25 && !id; r++) {
         var bestDistance = Infinity;
@@ -330,11 +338,16 @@
           }
         }
       }
-      if (!id) return;
-      p.field = landField(id);
-      p.home = depthAt(p.field, p.tx, p.ty);
-    });
+      if (!id) return {};
+      var f = landField(id);
+      return { field: f, home: depthAt(f, tx, ty) };
   }
+
+  places.forEach(function (p) {
+    var at = landOf(p.tx, p.ty);
+    p.field = at.field;
+    p.home = at.home;
+  });
 
   // Moves place `p` (in px) inland until it's as far inside its landmass as
   // it needs to be: as far as its real spot is (and at least on land, with
@@ -350,7 +363,9 @@
     var y = Math.min(H, Math.max(0, y0));
     if (p.field) {
       var pushed = Math.hypot(x0 - p.liftX - p.tx, y0 - p.liftY - p.ty);
-      var need = Math.min((p.far + RADIUS) / scale, Math.max(0, p.home, p.far / scale) + pushed);
+      var need = p.isGroup
+        ? Math.max(p.home || 0, p.radius / scale) // a group's circle sits wholly on land
+        : Math.min((p.far + RADIUS) / scale, Math.max(0, p.home, p.far / scale) + pushed);
       for (var k = 0; k < 4; k++) {
         var short = need - depthAt(p.field, x, y);
         if (short <= 0.01) break;
@@ -373,8 +388,162 @@
   // any two places whose markers are too close are pushed apart (the place
   // with more stops moving less), and any pushed into the sea come back
   // inland, over and over until none are too close.
+  /* Numbered groups (phones) --------------------------------------------- */
+
+  // On a phone there's no room to spread every marker out (the south-east
+  // and the Queensland coast would end up out at sea, or far inland), so
+  // places too close to press apart join into one group instead: a circle
+  // with how many stops it stands for, roughly where they are (and wholly on
+  // land). Pressing it zooms in on them, and it splits into their dots (any
+  // still too close make a smaller group). Zoomed right in, there are none.
+  var GROUP_R = 13; // px: a group's circle (24px across, style.css) and a little room for its ring
+  var units = places;
+  var groupEls = {};
+  var markerList = $(".sm__markers");
+
+  function stateOf(p) {
+    return episodes[p.stops[0]].state;
+  }
+
+  function makeGroup(members) {
+    var n = 0;
+    var x = 0;
+    var y = 0;
+    members.forEach(function (p) {
+      n += p.stops.length;
+      x += p.tx * p.stops.length;
+      y += p.ty * p.stops.length;
+    });
+    var first = episodes[members[0].stops[0]];
+    var g = {
+      isGroup: true,
+      members: members,
+      n: n,
+      stops: members.reduce(function (all, p) { return all.concat(p.stops); }, []),
+      tx: x / n,
+      ty: y / n,
+      dots: [[0, 0]],
+      far: 0,
+      radius: GROUP_R,
+      colour: first.colour,
+      // none of its stops is an episode yet: a hollow circle, like their dots
+      empty: members.every(function (p) { return p.marker.classList.contains("is-empty"); }),
+    };
+    g.key = g.stops.join(",");
+    var at = landOf(g.tx, g.ty);
+    g.field = at.field;
+    g.home = at.home;
+    return g;
+  }
+
+  // Places whose markers would be too close at this scale join up, the
+  // closest two first (only within a state, so a group has one colour),
+  // until none are too close.
+  function crowdedGroups() {
+    var us = places.map(function (p) {
+      return { members: [p], x: p.tx * scale, y: p.ty * scale, n: p.stops.length, state: stateOf(p), unit: p };
+    });
+    for (;;) {
+      var best = null;
+      for (var i = 0; i < us.length; i++) {
+        for (var j = i + 1; j < us.length; j++) {
+          var a = us[i];
+          var b = us[j];
+          if (a.state !== b.state) continue;
+          var dx = b.x - a.x;
+          var dy = b.y - a.y;
+          var d = Math.sqrt(dx * dx + dy * dy) || 0.001;
+          var need = reach(a.unit, dx / d, dy / d) + reach(b.unit, -dx / d, -dy / d) + GAP;
+          if (d < need && (!best || d < best.d)) best = { i: i, j: j, d: d };
+        }
+      }
+      if (!best) break;
+      var A = us[best.i];
+      var B = us[best.j];
+      var n = A.n + B.n;
+      us.splice(best.j, 1);
+      us.splice(best.i, 1);
+      us.push({
+        members: A.members.concat(B.members),
+        x: (A.x * A.n + B.x * B.n) / n,
+        y: (A.y * A.n + B.y * B.n) / n,
+        n: n,
+        state: A.state,
+        unit: { dots: [[0, 0]], far: 0, radius: GROUP_R },
+      });
+    }
+    return us.map(function (u) { return u.members.length > 1 ? makeGroup(u.members) : u.unit; });
+  }
+
+  // What gets spread out: the places, or (on a phone, until zoomed right in)
+  // places and groups of them.
+  function groupUp() {
+    if (!phone.matches || view.k >= MAX_ZOOM - 0.001) return places;
+    return crowdedGroups();
+  }
+
+  function groupButton(u) {
+    var el = groupEls[u.key];
+    if (!el) {
+      var item = document.createElement("li");
+      el = document.createElement("button");
+      el.type = "button";
+      el.className = "sm__group" + (u.empty ? " is-empty" : "");
+      el.style.setProperty("--c", u.colour);
+      el.textContent = u.n;
+      var names = [];
+      u.members.forEach(function (p) {
+        var name = episodes[p.stops[0]].place;
+        if (names.indexOf(name) < 0) names.push(name);
+      });
+      el.setAttribute("aria-label", u.n + " stops: " + names.join(", ") + ". Zoom in to see them.");
+      el.addEventListener("click", function () { openGroup(el.unit); });
+      item.appendChild(el);
+      markerList.appendChild(item);
+      groupEls[u.key] = el;
+    }
+    el.unit = u;
+    return el;
+  }
+
+  function showGroups() {
+    var shown = {};
+    units.forEach(function (u) {
+      if (!u.isGroup) return;
+      var el = groupButton(u);
+      shown[u.key] = true;
+      var at = toStage(u.x / scale, u.y / scale);
+      el.style.left = at.left + "%";
+      el.style.top = at.top + "%";
+      el.parentNode.hidden = false;
+      el.classList.toggle("is-current", current >= 0 && u.stops.indexOf(current) >= 0);
+    });
+    Object.keys(groupEls).forEach(function (key) {
+      if (!shown[key]) groupEls[key].parentNode.hidden = true;
+    });
+  }
+
+  // Pressing a group zooms in on its places, far enough to start pulling
+  // them apart (any still too close make a smaller group: press again).
+  function openGroup(u) {
+    var minX = Infinity;
+    var minY = Infinity;
+    var maxX = -Infinity;
+    var maxY = -Infinity;
+    u.members.forEach(function (p) {
+      minX = Math.min(minX, p.tx);
+      maxX = Math.max(maxX, p.tx);
+      minY = Math.min(minY, p.ty);
+      maxY = Math.max(maxY, p.ty);
+    });
+    var span = Math.max((maxX - minX) / W, (maxY - minY) / H) * 2.4;
+    var k = Math.min(MAX_ZOOM, Math.max(view.k * 1.8, span > 0 ? 1 / span : MAX_ZOOM));
+    glideTo({ k: k, cx: (minX + maxX) / 2, cy: (minY + maxY) / 2 });
+  }
+
   function spreadMarkers() {
-    places.forEach(function (p) {
+    units = groupUp();
+    units.forEach(function (p) {
       p.x = p.tx * scale;
       p.y = p.ty * scale;
       p.liftX = 0;
@@ -382,11 +551,11 @@
     });
     for (var pass = 0; pass < 300; pass++) {
       var worst = 0;
-      for (var i = 0; i < places.length; i++) {
-        for (var j = i + 1; j < places.length; j++) {
-          var p = places[i];
-          var q = places[j];
-          var most = p.far + q.far + 2 * RADIUS + GAP;
+      for (var i = 0; i < units.length; i++) {
+        for (var j = i + 1; j < units.length; j++) {
+          var p = units[i];
+          var q = units[j];
+          var most = p.far + q.far + (p.radius || RADIUS) + (q.radius || RADIUS) + GAP;
           var dx = q.x - p.x;
           var dy = q.y - p.y;
           if (Math.abs(dx) > most || Math.abs(dy) > most) continue;
@@ -403,9 +572,20 @@
           worst = Math.max(worst, push);
         }
       }
-      places.forEach(keepOnLand);
+      units.forEach(keepOnLand);
       if (worst < 0.05) break;
     }
+    // A grouped place's (hidden) dot is where its group is, so the route
+    // runs into the group.
+    places.forEach(function (p) { p.group = null; });
+    units.forEach(function (u) {
+      if (!u.isGroup) return;
+      u.members.forEach(function (p) {
+        p.group = u;
+        p.x = u.x;
+        p.y = u.y;
+      });
+    });
   }
 
   // Where stop `i`'s marker is, in map units (until the map has a size,
@@ -422,6 +602,12 @@
   var homeStop = -1;
   for (var n = 0; homeAt && n <= last && homeStop < 0; n++) {
     if (Math.abs(episodes[n].tx - homeAt.x) < 0.5 && Math.abs(episodes[n].ty - homeAt.y) < 0.5) homeStop = n;
+  }
+
+  // The group a leg's end is in, if any.
+  function groupAt(ref) {
+    var i = ref >= 0 ? ref : homeStop;
+    return i >= 0 ? spots[i].place.group : null;
   }
 
   // One end of a leg: a stop's dot, or home (-1).
@@ -485,7 +671,12 @@
       var b = endOf(leg.to);
       var d;
       var length;
-      if (leg.curve) {
+      var group = groupAt(leg.from);
+      if (group && group === groupAt(leg.to)) {
+        // between two places in the same group: inside its circle, unseen
+        d = "M" + num(a.x) + " " + num(a.y) + "L" + num(a.x) + " " + num(a.y);
+        length = 0;
+      } else if (leg.curve) {
         var c = leg.curve;
         var qx = c.qx + (a.x - c.ax + b.x - c.bx) / 2;
         var qy = c.qy + (a.y - c.ay + b.y - c.by) / 2;
@@ -551,16 +742,19 @@
     var here = spots[current].place;
     var w = place.offsetWidth;
     var h = place.offsetHeight;
+    // clear of its bunch, or of its group's circle
+    var wide = here.group ? GROUP_R + 2 : here.wide;
+    var tall = here.group ? GROUP_R + 2 : here.tall;
     // in a bunch, beside the chosen dot; else on the right, unless that's
     // near the right-hand edge
-    var dx = episodes[current].shown ? episodes[current].dx : 0;
+    var dx = episodes[current].shown && !here.group ? episodes[current].dx : 0;
     var first = dx ? (dx < 0 ? -1 : 1) : spot.left > 62 ? -1 : 1;
     var candidates = [];
     [0, 18, 36].forEach(function (out, ring) {
-      var gap = 14 + here.wide + out;
-      var gapY = 12 + here.tall + out;
-      var cornerX = 6 + here.wide + out * 0.7;
-      var cornerY = 8 + here.tall + out * 0.7;
+      var gap = 14 + wide + out;
+      var gapY = 12 + tall + out;
+      var cornerX = 6 + wide + out * 0.7;
+      var cornerY = 8 + tall + out * 0.7;
       [
         [first > 0 ? gap : -gap - w, -0.55 * h],
         [first > 0 ? -gap - w : gap, -0.55 * h],
@@ -627,7 +821,9 @@
       p.marker.style.top = at.top + "%";
       // Off-screen markers can't be tabbed to.
       p.marker.style.visibility = at.left < -2 || at.left > 102 || at.top < -2 || at.top > 102 ? "hidden" : "";
+      p.marker.classList.toggle("is-grouped", !!p.group);
     });
+    showGroups();
     if (current >= 0) {
       var line = dotOf(current);
       var spot = toStage(line.x, line.y);
@@ -723,7 +919,7 @@
   });
 
   stage.addEventListener("dblclick", function (event) {
-    if (event.target.closest(".sm__popup, .sm__zoom, .sm__marker")) return;
+    if (event.target.closest(".sm__popup, .sm__zoom, .sm__marker, .sm__group")) return;
     glideTo(viewAround(view.k * 2, pointAt(event.clientX, event.clientY)));
   });
 
@@ -733,7 +929,7 @@
   var dragged = false;
 
   stage.addEventListener("pointerdown", function (event) {
-    if (event.target.closest(".sm__popup, .sm__zoom, .sm__marker")) return;
+    if (event.target.closest(".sm__popup, .sm__zoom, .sm__marker, .sm__group")) return;
     if (event.pointerType === "mouse" && event.button !== 0) return;
     pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
     dragged = false;
@@ -935,7 +1131,6 @@
 
   // On a phone the popup is a card under the timeline, so the map stays in
   // view above it; on anything wider it sits over the map, beside the stop.
-  var phone = window.matchMedia("(max-width: 599.98px)");
   var timeline = $(".sm__timeline");
   var zoomBox = $(".sm__zoom");
   function placePopup() {
@@ -983,6 +1178,12 @@
 
     status.textContent = "Stop " + (index + 1) + " of " + episodes.length + ": " + ep.label;
     openPopup(ep);
+  }
+
+  // Where the keyboard goes back to for stop `i`: its marker, or its group.
+  function focusStop(i) {
+    var g = spots[i].place.group;
+    (g && groupEls[g.key] ? groupEls[g.key] : markerOf(i)).focus();
   }
 
   function step(by) {
@@ -1034,7 +1235,7 @@
 
   $(".sm__close").addEventListener("click", function () {
     closePopup();
-    if (current >= 0) markerOf(current).focus();
+    if (current >= 0) focusStop(current);
   });
 
   // A click on the map itself (not a marker or the popup, and not the end of
@@ -1049,7 +1250,7 @@
     if (event.key === "Escape") {
       var inPopup = popup.contains(document.activeElement);
       closePopup();
-      if (inPopup && current >= 0) markerOf(current).focus();
+      if (inPopup && current >= 0) focusStop(current);
     } else if (event.key === "ArrowRight" || event.key === "ArrowLeft") {
       event.preventDefault();
       step(event.key === "ArrowRight" ? 1 : -1);
