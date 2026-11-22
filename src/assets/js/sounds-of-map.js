@@ -116,9 +116,15 @@
   // chosen (HUDDLE_OPEN), so there's always room left for that. The route's
   // legs are redrawn to meet the places where they end up (the roads
   // between stay put).
-  var GAP = 12; // px between the edges of two dots: 25px from middle to middle, so each marker (24px across) has a target of its own
-  var RADIUS = 6.5; // px: an 11px dot and its outline (style.css)
-  var HUDDLE_OPEN = 15; // px between the middles of two dots in an open bunch (style.css)
+  // Sizes in px, as style.css draws them. On a phone the dots are smaller
+  // (8px, not 11px) and closer together, so far fewer places crowd each other.
+  var SIZES = {
+    phone: { gap: 6, radius: 5, open: 11 }, // 16px from middle to middle
+    other: { gap: 12, radius: 6.5, open: 15 }, // 25px from middle to middle, so each marker (24px across) has a target of its own
+  };
+  var GAP; // px between the edges of two dots
+  var RADIUS; // px: a dot and its outline
+  var HUDDLE_OPEN; // px between the middles of two dots in an open bunch
 
   var scale = 0; // screen px per map unit, at the map's current size and zoom
   var places = [];
@@ -135,7 +141,10 @@
     p.dotEls = Array.prototype.slice.call(p.marker.querySelectorAll(".sm__dot"));
     // what pressing it moves through (from the keyboard): its stops, in turn
     p.choices = p.shown.length ? p.shown : p.stops;
-    // where its dots are, in px from the place, with the bunch open
+  });
+
+  // Where a place's dots are, in px from the place, with the bunch open.
+  function measure(p) {
     p.dots = p.shown.map(function (i) { return [episodes[i].dx * HUDDLE_OPEN, episodes[i].dy * HUDDLE_OPEN]; });
     p.far = 0; // the furthest any dot is from the place
     p.wide = 0; // ...and the furthest to either side
@@ -145,7 +154,17 @@
       p.wide = Math.max(p.wide, Math.abs(d[0]));
       p.tall = Math.max(p.tall, Math.abs(d[1]));
     });
-  });
+  }
+
+  // The phone sizes, or the others (again whenever that changes).
+  function useSizes() {
+    var s = phone.matches ? SIZES.phone : SIZES.other;
+    GAP = s.gap;
+    RADIUS = s.radius;
+    HUDDLE_OPEN = s.open;
+    places.forEach(measure);
+  }
+  useSizes();
 
   // How far a place's markers reach from it in the direction (ux, uy).
   function reach(p, ux, uy) {
@@ -392,11 +411,14 @@
 
   // On a phone there's no room to spread every marker out (the south-east
   // and the Queensland coast would end up out at sea, or far inland), so
-  // places too close to press apart join into one group instead: a circle
-  // with how many stops it stands for, roughly where they are (and wholly on
-  // land). Pressing it zooms in on them, and it splits into their dots (any
-  // still too close make a smaller group). Zoomed right in, there are none.
-  var GROUP_R = 13; // px: a group's circle (24px across, style.css) and a little room for its ring
+  // places too close to press apart join into a small group instead: a
+  // circle with how many stops it stands for (never more than
+  // MOST_IN_GROUP), roughly where they are and wholly on land. Places that
+  // would make a group bigger than that are spread out instead. Pressing a
+  // group zooms in on it, and it splits into its dots. Zoomed right in,
+  // there are none.
+  var GROUP_R = 11; // px: a group's circle (16px across) and the ring round it (style.css)
+  var MOST_IN_GROUP = 3; // stops
   var units = places;
   var groupEls = {};
   var markerList = $(".sm__markers");
@@ -437,8 +459,8 @@
   }
 
   // Places whose markers would be too close at this scale join up, the
-  // closest two first (only within a state, so a group has one colour),
-  // until none are too close.
+  // closest two first (only within a state, so a group has one colour, and
+  // never past MOST_IN_GROUP stops), until none are too close that can.
   function crowdedGroups() {
     var us = places.map(function (p) {
       return { members: [p], x: p.tx * scale, y: p.ty * scale, n: p.stops.length, state: stateOf(p), unit: p };
@@ -449,7 +471,7 @@
         for (var j = i + 1; j < us.length; j++) {
           var a = us[i];
           var b = us[j];
-          if (a.state !== b.state) continue;
+          if (a.state !== b.state || a.n + b.n > MOST_IN_GROUP) continue;
           var dx = b.x - a.x;
           var dy = b.y - a.y;
           var d = Math.sqrt(dx * dx + dy * dy) || 0.001;
@@ -1266,6 +1288,12 @@
   earlier.setAttribute("aria-disabled", "true");
   render();
   layoutTimeline();
+  // The phone sizes come and go with the screen's width.
+  phone.addEventListener("change", function () {
+    useSizes();
+    scale = 0;
+    render();
+  });
   // The markers are spaced for the map's size, so again whenever it changes.
   if (window.ResizeObserver) new ResizeObserver(function () { render(); }).observe(stage);
   else window.addEventListener("resize", render);

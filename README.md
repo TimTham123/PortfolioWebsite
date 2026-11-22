@@ -320,17 +320,19 @@ The map puts being easy to read ahead of being exact:
   every marker is a 24px target of its own, easy to tap), each as near its
   real spot as it can be, and redraws the route to meet them. Zooming in
   brings them back to where they really are.
-- On a phone, where there isn't room to spread them all out, places too
-  close to tap apart join into one numbered group instead: a circle in the
-  state's colour saying how many stops it stands for (on an iPhone,
-  Victoria's 10, Perth and Margaret River's 3, and a few 2s and 4s up the
-  east coast), roughly where they are and wholly on land. Tapping one zooms
-  in and it splits into its dots; any still too close make a smaller group
-  (tap again), and zoomed right in there are none. Groups only join stops
-  in the same state, so each has one colour. The route runs into a group's
-  circle, and choosing one of its stops from the timeline rings the group.
-  Anything wider than a phone (600px and up) spreads the markers out
-  instead.
+- On a phone the dots are smaller (8px, 16px apart: `SIZES` in
+  `assets/js/sounds-of-map.js`), and places still too close to tap apart
+  join into a small numbered group: a circle in the state's colour saying
+  how many stops it stands for, never more than three (`MOST_IN_GROUP`).
+  On an iPhone that's a few 2s up the Queensland coast, a 3 and a 2 in New
+  South Wales and a 3 for Gippsland, each roughly where its stops are and
+  wholly on land. Places that would make a group bigger than that
+  (Melbourne's four, the Big Dance Festival's three) are spread out
+  instead. Tapping a group zooms in and it splits into its dots; zoomed
+  right in, there are none. Groups only join stops in the same state, so
+  each has one colour. The route runs into a group's circle, and choosing
+  one of its stops from the timeline rings the group. Anything wider than a
+  phone (600px and up) keeps the bigger dots and spreads them out instead.
 - No marker is ever pushed into the sea. Spreading the markers out keeps
   each one on land (on its own landmass, so a Victorian stop can't hop
   over to Tasmania): a marker that's been moved sits clear of the coast,
