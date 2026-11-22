@@ -15,8 +15,9 @@
   the same size.
 
   Markers never touch: whenever the map's scale changes (a smaller screen,
-  or zooming), dots that would be too close are spread apart, and the route
-  is redrawn to meet them (see "Spacing the markers"). Stops in the same
+  or zooming), dots that would be too close are spread apart, without ever
+  being pushed into the sea, and the route is redrawn to meet them (see
+  "Spacing the markers" and "Keeping the markers on land"). Stops in the same
   place share a marker, with a dot for each recording there, in a little
   bunch; pressing a dot opens its episode.
 */
@@ -159,15 +160,227 @@
     return p.dotEls[Math.max(0, p.shown.indexOf(i))];
   }
 
+  /* Keeping the markers on land ------------------------------------------ */
+
+  // Spreading the markers out mustn't push any of them into the sea (on a
+  // phone, the Victorian and east-coast places would otherwise end up off
+  // the coast). So the coastline is filled in on a small hidden canvas, and
+  // each landmass with a stop on it (the mainland; Tasmania, if there's ever
+  // one there) gets a map of how far every point is inside it, in map units
+  // (out at sea, less than 0). A marker pushed too near the coast, or off it,
+  // is moved straight back inland, onto its own landmass, so a Victorian
+  // marker can't hop over Bass Strait to Tasmania. The further a marker has
+  // been pushed from its real spot, the further inland it has to sit, until
+  // its dots are clear of the coast; a single marker at its real spot stays
+  // put, even on the very edge of the coast, and a bunch moves in just far
+  // enough for all its dots to be on land. If the browser can't draw the
+  // land (no canvas), the markers are spread as before.
+  var LAND_STEP = 3; // map units per cell of the land map (about 1px on a phone)
+  var FAR = 1e9; // "no nearer than this", in squared cells
+  var land = null;
+
+  function makeLand() {
+    var coast = svg.querySelector(".sm__coast");
+    var canvas = document.createElement("canvas");
+    var context = canvas.getContext && canvas.getContext("2d");
+    if (!coast || !context || !window.Path2D) return null;
+    var cols = Math.ceil(W / LAND_STEP);
+    var rows = Math.ceil(H / LAND_STEP);
+    var pixels;
+    try {
+      canvas.width = cols;
+      canvas.height = rows;
+      context.scale(1 / LAND_STEP, 1 / LAND_STEP);
+      context.fill(new Path2D(coast.getAttribute("d")));
+      pixels = context.getImageData(0, 0, cols, rows).data;
+    } catch (e) {
+      return null;
+    }
+    // Each cell's landmass, numbered 1, 2… (0: the sea), by flood fill.
+    var n = cols * rows;
+    var mass = new Int32Array(n);
+    var queue = new Int32Array(n);
+    var count = 0;
+    var any = false;
+    for (var start = 0; start < n; start++) {
+      if (mass[start] || pixels[start * 4 + 3] < 128) continue;
+      any = true;
+      mass[start] = ++count;
+      var head = 0;
+      var tail = 0;
+      queue[tail++] = start;
+      while (head < tail) {
+        var c = queue[head++];
+        var x = c % cols;
+        if (x > 0) tail = flood(c - 1, tail);
+        if (x < cols - 1) tail = flood(c + 1, tail);
+        if (c >= cols) tail = flood(c - cols, tail);
+        if (c < n - cols) tail = flood(c + cols, tail);
+      }
+    }
+    function flood(m, tail) {
+      if (mass[m] || pixels[m * 4 + 3] < 128) return tail;
+      mass[m] = count;
+      queue[tail] = m;
+      return tail + 1;
+    }
+    return any ? { cols: cols, rows: rows, mass: mass, fields: {} } : null;
+  }
+
+  // The squared distance from each cell of `grid` (0 where it's already
+  // there, FAR elsewhere) to the nearest 0, in cells: rows, then columns,
+  // each by Felzenszwalb and Huttenlocher's one-line transform.
+  function squaredDistances(grid) {
+    var cols = land.cols;
+    var rows = land.rows;
+    var size = Math.max(cols, rows);
+    var f = new Float64Array(size);
+    var d = new Float64Array(size);
+    var v = new Int32Array(size);
+    var z = new Float64Array(size + 1);
+    var x;
+    var y;
+    for (x = 0; x < cols; x++) {
+      for (y = 0; y < rows; y++) f[y] = grid[y * cols + x];
+      transformLine(f, d, v, z, rows);
+      for (y = 0; y < rows; y++) grid[y * cols + x] = d[y];
+    }
+    for (y = 0; y < rows; y++) {
+      for (x = 0; x < cols; x++) f[x] = grid[y * cols + x];
+      transformLine(f, d, v, z, cols);
+      for (x = 0; x < cols; x++) grid[y * cols + x] = d[x];
+    }
+  }
+
+  function transformLine(f, d, v, z, n) {
+    var k = 0;
+    v[0] = 0;
+    z[0] = -Infinity;
+    z[1] = Infinity;
+    for (var q = 1; q < n; q++) {
+      var s = (f[q] + q * q - f[v[k]] - v[k] * v[k]) / (2 * (q - v[k]));
+      while (s <= z[k]) {
+        k--;
+        s = (f[q] + q * q - f[v[k]] - v[k] * v[k]) / (2 * (q - v[k]));
+      }
+      k++;
+      v[k] = q;
+      z[k] = s;
+      z[k + 1] = Infinity;
+    }
+    k = 0;
+    for (q = 0; q < n; q++) {
+      while (z[k + 1] < q) k++;
+      d[q] = (q - v[k]) * (q - v[k]) + f[v[k]];
+    }
+  }
+
+  // How far each cell is inside landmass `id`, in map units (at sea, how
+  // far from it, as less than 0). Worked out the first time it's needed.
+  function landField(id) {
+    if (land.fields[id]) return land.fields[id];
+    var n = land.cols * land.rows;
+    var inside = new Float64Array(n); // to the nearest cell off it
+    var outside = new Float64Array(n); // ...and on it
+    for (var c = 0; c < n; c++) {
+      var mine = land.mass[c] === id;
+      inside[c] = mine ? FAR : 0;
+      outside[c] = mine ? 0 : FAR;
+    }
+    squaredDistances(inside);
+    squaredDistances(outside);
+    var field = new Float32Array(n);
+    for (c = 0; c < n; c++) {
+      field[c] = (land.mass[c] === id ? Math.sqrt(inside[c]) - 0.5 : 0.5 - Math.sqrt(outside[c])) * LAND_STEP;
+    }
+    return (land.fields[id] = field);
+  }
+
+  // A land map's value at a point (in map units), between its cells.
+  function depthAt(field, x, y) {
+    var cols = land.cols;
+    var gx = Math.min(cols - 1, Math.max(0, x / LAND_STEP - 0.5));
+    var gy = Math.min(land.rows - 1, Math.max(0, y / LAND_STEP - 0.5));
+    var x0 = Math.min(cols - 2, Math.floor(gx));
+    var y0 = Math.min(land.rows - 2, Math.floor(gy));
+    var fx = gx - x0;
+    var fy = gy - y0;
+    var i = y0 * cols + x0;
+    return (field[i] * (1 - fx) + field[i + 1] * fx) * (1 - fy) +
+      (field[i + cols] * (1 - fx) + field[i + cols + 1] * fx) * fy;
+  }
+
+  // Each place's landmass (for a spot just off the drawn coast, the nearest
+  // one) and how far inside it the place really is.
+  land = makeLand();
+  if (land) {
+    places.forEach(function (p) {
+      var col = Math.min(land.cols - 1, Math.max(0, Math.floor(p.tx / LAND_STEP)));
+      var row = Math.min(land.rows - 1, Math.max(0, Math.floor(p.ty / LAND_STEP)));
+      var id = 0;
+      for (var r = 0; r <= 25 && !id; r++) {
+        var bestDistance = Infinity;
+        for (var j = row - r; j <= row + r; j++) {
+          for (var i = col - r; i <= col + r; i++) {
+            if (i < 0 || j < 0 || i >= land.cols || j >= land.rows) continue;
+            if (Math.max(Math.abs(i - col), Math.abs(j - row)) !== r) continue;
+            var m = land.mass[j * land.cols + i];
+            var d = (i - col) * (i - col) + (j - row) * (j - row);
+            if (m && d < bestDistance) { bestDistance = d; id = m; }
+          }
+        }
+      }
+      if (!id) return;
+      p.field = landField(id);
+      p.home = depthAt(p.field, p.tx, p.ty);
+    });
+  }
+
+  // Moves place `p` (in px) inland until it's as far inside its landmass as
+  // it needs to be: as far as its real spot is (and at least on land, with
+  // every dot of a bunch on land), plus however far the other markers have
+  // pushed it, but never more than its dots reach (so they're clear of the
+  // coast). It stays inside the map's edges too. (p.liftX and p.liftY: how
+  // far it's been moved inland so far, in map units, which doesn't count
+  // as being pushed.)
+  function keepOnLand(p) {
+    var x0 = p.x / scale;
+    var y0 = p.y / scale;
+    var x = Math.min(W, Math.max(0, x0));
+    var y = Math.min(H, Math.max(0, y0));
+    if (p.field) {
+      var pushed = Math.hypot(x0 - p.liftX - p.tx, y0 - p.liftY - p.ty);
+      var need = Math.min((p.far + RADIUS) / scale, Math.max(0, p.home, p.far / scale) + pushed);
+      for (var k = 0; k < 4; k++) {
+        var short = need - depthAt(p.field, x, y);
+        if (short <= 0.01) break;
+        // straight inland: the way the land map rises most steeply
+        var gx = depthAt(p.field, x + LAND_STEP, y) - depthAt(p.field, x - LAND_STEP, y);
+        var gy = depthAt(p.field, x, y + LAND_STEP) - depthAt(p.field, x, y - LAND_STEP);
+        var g = Math.hypot(gx, gy);
+        if (g < 1e-6) break;
+        x = Math.min(W, Math.max(0, x + (gx / g) * short));
+        y = Math.min(H, Math.max(0, y + (gy / g) * short));
+      }
+    }
+    p.liftX += x - x0;
+    p.liftY += y - y0;
+    p.x = x * scale;
+    p.y = y * scale;
+  }
+
   // Every place starts at its real spot (in px, at the current scale); then
   // any two places whose markers are too close are pushed apart (the place
-  // with more stops moving less), over and over until none are.
+  // with more stops moving less), and any pushed into the sea come back
+  // inland, over and over until none are too close.
   function spreadMarkers() {
     places.forEach(function (p) {
       p.x = p.tx * scale;
       p.y = p.ty * scale;
+      p.liftX = 0;
+      p.liftY = 0;
     });
-    for (var pass = 0; pass < 200; pass++) {
+    for (var pass = 0; pass < 300; pass++) {
       var worst = 0;
       for (var i = 0; i < places.length; i++) {
         for (var j = i + 1; j < places.length; j++) {
@@ -190,6 +403,7 @@
           worst = Math.max(worst, push);
         }
       }
+      places.forEach(keepOnLand);
       if (worst < 0.05) break;
     }
   }

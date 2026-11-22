@@ -91,6 +91,7 @@
       <p>{% for w in words %}<span class="intro__w" style="--i: {{ loop.index0 }}">{% if loop.first %}&ldquo;{% endif %}{{ w }}{% if loop.last %}&rdquo;{% endif %}</span>{% if not loop.last %} {% endif %}{% endfor %}</p>
       <p class="intro__by" style="--i: {{ words.length + 2 }}">&ndash; {{ signoff.by }}</p>
     </div>
+    <p class="intro__tap">Tap to continue</p>
   </div>
   <script>
     (function () {
@@ -107,13 +108,18 @@
       /* Start writing once the handwriting has loaded (or after a second,
          whichever comes first). The writing takes 2.8 seconds (the last
          word, then the name: 51 x 50ms + 0.26s in style.css); the quote then
-         holds for 3.5 seconds and leaves, 6.3 seconds after it began */
+         holds for 15 seconds and leaves, 17.8 seconds after it began. Five
+         seconds into the hold, "Tap to continue" fades in underneath */
+      var WRITE = 2800;
+      var HOLD = 15000;
+      var TAP_AFTER = 5000; // into the hold
       var started = false;
       function write() {
         if (started) return;
         started = true;
         intro.classList.add("is-writing");
-        setTimeout(leave, 6300);
+        setTimeout(function () { intro.classList.add("is-waiting"); }, WRITE + TAP_AFTER);
+        setTimeout(leave, WRITE + HOLD);
       }
       if (document.fonts && document.fonts.load) {
         document.fonts.load('1em "Waiting for the Sunrise"').then(write, write);

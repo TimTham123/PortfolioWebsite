@@ -320,6 +320,13 @@ The map puts being easy to read ahead of being exact:
   every marker is a 24px target of its own, easy to tap), each as near its
   real spot as it can be, and redraws the route to meet them. Zooming in
   brings them back to where they really are.
+- No marker is ever pushed into the sea. Spreading the markers out keeps
+  each one on land (on its own landmass, so a Victorian stop can't hop
+  over to Tasmania): a marker that's been moved sits clear of the coast,
+  and a bunch always has all its dots on land. On a small phone, where
+  there's no room along the coast, the south-east's markers spread inland
+  instead. A single marker at its real spot can still sit right on the
+  coastline, where the town is.
 - Stops with the same latitude and longitude share one marker, with a dot
   for each stop there, the dots touching in a little bunch: four in a square
   in Melbourne, three in a triangle at the Big Dance Festival and Mount Isa,
@@ -510,8 +517,10 @@ credit stacks up beside its year instead.
   the timeline, so the map stays in view while you watch.
 - Photo popups swipe from one picture to the next.
 - **The intro:** the first time someone opens About Me on a phone, the quote
-  is written out by hand, word by word (2.8 seconds), holds for 3.5
-  seconds, then fades away to leave the page (a tap skips it). On phones the quote isn't shown
+  is written out by hand, word by word (2.8 seconds), holds for 15
+  seconds, then fades away to leave the page. Five seconds into the hold, a
+  light grey "Tap to continue" fades in at the bottom of the screen (a tap
+  skips the intro at any point). On phones the quote isn't shown
   on the page itself. It plays once per browser (to see it again, open the
   site in a private tab), never on bigger screens or for search engines'
   robots, and without the writing for people who've asked their phone to

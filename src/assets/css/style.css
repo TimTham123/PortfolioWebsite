@@ -2780,7 +2780,9 @@ html.has-lightbox {
    The quote fills the screen in the note hand and is written out word by
    word, each word drawn in from the left like a pen stroke, then the whole
    thing fades away and leaves the page underneath: 2.8 seconds to write,
-   then it holds for 3.5 seconds. A tap skips it. html.show-intro is set by a script in the page's head
+   then it holds for 15 seconds. Five seconds into the hold, a light grey
+   "Tap to continue" fades in at the bottom of the screen. A tap skips it
+   at any time. html.show-intro is set by a script in the page's head
    (base.njk), which also decides when it plays. Without JavaScript, on
    bigger screens or after the first visit, none of this shows.
    ========================================================================== */
@@ -2846,6 +2848,24 @@ html.has-lightbox {
   to { clip-path: inset(0 0 0 0); }
 }
 
+/* "Tap to continue": out of the way at the bottom, in light grey, faded in
+   once the quote has been up a while (.is-waiting, from base.njk) */
+.intro__tap {
+  position: absolute;
+  right: 0;
+  bottom: calc(40px + env(safe-area-inset-bottom, 0px));
+  left: 0;
+  margin: 0;
+  color: var(--pencil);
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+.intro.is-waiting .intro__tap {
+  opacity: 1;
+}
+
 /* For people who'd rather not have motion: the quote, still, then the page */
 @media (prefers-reduced-motion: reduce) {
   .intro__w,
@@ -2858,7 +2878,8 @@ html.has-lightbox {
     animation: none;
   }
 
-  .show-intro .intro {
+  .show-intro .intro,
+  .intro__tap {
     transition: none;
   }
 }
